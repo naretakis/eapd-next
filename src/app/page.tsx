@@ -1,103 +1,155 @@
-import Image from 'next/image';
+'use client';
+
+import React from 'react';
+import {
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Box,
+  Alert,
+  AlertTitle,
+} from '@mui/material';
+import {
+  Add as AddIcon,
+  Dashboard as DashboardIcon,
+  Description as DescriptionIcon,
+} from '@mui/icons-material';
+import Layout from '@/components/common/Layout';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <Layout title="eAPD-Next Dashboard">
+      <Box>
+        {/* Welcome Section */}
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Welcome to eAPD-Next
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+            Create, manage, and export APDs (Advance Planning Documents) for
+            state Medicaid agencies. This modern web application provides a
+            guided experience for APD creation with automated calculations,
+            validation, and multi-format export capabilities.
+          </Typography>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <Alert severity="info" sx={{ mb: 3 }}>
+            <AlertTitle>Development Environment</AlertTitle>
+            This is the initial setup of eAPD-Next. The application is currently
+            in development and will be built incrementally following the
+            implementation plan.
+          </Alert>
+        </Box>
+
+        {/* Quick Actions */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gap: 3,
+            mb: 4,
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <AddIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6">Create New APD</Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Start a new APD with guided templates for PAPD, IAPD, or OAPD
+                documents.
+              </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                disabled
+                startIcon={<AddIcon />}
+              >
+                Create APD (Coming Soon)
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <DashboardIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6">Manage APDs</Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                View, edit, and organize your existing APDs with project
+                grouping.
+              </Typography>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled
+                startIcon={<DashboardIcon />}
+              >
+                View APDs (Coming Soon)
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <DescriptionIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h6">Export & Share</Typography>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Export completed APDs to PDF, Markdown, or JSON formats for
+                submission.
+              </Typography>
+              <Button
+                variant="outlined"
+                fullWidth
+                disabled
+                startIcon={<DescriptionIcon />}
+              >
+                Export (Coming Soon)
+              </Button>
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* Development Status */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Development Progress
+          </Typography>
+          <Card>
+            <CardContent>
+              <Typography variant="body1" gutterBottom>
+                <strong>✅ Completed:</strong>
+              </Typography>
+              <ul>
+                <li>Project setup with Next.js, TypeScript, and Material-UI</li>
+                <li>GitHub repository configuration with CI/CD pipeline</li>
+                <li>
+                  Development environment with ESLint, Prettier, and Husky
+                </li>
+                <li>Basic layout component with responsive design</li>
+                <li>
+                  Testing framework setup with Jest and React Testing Library
+                </li>
+              </ul>
+
+              <Typography variant="body1" gutterBottom sx={{ mt: 2 }}>
+                <strong>🚧 Next Steps:</strong>
+              </Typography>
+              <ul>
+                <li>Kiro steering documents and agent hooks</li>
+                <li>IndexedDB storage layer implementation</li>
+                <li>Dashboard interface with APD management</li>
+                <li>Template system and form generation</li>
+                <li>APD editor with guided navigation</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+    </Layout>
   );
 }

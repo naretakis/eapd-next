@@ -29,7 +29,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Make initial commit and push to GitHub repository
   - _Requirements: 11.1, 11.8, 15.7_
 
-- [-] 1.3 Configure GitHub Actions CI/CD Pipeline
+- [x] 1.3 Configure GitHub Actions CI/CD Pipeline
   - Set up automated testing workflow running on pull requests and pushes
   - Configure multi-environment deployment to GitHub Pages (production, staging, development)
   - Add automated dependency updates and security scanning
@@ -37,7 +37,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Test deployment pipeline with initial Next.js app
   - _Requirements: 12.4, 12.5, 12.7_
 
-- [ ] 1.4 Set Up Development Environment and Tools
+- [x] 1.4 Set Up Development Environment and Tools
   - Configure Material-UI and set up default theme
   - Create basic layout component with AppBar and responsive container
   - Set up Material-UI theme provider and CSS baseline
@@ -45,7 +45,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Set up accessibility testing with @axe-core/react
   - _Requirements: 2.6, 10.3, 16.5, 14.1, 14.2_
 
-- [ ] 1.5 Set Up Kiro Steering Documents and Agent Hooks
+- [x] 1.5 Set Up Kiro Steering Documents and Agent Hooks
   - Create `.kiro/steering/` directory with development standards document
   - Write APD domain knowledge steering file referencing wiki content
   - Configure Material-UI guidelines steering file with component patterns
@@ -53,7 +53,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Implement pre-commit hooks for code quality checks
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.6_
 
-- [ ] 1.6 Create Initial Documentation and Learning Resources
+- [-] 1.6 Create Initial Documentation and Learning Resources
   - Write comprehensive README.md with setup instructions and architecture overview
   - Create LEARNING_PATH.md with week-by-week development progression
   - Set up ARCHITECTURE_DECISIONS.md for documenting design choices
