@@ -255,3 +255,22 @@ This project also serves as a comprehensive learning platform for modern web dev
 10. WHEN I review code THEN the system SHALL provide code review assistance hooks
 11. WHEN I organize files THEN the system SHALL use context-aware file naming and structure for maximum Kiro effectiveness
 12. WHEN I manage project documentation THEN the system SHALL integrate documentation with Kiro's context system for enhanced AI assistance
+
+### Requirement 18: APD Version Control and Change Tracking
+
+**User Story:** As a state user working on APDs over time, I want to track changes, create versions, and see what has been modified so that I can maintain an audit trail, collaborate safely, and revert changes when needed.
+
+#### Acceptance Criteria
+
+1. WHEN I work on an APD THEN the system SHALL maintain a "working copy" where I can make edits without affecting the committed version
+2. WHEN I make changes to fields THEN the system SHALL track all field-level changes with timestamps and change details
+3. WHEN I want to save my progress THEN the system SHALL allow me to "commit" changes with a descriptive message explaining what changed and why
+4. WHEN I commit changes THEN the system SHALL create a new version snapshot with automatic version numbering (v1.0, v1.1, etc.)
+5. WHEN I view an APD THEN the system SHALL provide inline change highlighting showing what has been modified since the last committed version
+6. WHEN I want to see history THEN the system SHALL display a version timeline showing all commits with messages, dates, and authors
+7. WHEN I need to compare versions THEN the system SHALL provide side-by-side or inline diff views showing exactly what changed between any two versions
+8. WHEN I need to revert changes THEN the system SHALL allow me to rollback to any previous committed version
+9. WHEN I want to preserve current work THEN the system SHALL allow me to create a "working copy" from any committed version for safe experimentation
+10. WHEN I collaborate with colleagues THEN the system SHALL maintain change attribution and provide clear audit trails for compliance
+11. WHEN I export an APD THEN the system SHALL include version information and change history in the exported document metadata
+12. WHEN I have uncommitted changes THEN the system SHALL clearly indicate unsaved work and prevent accidental data loss

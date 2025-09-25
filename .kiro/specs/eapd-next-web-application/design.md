@@ -301,6 +301,47 @@ interface APDService {
 }
 ```
 
+#### Version Control Service
+```typescript
+interface VersionControlService {
+  // Working copy management
+  getWorkingCopy(apdId: string): Promise<APDWorkingCopy>;
+  updateWorkingCopy(apdId: string, changes: FieldChange[]): Promise<void>;
+  
+  // Commit operations
+  commitChanges(apdId: string, message: string, author: string): Promise<APDVersion>;
+  getCommitHistory(apdId: string): Promise<APDVersion[]>;
+  
+  // Version operations
+  getVersion(apdId: string, versionId: string): Promise<APDVersion>;
+  revertToVersion(apdId: string, versionId: string): Promise<APDWorkingCopy>;
+  
+  // Change tracking
+  getChanges(apdId: string): Promise<FieldChange[]>;
+  compareVersions(apdId: string, fromVersion: string, toVersion: string): Promise<VersionDiff>;
+  
+  // Branch-like operations
+  createWorkingCopyFromVersion(apdId: string, versionId: string): Promise<APDWorkingCopy>;
+}
+```
+
+#### Change Tracking Service
+```typescript
+interface ChangeTrackingService {
+  // Field-level change detection
+  detectChanges(original: APD, modified: APD): FieldChange[];
+  trackFieldChange(fieldPath: string, oldValue: any, newValue: any, timestamp: Date): void;
+  
+  // Change highlighting
+  getFieldChangeStatus(fieldPath: string): ChangeStatus;
+  generateChangeHighlights(apd: APD): ChangeHighlight[];
+  
+  // Diff generation
+  generateDiff(version1: APDVersion, version2: APDVersion): VersionDiff;
+  generateInlineDiff(fieldPath: string, oldValue: any, newValue: any): InlineDiff;
+}
+```
+
 #### Storage Service
 ```typescript
 interface StorageService {
@@ -326,17 +367,83 @@ interface ExportService {
 
 ## Data Models
 
-### APD Data Model
+### APD Data Model with Version Control
 ```typescript
 interface APD {
   id: string;
   type: APDType;
-  version: string;
   metadata: APDMetadata;
   sections: Record<string, APDSectionData>;
   validationState: ValidationState;
   createdAt: Date;
   updatedAt: Date;
+  
+  // Version control
+  currentVersion: string; // Points to latest committed version
+  workingCopy?: APDWorkingCopy; // Current uncommitted changes
+  versions: APDVersion[]; // All committed versions
+}
+
+interface APDWorkingCopy {
+  id: string;
+  apdId: string;
+  baseVersionId: string; // Version this working copy was created from
+  sections: Record<string, APDSectionData>;
+  changes: FieldChange[]; // All uncommitted changes
+  lastModified: Date;
+  hasUncommittedChanges: boolean;
+}
+
+interface APDVersion {
+  id: string; // Unique version identifier
+  apdId: string;
+  versionNumber: string; // v1.0, v1.1, v1.2, etc.
+  commitMessage: string; // User-provided description of changes
+  author: string; // Who made this commit
+  timestamp: Date;
+  sections: Record<string, APDSectionData>; // Full snapshot
+  changesSinceLastVersion: FieldChange[]; // What changed from previous version
+  parentVersionId?: string; // Previous version (for history chain)
+}
+
+interface FieldChange {
+  id: string;
+  fieldPath: string; // e.g., "sections.budget.personnel.row1.federalShare"
+  fieldLabel: string; // Human-readable field name
+  oldValue: any;
+  newValue: any;
+  changeType: 'added' | 'modified' | 'deleted';
+  timestamp: Date;
+  author?: string;
+  section: string; // Which APD section this belongs to
+}
+
+interface VersionDiff {
+  fromVersion: string;
+  toVersion: string;
+  changes: FieldChange[];
+  summary: {
+    sectionsModified: string[];
+    fieldsAdded: number;
+    fieldsModified: number;
+    fieldsDeleted: number;
+  };
+}
+
+interface ChangeHighlight {
+  fieldPath: string;
+  changeType: 'added' | 'modified' | 'deleted';
+  displayType: 'inline' | 'background' | 'border';
+  tooltip: string; // Description of what changed
+}
+
+type ChangeStatus = 'unchanged' | 'modified' | 'added' | 'deleted';
+
+interface InlineDiff {
+  fieldPath: string;
+  oldText: string;
+  newText: string;
+  diffHtml: string; // HTML with change highlighting
 }
 
 interface APDMetadata {
@@ -414,7 +521,7 @@ interface ValidationError {
 }
 ```
 
-### Storage Schema
+### Storage Schema with Version Control
 ```typescript
 // IndexedDB Schema
 interface APDDatabase {
@@ -425,6 +532,41 @@ interface APDDatabase {
       type: APDType;
       projectName: string;
       lastModified: Date;
+      currentVersion: string;
+    };
+  };
+  
+  apdVersions: {
+    key: string; // Version ID
+    value: APDVersion;
+    indexes: {
+      apdId: string;
+      versionNumber: string;
+      timestamp: Date;
+      author: string;
+    };
+  };
+  
+  workingCopies: {
+    key: string; // APD ID (one working copy per APD)
+    value: APDWorkingCopy;
+    indexes: {
+      apdId: string;
+      baseVersionId: string;
+      lastModified: Date;
+      hasUncommittedChanges: boolean;
+    };
+  };
+  
+  fieldChanges: {
+    key: string; // Change ID
+    value: FieldChange;
+    indexes: {
+      apdId: string;
+      versionId: string;
+      fieldPath: string;
+      timestamp: Date;
+      changeType: string;
     };
   };
   

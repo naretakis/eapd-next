@@ -88,6 +88,14 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Write comprehensive unit tests for all service layer functions
   - _Requirements: 1.3, 5.1, 5.2, 5.3, 5.4_
 
+- [ ] 2.4 Implement Version Control and Change Tracking System
+  - Build VersionControlService for managing APD versions and working copies
+  - Implement ChangeTrackingService for field-level change detection and highlighting
+  - Create version history storage and retrieval with full snapshot approach
+  - Add commit workflow with user messages and automatic version numbering
+  - Implement working copy management with change preservation
+  - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.12_
+
 - [ ] 3. Dashboard Interface and APD Management
   - Build central dashboard for APD management with Material-UI components
   - Implement APD list view with sorting, filtering, and project grouping
@@ -101,12 +109,14 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create loading states and error boundaries for robust user experience
   - _Requirements: 1.1, 2.4, 13.7, 16.5_
 
-- [ ] 3.2 Implement APD List Component with Project Grouping
-  - Create APDList component displaying APDs with key information (type, name, date, status)
+- [ ] 3.2 Implement APD List Component with Project Grouping and Version Information
+  - Create APDList component displaying APDs with key information (type, name, date, status, current version)
   - Implement project grouping functionality to organize related APDs
-  - Add sorting and filtering capabilities (by project, type, date, completion status)
-  - Create APDCard component with action buttons (edit, view, duplicate, delete, export)
-  - _Requirements: 1.2, 1.3, 1.4, 1.5_
+  - Add sorting and filtering capabilities (by project, type, date, completion status, version)
+  - Create APDCard component with action buttons (edit, view, duplicate, delete, export, version history)
+  - Display version indicators showing current version number and uncommitted changes status
+  - Add quick access to version history and working copy status from dashboard
+  - _Requirements: 1.2, 1.3, 1.4, 1.5, 18.6, 18.12_
 
 - [ ] 3.3 Build APD Creation Dialog and Type Selection
   - Create CreateAPDDialog component with Material-UI Dialog and form controls
@@ -153,7 +163,8 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Implement ProgressTracker component showing completion status and section navigation
   - Add breadcrumb navigation for easy return to dashboard and section jumping
   - Create section completion indicators with visual progress representation
-  - _Requirements: 2.1, 2.2, 2.3, 2.4_
+  - Add version control panel showing current working copy status and uncommitted changes
+  - _Requirements: 2.1, 2.2, 2.3, 2.4, 18.1, 18.12_
 
 - [ ] 5.2 Implement Section Components for PAPD Template (Phase 1)
   - Create ExecutiveSummary section component with template-based form fields
@@ -169,7 +180,16 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create Acquisition Checklist template with regulatory compliance checks
   - _Requirements: 3.2, 3.3_
 
-- [ ] 5.4 Build Contextual Help and Guidance System
+- [ ] 5.4 Build Version Control User Interface
+  - Create ChangeTrackingPanel showing inline change highlights with Word-style track changes appearance
+  - Implement CommitDialog for users to commit changes with descriptive messages
+  - Build VersionHistory component displaying timeline of all commits with messages and dates
+  - Create VersionComparison component for side-by-side or inline diff views between versions
+  - Add RevertDialog for safely rolling back to previous versions
+  - Implement WorkingCopyIndicator showing unsaved changes and commit status
+  - _Requirements: 18.5, 18.6, 18.7, 18.8, 18.9, 18.12_
+
+- [ ] 5.5 Build Contextual Help and Guidance System
   - Implement HelpPanel component displaying template instructions and examples
   - Add field-level help tooltips and expandable guidance sections
   - Create context-sensitive help that updates based on current section and field
@@ -225,26 +245,29 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create professional document formatting suitable for CMS submission
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7_
 
-- [ ] 8.1 Implement Markdown Export with Template Formatting
+- [ ] 8.1 Implement Markdown Export with Template Formatting and Version Information
   - Create MarkdownExporter that generates properly formatted markdown following template structure
   - Implement section ordering and formatting based on original CMS templates
-  - Add metadata inclusion and document header generation
+  - Add metadata inclusion with version information, commit history, and change summary
+  - Include version control metadata in exported document headers
   - Build export validation to ensure completeness before generation
-  - _Requirements: 6.1, 6.2, 6.5, 6.6_
+  - _Requirements: 6.1, 6.2, 6.5, 6.6, 18.11_
 
-- [ ] 8.2 Build PDF Export with Professional Formatting
+- [ ] 8.2 Build PDF Export with Professional Formatting and Version History
   - Implement PDFExporter using jsPDF for professional document generation
   - Create PDF templates matching CMS document formatting requirements
   - Add table formatting, page breaks, and header/footer generation
+  - Include version history appendix with change log and commit messages
   - Implement progress indicators for large document exports
-  - _Requirements: 6.1, 6.3, 6.5, 6.7_
+  - _Requirements: 6.1, 6.3, 6.5, 6.7, 18.11_
 
-- [ ] 8.3 Create JSON Export and Import System
-  - Build JSONExporter for structured data export and backup functionality
-  - Implement JSONImporter with data validation and conflict resolution
-  - Add bulk export/import capabilities for multiple APDs
-  - Create data sharing functionality for collaboration between colleagues
-  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7_
+- [ ] 8.3 Create JSON Export and Import System with Version Control
+  - Build JSONExporter for structured data export including full version history and change tracking
+  - Implement JSONImporter with data validation, conflict resolution, and version preservation
+  - Add bulk export/import capabilities for multiple APDs with their complete version histories
+  - Create data sharing functionality for collaboration with version control information intact
+  - Handle import of APDs with existing version histories and merge conflicts
+  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 18.10, 18.11_
 
 - [ ] 9. View-Only Mode and Collaboration Features
   - Implement read-only APD viewing with full navigation capabilities
@@ -348,9 +371,11 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 - [ ] 14.1 Build Comprehensive Test Suite for All Features
   - Create unit tests for all components using React Testing Library
   - Implement integration tests for complete user workflows (create APD, edit, export)
+  - Add comprehensive version control testing (commit, revert, diff, working copy management)
+  - Build change tracking tests for field-level detection and highlighting accuracy
   - Add accessibility tests using @axe-core/react for WCAG compliance
-  - Build performance tests for large data operations and export functionality
-  - _Requirements: 14.1, 14.2, 14.3, 14.4_
+  - Build performance tests for large data operations, export functionality, and version history storage
+  - _Requirements: 14.1, 14.2, 14.3, 14.4, 18.1-18.12_
 
 - [ ] 14.2 Finalize Testing Quality Gates and Documentation
   - Ensure 90% code coverage target is met across all modules
