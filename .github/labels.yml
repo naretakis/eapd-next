@@ -1,0 +1,128 @@
+# GitHub Labels Configuration for eAPD-Next
+# This file can be used with github-label-sync or similar tools
+
+# Priority Labels
+- name: 'priority: critical'
+  color: 'd73a4a'
+  description: 'Critical priority - needs immediate attention'
+
+- name: 'priority: high'
+  color: 'ff6b6b'
+  description: 'High priority - should be addressed soon'
+
+- name: 'priority: medium'
+  color: 'ffa726'
+  description: 'Medium priority - normal timeline'
+
+- name: 'priority: low'
+  color: '4fc3f7'
+  description: 'Low priority - can be addressed later'
+
+# Type Labels
+- name: 'bug'
+  color: 'd73a4a'
+  description: "Something isn't working"
+
+- name: 'enhancement'
+  color: 'a2eeef'
+  description: 'New feature or request'
+
+- name: 'documentation'
+  color: '0075ca'
+  description: 'Improvements or additions to documentation'
+
+- name: 'question'
+  color: 'd876e3'
+  description: 'Further information is requested'
+
+- name: 'good first issue'
+  color: '7057ff'
+  description: 'Good for newcomers'
+
+- name: 'help wanted'
+  color: '008672'
+  description: 'Extra attention is needed'
+
+# Status Labels
+- name: 'needs-triage'
+  color: 'fbca04'
+  description: 'Needs initial review and categorization'
+
+- name: 'in-progress'
+  color: '0e8a16'
+  description: 'Currently being worked on'
+
+- name: 'blocked'
+  color: 'b60205'
+  description: 'Blocked by external dependency'
+
+- name: 'ready-for-review'
+  color: '0e8a16'
+  description: 'Ready for code review'
+
+- name: 'needs-testing'
+  color: 'f9d0c4'
+  description: 'Needs testing before merge'
+
+# Component Labels
+- name: 'component: dashboard'
+  color: 'c2e0c6'
+  description: 'Related to dashboard functionality'
+
+- name: 'component: apd-editor'
+  color: 'c2e0c6'
+  description: 'Related to APD editor'
+
+- name: 'component: templates'
+  color: 'c2e0c6'
+  description: 'Related to template system'
+
+- name: 'component: export'
+  color: 'c2e0c6'
+  description: 'Related to export functionality'
+
+- name: 'component: validation'
+  color: 'c2e0c6'
+  description: 'Related to validation system'
+
+- name: 'component: storage'
+  color: 'c2e0c6'
+  description: 'Related to data storage'
+
+# Technical Labels
+- name: 'accessibility'
+  color: '5319e7'
+  description: 'Related to accessibility improvements'
+
+- name: 'performance'
+  color: 'ff9500'
+  description: 'Related to performance improvements'
+
+- name: 'security'
+  color: 'd73a4a'
+  description: 'Related to security'
+
+- name: 'testing'
+  color: '1d76db'
+  description: 'Related to testing'
+
+- name: 'ci/cd'
+  color: '0366d6'
+  description: 'Related to continuous integration/deployment'
+
+# Resolution Labels
+- name: 'duplicate'
+  color: 'cfd3d7'
+  description: 'This issue or pull request already exists'
+
+- name: 'invalid'
+  color: 'e4e669'
+  description: "This doesn't seem right"
+
+- name: 'wontfix'
+  color: 'ffffff'
+  description: 'This will not be worked on'
+
+- name: 'resolved'
+  color: '0e8a16'
+  description: 'Issue has been resolved'

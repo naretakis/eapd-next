@@ -1,0 +1,76 @@
+name: Documentation Request
+description: Request improvements or additions to documentation
+title: '[Docs]: '
+labels: ['documentation', 'needs-triage']
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Please provide details about what documentation needs to be added or improved.
+
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Type of Documentation
+      description: What type of documentation needs attention?
+      options:
+        - API Documentation
+        - User Guide
+        - Developer Guide
+        - Setup Instructions
+        - Architecture Documentation
+        - Code Comments
+        - README Updates
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-issue
+    attributes:
+      label: Current Documentation Issue
+      description: What's wrong with the current documentation or what's missing?
+      placeholder: The current documentation doesn't explain...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: What would you like to see added or changed?
+    validations:
+      required: true
+
+  - type: textarea
+    id: target-audience
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this documentation? (e.g., new developers, end users, system administrators)
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, examples, or references that might be helpful.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
