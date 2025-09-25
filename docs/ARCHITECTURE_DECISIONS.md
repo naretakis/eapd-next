@@ -4,7 +4,7 @@ This document records the key architectural decisions made during the developmen
 
 ## ADR-001: Frontend Framework Selection
 
-**Date**: 2024-01-15  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -46,7 +46,7 @@ We will use **Next.js 15 with App Router** as our frontend framework.
 
 ## ADR-002: UI Component Library Selection
 
-**Date**: 2024-01-15  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -89,7 +89,7 @@ We will use **Material-UI (MUI) v5** as our primary UI component library.
 
 ## ADR-003: Data Storage Strategy
 
-**Date**: 2024-01-16  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -132,7 +132,7 @@ We will use **IndexedDB** as our primary data storage mechanism.
 
 ## ADR-004: State Management Approach
 
-**Date**: 2024-01-16  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -174,7 +174,7 @@ We will use **React Context API with custom hooks** for state management.
 
 ## ADR-005: Testing Strategy
 
-**Date**: 2024-01-17  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -216,7 +216,7 @@ We will use **Jest + React Testing Library + @axe-core/react** for our testing s
 
 ## ADR-006: Deployment Strategy
 
-**Date**: 2024-01-17  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -258,7 +258,7 @@ We will use **GitHub Pages with multi-branch deployment** for hosting.
 
 ## ADR-007: TypeScript Configuration
 
-**Date**: 2024-01-17  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -315,7 +315,7 @@ We will use **strict TypeScript configuration** with additional strict flags ena
 
 ## ADR-008: Code Quality and Formatting
 
-**Date**: 2024-01-17  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -361,7 +361,7 @@ We will use **ESLint + Prettier + Husky** for automated code quality and formatt
 
 ## ADR-009: Accessibility Strategy
 
-**Date**: 2024-01-18  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -409,7 +409,7 @@ We will implement **comprehensive accessibility with automated testing** through
 
 ## ADR-010: Performance Strategy
 
-**Date**: 2024-01-18  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 
@@ -455,7 +455,7 @@ We will implement **desktop-first performance optimization** with progressive en
 
 ## ADR-011: Documentation Strategy
 
-**Date**: 2024-01-18  
+**Date**: 2025-09-25  
 **Status**: Accepted  
 **Deciders**: Development Team
 

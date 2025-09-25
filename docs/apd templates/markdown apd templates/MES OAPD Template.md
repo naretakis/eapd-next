@@ -26,34 +26,37 @@ Version:
   - Document Version
 ---
 
->[!info]+
+> [!info]+
 > Fill out the front matter data above with all relevant state information.
+
 # [State] Advanced Planning Document (MES APD)
 
->[!info]+
+> [!info]+
+>
 > ## Using This Document
-> 
+>
 > This template can be used for Medicaid Enterprise Systems (MES) Operational Advanced Planning Document (OAPD).
-> 
+>
 > This template contains guidance information and examples for completing each section in the form of Instructions. The instructional text provides questions to consider, offers suggestions on content, and indicates whether a subsection or table is optional.
-> 
+>
 > All Instructions and related examples should be deleted before submitting the final completed document.
 
 ## Table of Contents
+
 [PLACEHOLDER FOR MARKDOWN TOC]
 
 ## Executive Summary
 
->[!info]+
+> [!info]+
 > Please draft a brief executive summary (one or two paragraphs) outlining this OAPD's intent.
-> 
+>
 > If this submission includes an update to the cost allocation plan, the State should provide a copy of the most recent Public Assistance Cost Allocation Plan (PACAP) as approved by the Director, Department of Health and Human Services (DHHS), Division of Cost Allocation Services (CAS) using Appendix B.
 
 [Insert written content here]
 
 ## 1. Summary of Activities
 
->[!info]+
+> [!info]+
 > Include a detailed description of the nature and scope of the activities to be undertaken and the methods to be used. [45 CFR § 95.610(c)(3)(i)]
 >
 > Use **Table A** to provide a narrative summary of the activities' status included in previously approved APD(s). In the subsequent subsections, list each activity separately and provide as much detail as necessary, including diagrams or images, to explain this activity.
@@ -69,18 +72,22 @@ Version:
 |          |                                   |
 |          |                                   |
 |          |                                   |
+
 ### 1.1 Activity 1 – [Activity Name]
+
 [Insert written content here]
 
 ### 1.2 Activity 2 – [Activity Name]
+
 [Insert written content here]
 
 ## 2. Acquisitions
 
->[!info]+
+> [!info]+
 > Remove this instruction before submission.
-> 
+>
 > Provide an acquisition summary for the upcoming year that provides the following information on proposed, or changes to, acquisitions in **Table B** [45 CFR § 95.610(c)(3)(ii)]:
+>
 > - Type and scope of contract(s) - refer to the sample vendor resource table.
 > - Estimated cost or not-to-exceed amount.
 > - Include the term of the contract(s) to include all optional years.
@@ -101,7 +108,7 @@ Version:
 
 ## 3. Annual Budget
 
->[!info]+
+> [!info]+
 > Provide an annual budget update by project per Federal Fiscal Year (FFY) for systems receiving Federal Financial Participation (FFP) through the programs covered under this OAPD. [45 CFR § 95.610(c)(3)(iii)]
 >
 > Report the status of the project expenditures approved by CMS in the OAPD per FFY (use the Sample OAPD Status provided in **Table C**).
@@ -122,8 +129,7 @@ Version:
 
 ### 3.1 Proposed Budget
 
-
->[!info]+
+> [!info]+
 > Include the proposed budget or revised funding requested in this OAPD.
 >
 > Ensure and attest that the costs of the system are determined in accordance with 45 C.F.R Part 75, subpart E. [42 CFR § 433.112(b)(7)]
@@ -131,26 +137,28 @@ Version:
 > The proposed budget presents the total project cost and the overall request for FFP. This would include the total operational FFP costs (75%), and the total of any general administrative FFP (50%). It should then separate the requested federal match amount and the state amount. The state should submit a proposed two-year budget; however, providing a budget estimate for a longer period would be helpful to CMS.
 >
 > **Table D** and **Table E** provide examples of budget detail to lay out the proposed project budget.
+>
 > > [!Example Budget Text]+
 > > The state’s total budget is estimated at $265,000, which includes $198,750 (75% Federal Share) and $66,250 (25% State Share). The state is requesting $265,000 in new OAPD funding and $0 in new MMIS APD funds for activities for October 2025 – October 2026.
-> > 
+> >
 > > **Increase example:** The state is asking for an increase in 75% FFP in the amount of $xxxxx to cover an increased cost in the operations of module X. The increase is due to an increase in resource cost. 
-> > 
+> >
 > > **Decrease example:** The state is requesting a decrease in the previously approved 75% FFP in the amount of $xxxx for the performance of activity A. This decrease is due to activity A being delayed and will now be performed in the upcoming fiscal year.
 
 [Insert written content here]
 
 ### Table D. Sample State Proposed Budget
 
-|State Cost Category|90% Federal Share|10% State Share|75% Federal Share|25% State Share|50% Federal Share|50% State Share|Total|
-|---|---|---|---|---|---|---|---|
-|State Personnel|0|0|$198,750|$66,250|0|$0|$265,000|
-|Contractor Personnel|0|0|0|0|0|0|0|
-|System Hardware|0|0|0|0|0|0|0|
-|System Software|0|0|0|0|0|0|0|
-|Training|0|0|0|0|0|0|0|
-|Supplies|0|0|0|0|0|0|0|
-|**Grand Total**|**0**|**0**|**$198,750**|**$66,250**|**0**|**$0**|**$265,000**|
+| State Cost Category  | 90% Federal Share | 10% State Share | 75% Federal Share | 25% State Share | 50% Federal Share | 50% State Share | Total        |
+| -------------------- | ----------------- | --------------- | ----------------- | --------------- | ----------------- | --------------- | ------------ |
+| State Personnel      | 0                 | 0               | $198,750          | $66,250         | 0                 | $0              | $265,000     |
+| Contractor Personnel | 0                 | 0               | 0                 | 0               | 0                 | 0               | 0            |
+| System Hardware      | 0                 | 0               | 0                 | 0               | 0                 | 0               | 0            |
+| System Software      | 0                 | 0               | 0                 | 0               | 0                 | 0               | 0            |
+| Training             | 0                 | 0               | 0                 | 0               | 0                 | 0               | 0            |
+| Supplies             | 0                 | 0               | 0                 | 0               | 0                 | 0               | 0            |
+| **Grand Total**      | **0**             | **0**           | **$198,750**      | **$66,250**     | **0**             | **$0**          | **$265,000** |
+
 ### Table E. Sample Contract Proposed Budget
 
 | Contract Cost Category | Cost         |
@@ -164,9 +172,10 @@ Version:
 | **Grand Total**        | **$265,000** |
 
 ## Appendix
+
 ### Appendix A. Proposed Activity Schedule for the Project
 
->[!info]+
+> [!info]+
 > Provide a description of the nature and scope of system work and the methods used to execute the work. In general, this description should match the major milestones, deliverables, and key dates on the project schedule or work plan.
 >
 > For E&E projects already underway, states should prioritize, in the following order, delivery performance tuning for Medicaid Modified Adjusted Gross Income (MAGI) determinations (including accuracy and efficiency, and optimization of real-time eligibility determinations); delivery of additional Medicaid MAGI functionality based upon any new federal or state requirements; dynamic notices to beneficiaries; and delivery of non-MAGI functionality.
@@ -177,35 +186,37 @@ Version:
 
 #### Table F. Sample Proposed Activity Schedule
 
-| Project Schedule | Estimated  <br>Start Date | Estimated Finish Date |
-| ---------------- | ------------------------- | --------------------- |
-| Activity 1       | 10/01/20XX                | 12/16/20XX            |
-| Activity 2       | 01/03/20XX                | 12/02/20XX            |
-| Activity 3       | 01/09/20XX                | 06/03/20XX            |
-| Activity 4       | 01/09/20XX                | Completed             |
+| Project Schedule | Estimated <br>Start Date | Estimated Finish Date |
+| ---------------- | ------------------------ | --------------------- |
+| Activity 1       | 10/01/20XX               | 12/16/20XX            |
+| Activity 2       | 01/03/20XX               | 12/02/20XX            |
+| Activity 3       | 01/09/20XX               | 06/03/20XX            |
+| Activity 4       | 01/09/20XX               | Completed             |
+
 ### Appendix B. Cost Allocation for Planned Maintenance & Operations Activities
 
->[!info]+
+> [!info]+
 > As specified in Office of Management and Budget (OMB) Circular A-87, a cost allocation plan must be included that identifies all participants and their associated cost allocation to depict non-Medicaid activities and non-Medicaid Full-Time Equivalents participating in this project, if any.
 >
 > Provide the existing cost allocation/distribution to the various state and federal funding sources and the proposed procedures for distributing costs,  Cost Allocation Plan as approved by DHHS CAS, and a summary (sample format in **Table G**). The state should provide a copy or date of the most recent approval from CAS. If submitting an update based on the proposed plan, provide a copy and a summary of the plan using **Table G**.
 
 [Insert written content here]
+
 #### Table G. Sample Cost Allocation Summary
 
-|Federal/State Program|Medicaid Share (%)|Federal Share (%)|State Share (%)|Other Benefitting Program Share (%)|Total Program Cost ($)|
-|---|---|---|---|---|---|
-|MES Program||||||
-|Other Program||||||
-|**Total**||||||
+| Federal/State Program | Medicaid Share (%) | Federal Share (%) | State Share (%) | Other Benefitting Program Share (%) | Total Program Cost ($) |
+| --------------------- | ------------------ | ----------------- | --------------- | ----------------------------------- | ---------------------- |
+| MES Program           |                    |                   |                 |                                     |                        |
+| Other Program         |                    |                   |                 |                                     |                        |
+| **Total**             |                    |                   |                 |                                     |                        |
 
 ### Appendix C. Conditions for Enhanced Funding
 
->[!info]+
+> [!info]+
 > This section is required under 42 CFR § 433.112(b).
-> 
+>
 > The state should attest to whether the system meets these conditions by completing **Table H** and indicating “Yes,” “No,” or “N/A”. If the state’s response is “Yes,” it must explain how the condition is being met. If the state’s response is “No” or “N/A,” the state must provide an explanation for why the specific condition is not being met or why it is not applicable.  
-> 
+>
 > The state should include a separate table for each project included in this OAPD and identify the project name in the table caption.
 
 [Insert written content here]
@@ -239,39 +250,41 @@ Version:
 
 ### Appendix D. Outcomes and Metrics
 
->[!info]+
+> [!info]+
 > In accordance with 42 CFR § 433.112(b)(15), states must submit transaction data, reports, and performance metrics to support program evaluation, continuous improvement, and accountability. Each OAPD submission must include an attestation specifying the CMS designated repository of the submitted Operational Report Workbook (ORW). State must also attest that 12 months of metrics data (or data from the go-live date if the system has been live for less than 12 months) has been submitted using the **Operational Report Workbook**.
-> 
+>
 > If data has not yet been submitted, the state must explain why and provide an estimated timeline for submission.
-> 
+>
 > CMS-required outcomes must be reported for each applicable module in this OAPD when the state requests enhanced federal matching funds. This includes legacy systems, certified systems, systems of record, and those claiming enhanced rates for DDI or operations.
-> 
+>
 > Complete Table I by listing all applicable CMS-required outcome reference numbers for each module included in this OAPD. For each outcome, indicate whether it applies or explain why it does not. In the final column, include any new or updated metrics that will be reported in the Operational Report Workbook but were not included in a previous APD.
-> 
+>
 > The state could use an attachment instead of **Table I** and **Table J**.
 
 [Insert written content here]
+
 #### Table I. CMS-Required Outcomes and Metrics
 
 | Reference # | Applicable (yes or no - if no, then include why) | New / Modified Metric |
 | ----------- | ------------------------------------------------ | --------------------- |
 |             |                                                  |                       |
 |             |                                                  |                       |
+
 #### Table J. State-Specific Outcomes and Metrics
 
->[!info]+
+> [!info]+
 > List the business goals, associated state-specific outcome reference #, state-specific outcome(s), and any new or modified metrics for the project that will be reported in the Operational Report Workbook (ORW) and were not included in a previous APD.
-> 
+>
 > For the state-specific outcome reference #, use the acronym “ST” (not the state abbreviation), followed by the appropriate module abbreviation, and a number: ST[ModuleAbbreviation][ConsecutiveNumber]
-> 
+>
 > **Example:** If a state provides a state-specific outcome for its LTSS module, the first outcome reference # would be: STLTSS01
-> 
+>
 > Module abbreviations are available in the appendices of the procedure manual in the MES Certification Repository.
-> 
+>
 > For new or modified outcomes briefly explain why you are requesting a new or modified outcome.
-> 
+>
 > For the New/Modified Metric column, briefly explain why you are requesting a new or modified metric.
-> 
+>
 > The reference # used in **Table J** should match the identifier defined in the ORW and, if applicable, the SMC Intake Form to ensure consistency across documents.
 
 | Business Goal | State-Specific Outcome Reference # | State-Specific Outcome | New / Modified Metric |

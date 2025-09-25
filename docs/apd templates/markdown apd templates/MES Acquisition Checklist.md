@@ -26,22 +26,25 @@ Version:
   - Document Version
 ---
 
->[!info]+
+> [!info]+
 > Fill out the front matter data above with all relevant state information.
+
 # [State] Procurement Checklist
 
-
->[!info]+
+> [!info]+
 > The Procurement Documents checklist—for Request for Proposal (RFP)/Request for Quote (RFQ) and other procurement instruments—should be submitted to CMS in support of a request for review and approval prior to the release of procurement solicitations. This checklist offers states the opportunity to attest that they have met the various regulatory requirements surrounding the issuance of a procurement document with the intent to implement solutions to support Medicare Enterprise Systems (MES) modules.
+>
 > - SMA should populate the column labeled ‘Section and Page Applicable’ with the name of the proposal section and specific page numbers where the criteria are addressed. 
-> - SMA should populate the column labeled ‘Comments’ with any comments they believe will assist in reviewing the specific criteria.  
+> - SMA should populate the column labeled ‘Comments’ with any comments they believe will assist in reviewing the specific criteria.
 > - Fill in “Section and Page”: Indicate where each item is addressed in your solicitation.
 > - Use “Comments”: Add notes that aid in reviewing the item, if necessary.
 
 ## Purpose of Solicitation
+
 [Insert written content here]
 
 ## Scope Summary
+
 [Insert written content here]
 
 ## Table 1: Procurement Criteria – Regulatory Requirements
