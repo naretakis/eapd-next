@@ -12,6 +12,9 @@ const nextConfig: NextConfig = {
   // Set base path based on environment
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
 
+  // Set asset prefix for GitHub Pages
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+
   // Enable trailing slash for better GitHub Pages compatibility
   trailingSlash: true,
 
