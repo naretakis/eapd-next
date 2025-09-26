@@ -34,7 +34,7 @@ export default function Home() {
           </Typography>
 
           <Alert severity="info" sx={{ mb: 3 }}>
-            <AlertTitle>Development Environment</AlertTitle>
+            <AlertTitle>Welcome to eAPD-Next</AlertTitle>
             This is the initial setup of eAPD-Next. The application is currently
             in development and will be built incrementally following the
             implementation plan.
