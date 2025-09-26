@@ -6,7 +6,7 @@ A modern, browser-based application for creating, managing, and exporting APDs (
 
 ### Prerequisites
 
-- Node.js 18.x or 20.x
+- Node.js 20.x or later
 - npm 9.x or later
 - Git
 
@@ -74,6 +74,7 @@ src/
 ├── hooks/                 # Custom React hooks
 ├── utils/                 # Utility functions
 ├── theme/                 # Material-UI theme configuration
+├── testing/               # Development testing utilities
 └── templates/             # APD template definitions
 
 .github/
@@ -181,9 +182,25 @@ npm run test:coverage
 # Run tests in watch mode
 npm run test:watch
 
+# Run specific test suites (to avoid memory issues)
+npm test -- --testPathPatterns=database.test.ts --maxWorkers=1
+npm test -- --testPathPatterns=apdService.test.ts --maxWorkers=1
+npm test -- --testPathPatterns=versionControlService.test.ts --maxWorkers=1
+
 # Run accessibility tests
 npm run test -- --testNamePattern="accessibility"
 ```
+
+### Manual Testing
+
+For manual testing of the storage layer:
+
+1. **Start development server**: `npm run dev`
+2. **Visit test page**: `http://localhost:3000/storage-test.html`
+3. **Run through test sequence**: Click buttons in order to test functionality
+4. **Check browser console**: Look for errors in Developer Tools (F12)
+
+See `TESTING-CHECKLIST.md` for detailed testing instructions.
 
 ### Test Structure
 
@@ -323,7 +340,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 - [ ] Dashboard interface implementation
 - [ ] Template system development
-- [ ] IndexedDB storage layer
+- [x] IndexedDB storage layer ✅
 - [ ] Basic APD editor
 
 ### Phase 3: Advanced Features (Weeks 5-6)
