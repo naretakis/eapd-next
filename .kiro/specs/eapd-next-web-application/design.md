@@ -39,13 +39,13 @@ graph TB
             APDEditor[APD Editor Component]
             ExportSystem[Export System]
         end
-        
+
         subgraph "Data Layer"
             IndexedDB[(IndexedDB)]
             TemplateEngine[Template Engine]
             ValidationEngine[Validation Engine]
         end
-        
+
         subgraph "Service Layer"
             APDService[APD Service]
             StorageService[Storage Service]
@@ -53,13 +53,13 @@ graph TB
             ValidationService[Validation Service]
         end
     end
-    
+
     subgraph "Static Assets"
         Templates[APD Templates]
         Schemas[Validation Schemas]
         HelpContent[Help Content]
     end
-    
+
     Dashboard --> APDService
     APDEditor --> APDService
     APDService --> StorageService
@@ -85,6 +85,7 @@ graph LR
 ```
 
 **Template Processing Pipeline:**
+
 1. **Parse Markdown**: Extract sections, fields, and help text from template files
 2. **Generate Schema**: Create TypeScript interfaces and validation rules
 3. **Build Forms**: Dynamically create Material-UI form components
@@ -99,13 +100,13 @@ Addresses the #1 user pain point - complicated budget calculations:
 interface BudgetCalculationEngine {
   // Automatic calculation of federal/state shares
   calculateFederalShare(total: number, ffpRate: number): number;
-  
+
   // Validation of budget consistency across sections
   validateBudgetConsistency(apd: APD): ValidationResult;
-  
+
   // Real-time calculation updates as user types
   updateCalculations(fieldId: string, value: number): void;
-  
+
   // Generate budget summary tables
   generateBudgetSummary(apd: APD): BudgetSummary;
 }
@@ -116,6 +117,7 @@ interface BudgetCalculationEngine {
 The application follows a hierarchical component structure optimized for Material-UI and React best practices:
 
 **📁 File Organization Strategy for Learning:**
+
 - Each component lives in its own folder with index.ts, Component.tsx, Component.test.tsx, and README.md
 - README.md explains the component's purpose, props, and usage examples
 - Tests serve as living documentation of expected behavior
@@ -205,7 +207,7 @@ sequenceDiagram
     participant APDService
     participant StorageService
     participant IndexedDB
-    
+
     User->>Dashboard: Access Application
     Dashboard->>APDService: Load APD List
     APDService->>StorageService: Get All APDs
@@ -213,13 +215,13 @@ sequenceDiagram
     IndexedDB-->>StorageService: Return APD Data
     StorageService-->>APDService: Return APDs
     APDService-->>Dashboard: Display APDs
-    
+
     User->>Dashboard: Create New APD
     Dashboard->>APDEditor: Navigate to Editor
     APDEditor->>APDService: Initialize APD
     APDService->>StorageService: Create APD Record
     StorageService->>IndexedDB: Store APD
-    
+
     User->>APDEditor: Edit APD Content
     APDEditor->>APDService: Auto-save Changes
     APDService->>StorageService: Update APD
@@ -231,6 +233,7 @@ sequenceDiagram
 ### Core Components
 
 #### Dashboard Component
+
 ```typescript
 interface DashboardProps {
   onCreateAPD: (type: APDType) => void;
@@ -248,6 +251,7 @@ interface APDListItem {
 ```
 
 #### APD Editor Component
+
 ```typescript
 interface APDEditorProps {
   apdId: string;
@@ -266,6 +270,7 @@ interface APDSection {
 ```
 
 #### Form Components
+
 ```typescript
 interface FormFieldProps {
   name: string;
@@ -289,6 +294,7 @@ interface BudgetTableProps {
 ### Service Interfaces
 
 #### APD Service
+
 ```typescript
 interface APDService {
   createAPD(type: APDType, projectName: string): Promise<APD>;
@@ -302,47 +308,70 @@ interface APDService {
 ```
 
 #### Version Control Service
+
 ```typescript
 interface VersionControlService {
   // Working copy management
   getWorkingCopy(apdId: string): Promise<APDWorkingCopy>;
   updateWorkingCopy(apdId: string, changes: FieldChange[]): Promise<void>;
-  
+
   // Commit operations
-  commitChanges(apdId: string, message: string, author: string): Promise<APDVersion>;
+  commitChanges(
+    apdId: string,
+    message: string,
+    author: string
+  ): Promise<APDVersion>;
   getCommitHistory(apdId: string): Promise<APDVersion[]>;
-  
+
   // Version operations
   getVersion(apdId: string, versionId: string): Promise<APDVersion>;
   revertToVersion(apdId: string, versionId: string): Promise<APDWorkingCopy>;
-  
+
   // Change tracking
   getChanges(apdId: string): Promise<FieldChange[]>;
-  compareVersions(apdId: string, fromVersion: string, toVersion: string): Promise<VersionDiff>;
-  
+  compareVersions(
+    apdId: string,
+    fromVersion: string,
+    toVersion: string
+  ): Promise<VersionDiff>;
+
   // Branch-like operations
-  createWorkingCopyFromVersion(apdId: string, versionId: string): Promise<APDWorkingCopy>;
+  createWorkingCopyFromVersion(
+    apdId: string,
+    versionId: string
+  ): Promise<APDWorkingCopy>;
 }
 ```
 
 #### Change Tracking Service
+
 ```typescript
 interface ChangeTrackingService {
   // Field-level change detection
   detectChanges(original: APD, modified: APD): FieldChange[];
-  trackFieldChange(fieldPath: string, oldValue: any, newValue: any, timestamp: Date): void;
-  
+  trackFieldChange(
+    fieldPath: string,
+    oldValue: any,
+    newValue: any,
+    timestamp: Date
+  ): void;
+
   // Change highlighting
   getFieldChangeStatus(fieldPath: string): ChangeStatus;
   generateChangeHighlights(apd: APD): ChangeHighlight[];
-  
+
   // Diff generation
   generateDiff(version1: APDVersion, version2: APDVersion): VersionDiff;
-  generateInlineDiff(fieldPath: string, oldValue: any, newValue: any): InlineDiff;
+  generateInlineDiff(
+    fieldPath: string,
+    oldValue: any,
+    newValue: any
+  ): InlineDiff;
 }
 ```
 
 #### Storage Service
+
 ```typescript
 interface StorageService {
   initialize(): Promise<void>;
@@ -356,6 +385,7 @@ interface StorageService {
 ```
 
 #### Export Service
+
 ```typescript
 interface ExportService {
   exportToMarkdown(apd: APD): Promise<string>;
@@ -368,6 +398,7 @@ interface ExportService {
 ## Data Models
 
 ### APD Data Model with Version Control
+
 ```typescript
 interface APD {
   id: string;
@@ -377,7 +408,7 @@ interface APD {
   validationState: ValidationState;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Version control
   currentVersion: string; // Points to latest committed version
   workingCopy?: APDWorkingCopy; // Current uncommitted changes
@@ -466,6 +497,7 @@ interface APDSectionData {
 ```
 
 ### Template Data Model
+
 ```typescript
 interface APDTemplate {
   id: string;
@@ -499,6 +531,7 @@ interface TemplateField {
 ```
 
 ### Validation Data Model
+
 ```typescript
 interface ValidationRule {
   type: 'required' | 'minLength' | 'maxLength' | 'pattern' | 'custom';
@@ -522,6 +555,7 @@ interface ValidationError {
 ```
 
 ### Storage Schema with Version Control
+
 ```typescript
 // IndexedDB Schema
 interface APDDatabase {
@@ -535,7 +569,7 @@ interface APDDatabase {
       currentVersion: string;
     };
   };
-  
+
   apdVersions: {
     key: string; // Version ID
     value: APDVersion;
@@ -546,7 +580,7 @@ interface APDDatabase {
       author: string;
     };
   };
-  
+
   workingCopies: {
     key: string; // APD ID (one working copy per APD)
     value: APDWorkingCopy;
@@ -557,7 +591,7 @@ interface APDDatabase {
       hasUncommittedChanges: boolean;
     };
   };
-  
+
   fieldChanges: {
     key: string; // Change ID
     value: FieldChange;
@@ -569,7 +603,7 @@ interface APDDatabase {
       changeType: string;
     };
   };
-  
+
   projects: {
     key: string; // Project ID
     value: {
@@ -579,12 +613,12 @@ interface APDDatabase {
       createdAt: Date;
     };
   };
-  
+
   templates: {
     key: string; // Template ID
     value: APDTemplate;
   };
-  
+
   settings: {
     key: string; // Setting key
     value: any;
@@ -595,6 +629,7 @@ interface APDDatabase {
 ## Error Handling
 
 ### Error Boundary Strategy
+
 ```typescript
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -608,7 +643,7 @@ enum ErrorType {
   VALIDATION_ERROR = 'VALIDATION_ERROR',
   EXPORT_ERROR = 'EXPORT_ERROR',
   TEMPLATE_ERROR = 'TEMPLATE_ERROR',
-  NETWORK_ERROR = 'NETWORK_ERROR'
+  NETWORK_ERROR = 'NETWORK_ERROR',
 }
 
 interface AppError {
@@ -621,6 +656,7 @@ interface AppError {
 ```
 
 ### Recovery Mechanisms
+
 - **Auto-save Recovery**: Restore unsaved changes from IndexedDB on application restart
 - **Data Corruption Recovery**: Validate data integrity and provide repair options
 - **Export Failure Recovery**: Retry mechanisms with progressive fallbacks
@@ -629,24 +665,28 @@ interface AppError {
 ## Testing Strategy
 
 ### Unit Testing
+
 - **Component Testing**: React Testing Library for all UI components
 - **Service Testing**: Jest for business logic and data services
 - **Hook Testing**: Custom hooks with React Hooks Testing Library
 - **Utility Testing**: Pure function testing for validation and export utilities
 
 ### Integration Testing
+
 - **User Flow Testing**: Complete APD creation and editing workflows
 - **Storage Integration**: IndexedDB operations and data persistence
 - **Export Integration**: End-to-end export functionality testing
 - **Template Integration**: Template parsing and form generation
 
 ### Accessibility Testing
+
 - **Automated Testing**: axe-core integration for WCAG compliance
 - **Screen Reader Testing**: NVDA and JAWS compatibility
 - **Keyboard Navigation**: Tab order and keyboard-only operation
 - **Color Contrast**: Automated contrast ratio validation
 
 ### Performance Testing
+
 - **Load Time Testing**: Bundle size analysis and loading performance
 - **Memory Usage**: IndexedDB storage efficiency and memory leaks
 - **Rendering Performance**: Large form and table rendering optimization
@@ -655,18 +695,21 @@ interface AppError {
 ## Security Considerations
 
 ### Data Privacy
+
 - **Local-Only Storage**: No data transmission to external servers
 - **Encryption**: Optional client-side encryption for sensitive data
 - **Data Isolation**: Separate storage per browser profile
 - **Secure Deletion**: Proper data cleanup on APD deletion
 
 ### Input Validation
+
 - **XSS Prevention**: Sanitization of all user inputs
 - **Data Validation**: Schema validation for all stored data
 - **File Upload Security**: Validation of imported JSON files
 - **Template Security**: Validation of template definitions
 
 ### Browser Security
+
 - **Content Security Policy**: Strict CSP headers
 - **Secure Contexts**: HTTPS-only operation
 - **Storage Limits**: Graceful handling of storage quota limits
@@ -675,18 +718,21 @@ interface AppError {
 ## Performance Optimization
 
 ### Bundle Optimization
+
 - **Code Splitting**: Route-based and component-based splitting
 - **Tree Shaking**: Elimination of unused Material-UI components
 - **Lazy Loading**: Dynamic imports for large components
 - **Asset Optimization**: Image and font optimization
 
 ### Runtime Performance
+
 - **Virtual Scrolling**: For large APD lists and tables
 - **Memoization**: React.memo and useMemo for expensive operations
 - **Debounced Auto-save**: Optimized save frequency
 - **IndexedDB Optimization**: Efficient queries and indexing
 
 ### Memory Management
+
 - **Component Cleanup**: Proper useEffect cleanup
 - **Event Listener Management**: Automatic cleanup on unmount
 - **Large Data Handling**: Streaming for large exports
@@ -695,23 +741,25 @@ interface AppError {
 ## Deployment Architecture
 
 ### Multi-Environment Setup
+
 ```yaml
 # GitHub Actions Workflow Structure
 environments:
   production:
     branch: main
     url: https://username.github.io/eapd-next/
-    
+
   staging:
     branch: test
     url: https://username.github.io/eapd-next-test/
-    
+
   development:
     branch: dev
     url: https://username.github.io/eapd-next-dev/
 ```
 
 ### Build Process
+
 1. **Dependency Installation**: npm ci for reproducible builds
 2. **Type Checking**: TypeScript compilation and type validation
 3. **Testing**: Unit and integration test execution
@@ -721,16 +769,17 @@ environments:
 7. **Deployment**: GitHub Pages deployment with proper routing
 
 ### Progressive Web App Configuration
+
 ```typescript
 // PWA Manifest
 interface PWAManifest {
-  name: "eAPD-Next";
-  short_name: "eAPD-Next";
-  description: "APD Creation and Management Tool";
-  start_url: "/";
-  display: "standalone";
-  background_color: "#ffffff";
-  theme_color: "#1976d2";
+  name: 'eAPD-Next';
+  short_name: 'eAPD-Next';
+  description: 'APD Creation and Management Tool';
+  start_url: '/';
+  display: 'standalone';
+  background_color: '#ffffff';
+  theme_color: '#1976d2';
   icons: PWAIcon[];
 }
 
@@ -780,13 +829,15 @@ interface ServiceWorkerConfig {
 
 ```markdown
 # development-standards.md
+
 - TypeScript strict mode requirements
 - ESLint and Prettier configuration
 - Component naming conventions
 - File organization patterns
 - Code review checklist
 
-# apd-domain-knowledge.md  
+# apd-domain-knowledge.md
+
 - APD types and their purposes
 - CMS regulatory requirements
 - Budget calculation rules
@@ -794,6 +845,7 @@ interface ServiceWorkerConfig {
 - User workflow patterns
 
 # material-ui-guidelines.md
+
 - Preferred MUI components for each use case
 - Theme customization patterns
 - Accessibility implementation with MUI
@@ -801,6 +853,7 @@ interface ServiceWorkerConfig {
 - Common MUI patterns and anti-patterns
 
 # git-workflow.md
+
 - Branch naming conventions
 - Commit message standards
 - Pull request templates
@@ -820,24 +873,24 @@ module.exports = {
     'npm run type-check',
     'npm run lint',
     'npm run test:changed',
-    'npm run accessibility-check'
+    'npm run accessibility-check',
   ],
-  onFailure: 'provide-fix-suggestions'
+  onFailure: 'provide-fix-suggestions',
 };
 
-// .kiro/hooks/test-runner.js  
+// .kiro/hooks/test-runner.js
 // Automatically runs relevant tests when files change
 module.exports = {
   watchPatterns: ['src/**/*.ts', 'src/**/*.tsx'],
   testCommand: 'npm run test:watch',
-  coverageThreshold: 90
+  coverageThreshold: 90,
 };
 
 // .kiro/hooks/documentation-updater.js
 // Updates documentation when code changes
 module.exports = {
   triggers: ['component-added', 'interface-changed'],
-  actions: ['update-component-guide', 'regenerate-api-docs']
+  actions: ['update-component-guide', 'regenerate-api-docs'],
 };
 ```
 
@@ -846,6 +899,7 @@ module.exports = {
 **🛠️ Implementation Roadmap for Learning Developers:**
 
 #### Phase 1: Foundation (Week 1-2)
+
 1. **Project Setup**
    - Initialize Next.js with TypeScript
    - Configure Material-UI theme
@@ -859,6 +913,7 @@ module.exports = {
    - Set up routing between dashboard and editor
 
 #### Phase 2: Core Features (Week 3-4)
+
 1. **Template System**
    - Parse markdown templates into JSON schemas
    - Generate form components from schemas
@@ -872,6 +927,7 @@ module.exports = {
    - Add offline detection
 
 #### Phase 3: Advanced Features (Week 5-6)
+
 1. **Export System**
    - PDF generation with jsPDF
    - Markdown export with proper formatting
@@ -894,18 +950,18 @@ module.exports = {
 
 /**
  * FormField Component
- * 
+ *
  * Purpose: Renders different types of form fields based on template definitions
- * 
+ *
  * Learning Notes:
  * - Uses Material-UI components for consistent styling
  * - Implements proper TypeScript typing for props
  * - Includes accessibility attributes (ARIA labels)
  * - Handles validation state and error messages
- * 
+ *
  * Usage Example:
- * <FormField 
- *   field={templateField} 
+ * <FormField
+ *   field={templateField}
  *   value={currentValue}
  *   onChange={handleChange}
  *   error={validationError}
@@ -913,17 +969,17 @@ module.exports = {
  */
 
 interface FormFieldProps {
-  field: TemplateField;        // What type of field to render
-  value: any;                  // Current field value
+  field: TemplateField; // What type of field to render
+  value: any; // Current field value
   onChange: (value: any) => void; // Callback when value changes
-  error?: ValidationError;     // Optional validation error
+  error?: ValidationError; // Optional validation error
 }
 
-export const FormField: React.FC<FormFieldProps> = ({ 
-  field, 
-  value, 
-  onChange, 
-  error 
+export const FormField: React.FC<FormFieldProps> = ({
+  field,
+  value,
+  onChange,
+  error,
 }) => {
   // Implementation with detailed comments explaining each part...
 };

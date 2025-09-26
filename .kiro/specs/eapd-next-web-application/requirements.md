@@ -44,7 +44,7 @@ This project also serves as a comprehensive learning platform for modern web dev
 #### Acceptance Criteria
 
 1. WHEN I create a PAPD THEN the system SHALL generate forms based on the MES APD Template.md structure
-2. WHEN I create an AoA THEN the system SHALL generate forms based on the MES AoA Template.md structure  
+2. WHEN I create an AoA THEN the system SHALL generate forms based on the MES AoA Template.md structure
 3. WHEN I create an OAPD THEN the system SHALL generate forms based on the MES OAPD Template.md structure
 4. WHEN I fill out forms THEN the system SHALL use appropriate Material-UI components (text fields, select dropdowns, date pickers, tables) for different field types
 5. WHEN I view form sections THEN the system SHALL display help text and instructions from the template guidance
@@ -170,7 +170,7 @@ This project also serves as a comprehensive learning platform for modern web dev
 #### Acceptance Criteria
 
 1. WHEN I push to the main branch THEN the system SHALL automatically deploy to the production environment
-2. WHEN I push to the test branch THEN the system SHALL automatically deploy to the test environment  
+2. WHEN I push to the test branch THEN the system SHALL automatically deploy to the test environment
 3. WHEN I push to the dev branch THEN the system SHALL automatically deploy to the development environment
 4. WHEN deployments occur THEN the system SHALL use GitHub Actions for automated build and deployment
 5. WHEN deployments fail THEN the system SHALL provide clear error messages and rollback capabilities
