@@ -86,10 +86,8 @@ describe('ComponentName', () => {
 
 ### Branch Strategy
 
-- `main` - Production-ready code
-- `test` - Staging environment
-- `dev` - Development environment
-- Feature branches: `feature/task-description`
+- `main` - Production-ready code (automatically deployed)
+- Feature branches: `feature/task-description` (local development)
 - Bug fixes: `fix/issue-description`
 
 ### Pull Request Requirements
@@ -202,6 +200,6 @@ describe('ComponentName', () => {
 ### Deployment Process
 
 - All changes go through CI/CD pipeline
-- Automated testing on multiple environments
-- Manual testing on staging before production
+- Automated testing and deployment on main branch
+- Local testing required before merging to main
 - Rollback plan for production deployments
