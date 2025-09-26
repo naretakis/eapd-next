@@ -740,22 +740,19 @@ interface AppError {
 
 ## Deployment Architecture
 
-### Multi-Environment Setup
+### Simple Production Deployment
 
 ```yaml
 # GitHub Actions Workflow Structure
-environments:
-  production:
-    branch: main
-    url: https://username.github.io/eapd-next/
+production:
+  branch: main
+  url: https://username.github.io/eapd-next/
+  trigger: automatic on push to main
 
-  staging:
-    branch: test
-    url: https://username.github.io/eapd-next-test/
-
-  development:
-    branch: dev
-    url: https://username.github.io/eapd-next-dev/
+development:
+  branches: feature/* (local development only)
+  testing: npm run dev (local development server)
+  deployment: merge to main when ready
 ```
 
 ### Build Process
@@ -858,7 +855,7 @@ interface ServiceWorkerConfig {
 - Commit message standards
 - Pull request templates
 - Release process
-- Deployment procedures
+- Simple deployment procedures
 ```
 
 ### Kiro Agent Hooks Implementation

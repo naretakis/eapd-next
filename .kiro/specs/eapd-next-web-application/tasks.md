@@ -9,7 +9,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 - [x] 1. GitHub Repository Setup and Project Foundation
   - Set up GitHub repository with proper configuration and project management
   - Initialize Next.js project with TypeScript and essential development tools
-  - Configure CI/CD pipeline and multi-environment deployment
+  - Configure CI/CD pipeline and simple production deployment
   - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6, 15.7, 12.4, 12.5, 12.7_
 
 - [x] 1.1 Create and Configure GitHub Repository
@@ -31,7 +31,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 
 - [x] 1.3 Configure GitHub Actions CI/CD Pipeline
   - Set up automated testing workflow running on pull requests and pushes
-  - Configure multi-environment deployment to GitHub Pages (production, staging, development)
+  - Configure simple production deployment to GitHub Pages
   - Add automated dependency updates and security scanning
   - Implement deployment verification and rollback capabilities
   - Test deployment pipeline with initial Next.js app
@@ -58,7 +58,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create LEARNING_PATH.md with week-by-week development progression
   - Set up ARCHITECTURE_DECISIONS.md for documenting design choices
   - Create initial test examples and testing utilities
-  - Document deployment process and environment setup
+  - Document simple deployment process and local development setup
   - _Requirements: 11.1, 11.2, 11.3, 14.7, 14.8_
 
 - [ ] 2. IndexedDB Storage Layer and Data Management
@@ -331,7 +331,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 
 - [ ] 12. Release Management and Production Readiness
   - Implement automated release management with semantic versioning
-  - Finalize production deployment configuration and monitoring
+  - Finalize production deployment configuration and verification
   - Create user-facing release documentation and update notifications
   - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5, 13.6, 13.7, 13.8_
 
@@ -429,7 +429,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 **Phase 1 (Tasks 1-2): Foundation and Setup**
 
 - Learn GitHub repository setup and project management best practices
-- Understand CI/CD pipeline configuration and automated deployment
+- Understand CI/CD pipeline configuration and simple automated deployment
 - Master Next.js project structure and TypeScript configuration
 - Practice test-driven development setup with Jest and React Testing Library
 - Learn IndexedDB operations and data persistence patterns

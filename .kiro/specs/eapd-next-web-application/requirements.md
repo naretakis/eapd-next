@@ -157,25 +157,25 @@ This project also serves as a comprehensive learning platform for modern web dev
 1. WHEN I set up the project THEN the system SHALL provide detailed README.md with setup instructions and architecture overview
 2. WHEN I work with the code THEN the system SHALL include comprehensive code documentation and examples
 3. WHEN I need to understand architecture THEN the system SHALL provide clear documentation of component structure and data flow
-4. WHEN I deploy the application THEN the system SHALL include deployment guides for GitHub Pages multi-branch setup
+4. WHEN I deploy the application THEN the system SHALL include deployment guides for GitHub Pages single-branch setup
 5. WHEN I encounter issues THEN the system SHALL provide troubleshooting guides for common problems
 6. WHEN I follow best practices THEN the system SHALL demonstrate proper Git workflows, testing strategies, and code organization
 7. WHEN I learn new concepts THEN the system SHALL include links to relevant learning resources and documentation
 8. WHEN I review code THEN the system SHALL follow consistent coding standards and include explanatory comments
 
-### Requirement 12: Multi-Environment Deployment
+### Requirement 12: Simple Production Deployment
 
-**User Story:** As a developer, I want automated deployments to multiple environments so that I can test changes and maintain stable releases.
+**User Story:** As a developer, I want automated deployment to production so that I can deploy changes reliably and efficiently.
 
 #### Acceptance Criteria
 
 1. WHEN I push to the main branch THEN the system SHALL automatically deploy to the production environment
-2. WHEN I push to the test branch THEN the system SHALL automatically deploy to the test environment
-3. WHEN I push to the dev branch THEN the system SHALL automatically deploy to the development environment
-4. WHEN deployments occur THEN the system SHALL use GitHub Actions for automated build and deployment
-5. WHEN deployments fail THEN the system SHALL provide clear error messages and rollback capabilities
-6. WHEN I access different environments THEN the system SHALL clearly indicate which environment I'm using
-7. WHEN I configure deployments THEN the system SHALL use GitHub Pages with proper branch protection rules
+2. WHEN I develop features THEN the system SHALL support local development and testing on feature branches
+3. WHEN deployments occur THEN the system SHALL use GitHub Actions for automated build and deployment
+4. WHEN deployments fail THEN the system SHALL provide clear error messages and rollback capabilities
+5. WHEN I access the production site THEN the system SHALL clearly indicate the application status
+6. WHEN I configure deployments THEN the system SHALL use GitHub Pages with proper branch protection rules
+7. WHEN I test locally THEN the system SHALL provide comprehensive local development tools
 
 ### Requirement 13: Release Management and Documentation
 
@@ -247,7 +247,7 @@ This project also serves as a comprehensive learning platform for modern web dev
 2. WHEN I work on development THEN the system SHALL provide a development standards and coding conventions steering file
 3. WHEN I need APD domain knowledge THEN the system SHALL include an APD domain knowledge steering file referencing the wiki content
 4. WHEN I use Material-UI components THEN the system SHALL provide a Material-UI component usage guidelines steering file
-5. WHEN I manage Git workflows THEN the system SHALL include a Git workflow and deployment process steering file
+5. WHEN I manage Git workflows THEN the system SHALL include a Git workflow and simple deployment process steering file
 6. WHEN I commit code THEN the system SHALL configure Kiro agent hooks for pre-commit code quality checks
 7. WHEN I update documentation THEN the system SHALL provide automatic documentation update hooks when code changes
 8. WHEN I run tests THEN the system SHALL include test running hooks for development workflow
