@@ -4,9 +4,6 @@ A modern, browser-based application for creating, managing, and exporting APDs (
 
 ## 🚀 Quick Start
 
-> **Status**: Development environment ready! GitHub Pages deployment configured.  
-> **CI/CD**: Node.js 20+ workflows active ✅
-
 ### Prerequisites
 
 - Node.js 18.x or 20.x
