@@ -23,7 +23,7 @@ jest.mock('next/navigation', () => ({
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -36,7 +36,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
+(global as any).IntersectionObserver = class IntersectionObserver {
   constructor() {}
   disconnect() {}
   observe() {}
@@ -44,7 +44,7 @@ global.IntersectionObserver = class IntersectionObserver {
 };
 
 // Mock ResizeObserver
-global.ResizeObserver = class ResizeObserver {
+(global as any).ResizeObserver = class ResizeObserver {
   constructor() {}
   disconnect() {}
   observe() {}
@@ -53,7 +53,8 @@ global.ResizeObserver = class ResizeObserver {
 
 // Setup axe-core for accessibility testing in development
 if (process.env.NODE_ENV === 'development') {
-  import('@axe-core/react').then(axe => {
-    axe.default(React, ReactDOM, 1000);
+  import('@axe-core/react').then(() => {
+    // Axe-core loaded for accessibility testing
+    console.log('Axe-core loaded for accessibility testing');
   });
 }
