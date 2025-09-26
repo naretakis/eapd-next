@@ -150,10 +150,12 @@ describe('ComponentName', () => {
 
 ### Code Documentation
 
+- Keep main README file up to date with code changes
+- Keep CHANGELOG file up to date with changes
+- Keep all other documentation up to date with code changes
 - JSDoc comments for all public APIs
 - README files for complex components
 - Architecture decision records for major changes
-- Keep documentation up to date with code changes
 
 ### User Documentation
 
