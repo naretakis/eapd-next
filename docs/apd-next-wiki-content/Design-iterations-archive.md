@@ -10,6 +10,6 @@ All of the content was authored in Word Documents and relied on change tracking 
 
 ![Screen Shot 2020-01-09 at 9 54 45 AM](https://user-images.githubusercontent.com/21222704/72091913-1e362600-32c6-11ea-9bfe-6343905495ff.png)
 
-## eAPD-Next Version 0.1
+## eAPD-Next Version v0.1.0 - Initial placeholder landing page and dashboard
 
-[placeholder]
+<img width="1382" height="787" alt="eAPD-Next Initial Landing Page and Dashboard 2025-09-26 at 11 46 16" src="https://github.com/user-attachments/assets/9eb836f7-1570-4d33-abb1-433e542512aa" />
