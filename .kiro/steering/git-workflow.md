@@ -2,17 +2,20 @@
 
 ## Branch Strategy
 
-### Main Branches
+### Main Branch
 
-- **`main`** - Production-ready code, deployed to production environment
-- **`test`** - Staging environment for testing before production
-- **`dev`** - Development environment for ongoing development work
+- **`main`** - Production-ready code, automatically deployed to production
+
+### Development Branches
+
+- **Feature branches** - Individual features and tasks (local development only)
+- **Bug fix branches** - Bug fixes and hotfixes (local development only)
 
 ### Feature Branches
 
 - **Naming**: `feature/task-description` or `feature/issue-number-description`
 - **Purpose**: Individual features or tasks from the implementation plan
-- **Lifecycle**: Created from `dev`, merged back to `dev` when complete
+- **Lifecycle**: Created from `main`, merged back to `main` when ready for production
 - **Examples**:
   - `feature/dashboard-apd-list`
   - `feature/template-parser`
@@ -22,17 +25,17 @@
 
 - **Naming**: `fix/issue-description` or `fix/bug-number-description`
 - **Purpose**: Bug fixes and hotfixes
-- **Lifecycle**: Created from appropriate base branch, merged back when fixed
+- **Lifecycle**: Created from `main`, merged back to `main` when fixed
 - **Examples**:
   - `fix/validation-error-display`
   - `fix/export-pdf-formatting`
 
-### Release Branches
+### Release Process
 
-- **Naming**: `release/version-number`
-- **Purpose**: Prepare releases, final testing, and version bumping
-- **Lifecycle**: Created from `dev`, merged to `main` and `test`
-- **Examples**: `release/1.0.0`, `release/1.1.0`
+- **Tagging**: Use Git tags for version releases on `main` branch
+- **Purpose**: Mark stable releases and track version history
+- **Process**: Tag `main` branch when ready for release
+- **Examples**: `git tag v1.0.0`, `git tag v1.1.0`
 
 ## Commit Message Standards
 
@@ -110,8 +113,8 @@ Closes #123
 1. **Update local repository**:
 
    ```bash
-   git checkout dev
-   git pull origin dev
+   git checkout main
+   git pull origin main
    ```
 
 2. **Create feature branch**:
@@ -120,17 +123,27 @@ Closes #123
    git checkout -b feature/task-description
    ```
 
-3. **Make changes and commit regularly**:
+3. **Develop and test locally**:
+
+   ```bash
+   npm run dev  # Test in development server
+   npm test     # Run tests
+   npm run lint # Check code quality
+   ```
+
+4. **Commit changes regularly**:
 
    ```bash
    git add .
    git commit -m "feat(component): implement initial structure"
    ```
 
-4. **Push branch and create PR**:
+5. **Merge to main when ready**:
    ```bash
-   git push origin feature/task-description
-   # Create PR through GitHub interface
+   git checkout main
+   git pull origin main
+   git merge feature/task-description
+   git push origin main  # Triggers automatic deployment
    ```
 
 ### Code Review Process
@@ -147,36 +160,26 @@ Closes #123
 - **Merge commit** for release branches to preserve branch history
 - **Rebase and merge** for small, clean commits
 
-## Multi-Environment Deployment
+## Simple Deployment Strategy
 
-### Environment Configuration
-
-#### Production Environment
+### Production Environment
 
 - **Branch**: `main`
 - **URL**: `https://username.github.io/eapd-next/`
 - **Deployment**: Automatic on push to `main`
 - **Purpose**: Live application for end users
 
-#### Staging Environment
+### Development Environment
 
-- **Branch**: `test`
-- **URL**: `https://username.github.io/eapd-next-test/`
-- **Deployment**: Automatic on push to `test`
-- **Purpose**: Final testing before production release
-
-#### Development Environment
-
-- **Branch**: `dev`
-- **URL**: `https://username.github.io/eapd-next-dev/`
-- **Deployment**: Automatic on push to `dev`
-- **Purpose**: Ongoing development and integration testing
+- **Branches**: Feature branches (e.g., `feature/dashboard`, `fix/validation`)
+- **Testing**: Local development server (`npm run dev`)
+- **Purpose**: Local development and testing before merging to main
 
 ### Deployment Pipeline
 
 #### Automated Deployment Process
 
-1. **Code push** to tracked branch
+1. **Code push** to `main` branch
 2. **CI/CD pipeline** runs automatically:
    - Install dependencies
    - Run type checking
@@ -185,69 +188,49 @@ Closes #123
    - Build application
    - Deploy to GitHub Pages
 3. **Deployment verification** checks site accessibility
-4. **Rollback** if deployment fails (production only)
 
 #### Manual Deployment
 
-For emergency deployments or special cases:
+For emergency deployments:
 
 ```bash
-# Deploy specific commit to staging
-git checkout test
-git cherry-pick <commit-hash>
-git push origin test
-
 # Deploy hotfix to production
 git checkout main
-git cherry-pick <hotfix-commit>
-git push origin main
+git pull origin main
+# Make necessary changes
+git add .
+git commit -m "fix(critical): resolve urgent issue"
+git push origin main  # Triggers automatic deployment
 ```
 
 ### Release Process
 
-#### Regular Release (Weekly/Bi-weekly)
+#### Regular Release
 
-1. **Create release branch** from `dev`:
-
-   ```bash
-   git checkout dev
-   git pull origin dev
-   git checkout -b release/1.1.0
-   ```
-
-2. **Update version numbers** and changelog:
-
-   ```bash
-   npm version minor  # or patch/major
-   # Update CHANGELOG.md
-   git commit -am "chore(release): prepare version 1.1.0"
-   ```
-
-3. **Test on staging**:
-
-   ```bash
-   git checkout test
-   git merge release/1.1.0
-   git push origin test
-   # Perform manual testing on staging environment
-   ```
-
-4. **Deploy to production**:
+1. **Ensure main is ready**:
 
    ```bash
    git checkout main
-   git merge release/1.1.0
-   git push origin main
-   git tag v1.1.0
-   git push origin v1.1.0
+   git pull origin main
+   # Verify all features are complete and tested
    ```
 
-5. **Merge back to dev**:
+2. **Update version and create tag**:
+
    ```bash
-   git checkout dev
-   git merge release/1.1.0
-   git push origin dev
-   git branch -d release/1.1.0
+   npm version minor  # or patch/major
+   # Update CHANGELOG.md if needed
+   git add .
+   git commit -m "chore(release): prepare version 1.1.0"
+   git tag v1.1.0
+   ```
+
+3. **Deploy to production**:
+
+   ```bash
+   git push origin main
+   git push origin v1.1.0
+   # GitHub Actions automatically deploys to production
    ```
 
 #### Hotfix Process
@@ -256,37 +239,26 @@ git push origin main
 
    ```bash
    git checkout main
+   git pull origin main
    git checkout -b fix/critical-bug
    ```
 
-2. **Implement fix and test**:
+2. **Implement and test fix locally**:
 
    ```bash
    # Make necessary changes
+   npm run dev  # Test locally
+   npm test     # Run tests
    git commit -m "fix(critical): resolve security vulnerability"
    ```
 
-3. **Deploy to staging for verification**:
-
-   ```bash
-   git checkout test
-   git merge fix/critical-bug
-   git push origin test
-   ```
-
-4. **Deploy to production**:
+3. **Deploy to production**:
 
    ```bash
    git checkout main
    git merge fix/critical-bug
-   git push origin main
-   ```
-
-5. **Merge back to dev**:
-   ```bash
-   git checkout dev
-   git merge fix/critical-bug
-   git push origin dev
+   git push origin main  # Automatic deployment
+   git branch -d fix/critical-bug
    ```
 
 ## Quality Gates
@@ -313,13 +285,14 @@ Before merging any PR:
 
 ### Deployment Requirements
 
-Before deploying to production:
+Before merging to main (production):
 
-- [ ] All tests pass on staging
-- [ ] Manual testing completed
+- [ ] All tests pass locally (`npm test`)
+- [ ] Code quality checks pass (`npm run lint`)
+- [ ] TypeScript compilation successful (`npm run type-check`)
+- [ ] Local testing completed (`npm run dev`)
 - [ ] Performance impact assessed
 - [ ] Security review completed
-- [ ] Rollback plan prepared
 
 ## Branch Protection Rules
 
@@ -331,17 +304,12 @@ Before deploying to production:
 - **Include administrators**: Rules apply to all users
 - **Restrict force pushes**: Prevent history rewriting
 
-### Test Branch Protection
+### Feature Branch Guidelines
 
-- **Require status checks**: Build and test must pass
-- **Allow force pushes**: For emergency fixes
-- **Require up-to-date branches**: Recommended but not required
-
-### Dev Branch Protection
-
-- **Require status checks**: Basic build check
-- **Allow force pushes**: For development flexibility
-- **No review required**: For rapid development
+- **Local development**: No protection rules needed
+- **Testing required**: Must test locally before merging
+- **Clean history**: Squash commits when merging to main
+- **Delete after merge**: Clean up feature branches promptly
 
 ## Troubleshooting Common Issues
 
@@ -367,18 +335,18 @@ git push --force-with-lease origin feature/my-feature
 3. **Test build locally** to reproduce issues
 4. **Rollback if necessary** using previous deployment
 
-### Sync Issues Between Environments
+### Branch Sync Issues
 
 ```bash
-# Sync staging with production
-git checkout test
-git reset --hard main
-git push --force origin test
+# Update feature branch with latest main
+git checkout feature/my-feature
+git fetch origin
+git rebase origin/main
 
-# Sync development with staging
-git checkout dev
-git merge test
-git push origin dev
+# Resolve conflicts in your editor
+# After resolving conflicts:
+git add .
+git rebase --continue
 ```
 
 ## Git Hooks and Automation
@@ -437,7 +405,7 @@ In `package.json`:
 
 ### Deployment Safety
 
-- **Test thoroughly**: Use staging environment
-- **Monitor deployments**: Watch for errors after deployment
-- **Have rollback plan**: Know how to revert quickly
-- **Communicate changes**: Notify team of deployments
+- **Test thoroughly**: Use local development server
+- **Monitor deployments**: Watch GitHub Actions and production site
+- **Have rollback plan**: Know how to revert commits quickly
+- **Communicate changes**: Notify team of production deployments

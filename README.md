@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - ✅ **Responsive Design**: Desktop-optimized with mobile compatibility
 - ✅ **Development Tools**: ESLint, Prettier, Husky pre-commit hooks
 - ✅ **Testing Framework**: Jest and React Testing Library
-- ✅ **CI/CD Pipeline**: GitHub Actions with multi-environment deployment
+- ✅ **CI/CD Pipeline**: GitHub Actions with automatic deployment
 - ✅ **Accessibility**: WCAG AA compliance foundation
 
 ### Planned Features
@@ -56,7 +56,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - **UI Library**: Material-UI (MUI) v5
 - **Storage**: IndexedDB for local data persistence
 - **Testing**: Jest + React Testing Library + @axe-core/react
-- **Deployment**: GitHub Pages with multi-environment support
+- **Deployment**: GitHub Pages with automatic deployment
 
 ### Project Structure
 
@@ -115,10 +115,11 @@ npm run test:coverage    # Run tests with coverage report
 
 1. **Create feature branch**: `git checkout -b feature/task-description`
 2. **Make changes**: Follow coding standards in `.kiro/steering/`
-3. **Run tests**: `npm test` and `npm run lint`
-4. **Commit changes**: Use conventional commit format
-5. **Create PR**: Use the provided PR template
-6. **Code review**: Address feedback and merge
+3. **Test locally**: `npm run dev` and `npm test`
+4. **Run quality checks**: `npm run lint` and `npm run type-check`
+5. **Commit changes**: Use conventional commit format
+6. **Merge to main**: When ready to deploy to production
+7. **Automatic deployment**: GitHub Actions deploys to production
 
 ### Code Quality Standards
 
@@ -130,25 +131,34 @@ npm run test:coverage    # Run tests with coverage report
 
 ## 🚀 Deployment
 
-### Multi-Environment Setup
+### Simple Deployment Strategy
 
 - **Production**: `main` branch → https://username.github.io/eapd-next/
-- **Staging**: `test` branch → https://username.github.io/eapd-next-test/
-- **Development**: `dev` branch → https://username.github.io/eapd-next-dev/
+- **Development**: Feature branches (local testing only)
 
 ### Deployment Process
 
-1. **Automatic**: Push to tracked branches triggers deployment
-2. **Manual**: Use GitHub Actions workflow dispatch
-3. **Verification**: Automated deployment verification and rollback
+1. **Develop locally**: Work on feature branches with `npm run dev`
+2. **Test thoroughly**: Run `npm test` and `npm run lint`
+3. **Merge to main**: When ready to deploy to production
+4. **Automatic deployment**: GitHub Actions deploys to GitHub Pages
+5. **Verification**: Automated deployment verification
 
 ### Environment Configuration
 
 ```bash
-# Set environment variables for different deployments
-NEXT_PUBLIC_ENVIRONMENT=production|staging|development
-NEXT_PUBLIC_BASE_PATH=/eapd-next|/eapd-next-test|/eapd-next-dev
+# Production environment variables
+NEXT_PUBLIC_ENVIRONMENT=production
+NEXT_PUBLIC_BASE_PATH=/eapd-next
 ```
+
+### Benefits of Single-Branch Deployment
+
+- ✅ **Simple and reliable** - no complex branching logic
+- ✅ **Fast deployment** - direct main branch to production
+- ✅ **Easy maintenance** - single workflow to manage
+- ✅ **Flexible development** - work on any branch locally
+- ✅ **Clear production state** - main branch always reflects live site
 
 ## 🧪 Testing
 
