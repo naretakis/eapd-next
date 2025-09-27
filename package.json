@@ -19,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "analyze": "cross-env ANALYZE=true npm run build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "changelog:draft": "./scripts/generate-changelog-draft.sh"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

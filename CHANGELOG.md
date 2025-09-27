@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2025-01-27
+## [0.2.0] - 2025-09-27
 
 ### Added
 
@@ -64,25 +64,112 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ **Centralized Management** (Pain Point #2): Single dashboard for all APD operations
 - ✅ **Project Organization** (Pain Point #7): Project-based APD grouping and management
 
-## [0.1.0] - 2025-01-20
+## [0.1.0] - 2025-09-26
 
 ### Added
 
-- **Project Foundation**: Next.js 15 with TypeScript and Material-UI setup
-- **GitHub Repository**: Configured with CI/CD pipeline and automated deployment
-- **Development Environment**: ESLint, Prettier, Husky, and testing framework
-- **Storage Layer**: Complete IndexedDB implementation with Dexie.js
-- **Service Architecture**: APD service layer with business logic
-- **Version Control System**: Working copy management and change tracking
-- **Basic Layout**: Responsive layout component with Material-UI theming
-- **Testing Framework**: Jest and React Testing Library configuration
+#### Project Foundation and Infrastructure (Tasks 1-2 Complete)
+
+- **Next.js 15 Application**: Modern React framework with TypeScript and Material-UI
+- **GitHub Repository**: Comprehensive setup with issue templates, PR templates, and project management
+- **CI/CD Pipeline**: GitHub Actions with automated testing, linting, and deployment to GitHub Pages
+- **Development Environment**: ESLint, Prettier, Husky pre-commit hooks, and Jest testing framework
+- **Single-Branch Deployment**: Simplified deployment strategy with main branch auto-deployment
+
+#### Storage and Data Management
+
+- **IndexedDB Implementation**: Complete local storage system using Dexie.js
+- **APD Service Layer**: Business logic for APD creation, management, and validation
+- **Version Control System**: Working copy management with change tracking and commit workflow
+- **Auto-save Functionality**: Debounced auto-save with conflict resolution and error recovery
+- **Data Models**: TypeScript interfaces for APDs, projects, templates, and database operations
+
+#### Core Components and Layout
+
+- **Responsive Layout**: Material-UI based layout with proper theming and accessibility
+- **Error Boundaries**: Graceful error handling throughout the application
+- **Loading States**: Comprehensive loading indicators and user feedback
+- **Theme System**: Consistent Material-UI theming with dark/light mode support
+
+#### Documentation and Learning Resources
+
+- **Comprehensive README**: Setup instructions, architecture overview, and development guidelines
+- **APD Domain Knowledge**: Extensive documentation of APD requirements and regulatory context
+- **Development Standards**: Code quality guidelines and best practices
+- **Kiro Integration**: Steering documents and agent hooks for AI-assisted development
 
 ### Infrastructure
 
-- **CI/CD Pipeline**: GitHub Actions with automated testing and deployment
-- **Code Quality**: Pre-commit hooks with linting and formatting
-- **Documentation**: Comprehensive README and development guidelines
-- **Accessibility**: Foundation for WCAG AA compliance
+- **Node.js 20+ Requirement**: Modern Node.js version with performance improvements
+- **Code Quality Gates**: Automated linting, formatting, and type checking
+- **Accessibility Foundation**: WCAG AA compliance setup with axe-core testing
+- **Performance Monitoring**: Bundle analysis and optimization configuration
 
-[0.2.0]: https://github.com/yourusername/eapd-next/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/yourusername/eapd-next/releases/tag/v0.1.0
+### Fixed
+
+- **GitHub Pages Deployment**: Resolved configuration issues for proper static site deployment
+- **TypeScript Errors**: Fixed type safety issues throughout the codebase
+- **ESLint Configuration**: Resolved linting errors and established consistent code style
+- **CI/CD Pipeline**: Stabilized automated testing and deployment workflow
+
+## [0.0.1] - 2025-09-25
+
+### Added
+
+- **Initial Repository**: Basic project structure and configuration
+- **Project Documentation**: Initial README and project planning documents
+- **License**: GNU General Public License v3.0
+- **Git Configuration**: Comprehensive .gitignore for Next.js projects
+
+### Infrastructure
+
+- **Repository Setup**: GitHub repository with basic configuration
+- **Documentation Foundation**: Initial project documentation and planning materials
+
+---
+
+## Changelog Maintenance
+
+This changelog follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) principles:
+
+- **Added** for new features
+- **Changed** for changes in existing functionality
+- **Deprecated** for soon-to-be removed features
+- **Removed** for now removed features
+- **Fixed** for any bug fixes
+- **Security** for vulnerability fixes
+
+### Semi-Automated Workflow
+
+1. **Use Conventional Commits**: Continue using `feat:`, `fix:`, `docs:`, etc.
+2. **Generate Draft Entries**: Use `git log` to identify changes since last release
+3. **Curate for Users**: Focus on user-facing changes and group related commits
+4. **Update on Releases**: Update changelog when bumping versions
+
+### Commit Types to Changelog Mapping
+
+- `feat:` → **Added** section
+- `fix:` → **Fixed** section
+- `docs:` → **Changed** (if user-facing) or omit if internal
+- `style:`, `refactor:` → Usually omit unless user-facing
+- `chore:` → Usually omit unless significant
+- `perf:` → **Changed** or **Added** if performance improvement
+- `test:` → Usually omit unless it affects user confidence
+
+### Helper Commands for Changelog Updates
+
+```bash
+# Get commits since last tag for changelog drafting
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges
+
+# Get commits by type since last tag
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^feat:"
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^fix:"
+
+# Get all conventional commit types since last tag
+git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges | grep -E "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build):"
+```
+
+[0.2.0]: https://github.com/naretakis/eapd-next/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/naretakis/eapd-next/compare/v0.0.1...v0.1.0
+[0.0.1]: https://github.com/naretakis/eapd-next/releases/tag/v0.0.1
