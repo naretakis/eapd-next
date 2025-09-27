@@ -57,6 +57,12 @@ interface MockGlobal {
   unobserve() {}
 };
 
+// Mock uuid module to avoid ES module issues
+jest.mock('uuid', () => ({
+  v4: jest.fn(() => 'mock-uuid-v4'),
+  v1: jest.fn(() => 'mock-uuid-v1'),
+}));
+
 // Setup axe-core for accessibility testing in development
 if (process.env.NODE_ENV === 'development') {
   import('@axe-core/react').then(() => {

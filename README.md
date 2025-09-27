@@ -28,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ## 📋 Features
 
-### Current Features (v0.1.0)
+### Current Features (v0.2.0)
 
 - ✅ **Modern Tech Stack**: Next.js 15, TypeScript, Material-UI
 - ✅ **Responsive Design**: Desktop-optimized with mobile compatibility
@@ -36,6 +36,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 - ✅ **Testing Framework**: Jest and React Testing Library
 - ✅ **CI/CD Pipeline**: GitHub Actions with automatic deployment
 - ✅ **Accessibility**: WCAG AA compliance foundation
+- ✅ **Storage Layer**: Complete IndexedDB implementation with Dexie
+- ✅ **Service Architecture**: APD service layer with business logic
+- ✅ **Component Scaffolding**: Material-UI component structure
 
 ### Planned Features
 
@@ -88,6 +91,44 @@ src/
 
 docs/                      # Additional documentation
 ```
+
+## 🚧 Current Development Status
+
+### Recently Completed (Phase 2 Progress)
+
+- **Storage Layer**: Complete IndexedDB implementation using Dexie.js
+  - APD storage with version control
+  - Change tracking and working copies
+  - Project grouping and templates
+  - Auto-migration and error handling
+  - Storage quota monitoring
+
+- **Service Architecture**: Business logic layer implementation
+  - APD lifecycle management (create, update, delete, duplicate)
+  - Real-time validation with business rules
+  - Project grouping and organization
+  - Template-based APD creation
+  - Completion status tracking
+
+- **Component Scaffolding**: Material-UI component structure
+  - Dashboard components (APDCard, APDList, CreateAPDDialog)
+  - Common components (Layout, ErrorBoundary, LoadingSpinner)
+  - Form components (structured for future implementation)
+  - Export components (structured for future implementation)
+
+### Known Issues
+
+- **Test Coverage**: Currently 39.59% (target: 80%)
+- **Component Implementation**: Many components scaffolded but not fully implemented
+- **Test Infrastructure**: Some test utilities need fixes
+- **Integration**: Services implemented but UI integration in progress
+
+### Next Steps
+
+1. Complete component implementations
+2. Fix test infrastructure issues
+3. Achieve 80% test coverage
+4. Integrate services with UI components
 
 ## 🛠️ Development
 
@@ -162,6 +203,14 @@ NEXT_PUBLIC_BASE_PATH=/eapd-next
 - ✅ **Clear production state** - main branch always reflects live site
 
 ## 🧪 Testing
+
+### Current Test Status
+
+- **Passing**: 257 tests ✅
+- **Failing**: 138 tests ❌ (primarily component integration issues)
+- **Coverage**: 39.59% (target: 80%)
+- **Services**: Well-tested with 52.81% coverage
+- **Components**: Test infrastructure needs fixes
 
 ### Test Types
 
@@ -257,7 +306,7 @@ describe('ComponentName', () => {
 ```bash
 # Application Configuration
 NEXT_PUBLIC_ENVIRONMENT=development
-NEXT_PUBLIC_VERSION=0.1.0
+NEXT_PUBLIC_VERSION=0.2.0
 NEXT_PUBLIC_BASE_PATH=
 
 # Development Tools
@@ -338,9 +387,11 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ### Phase 2: Core Features (Weeks 3-4)
 
+- [x] IndexedDB storage layer ✅
+- [x] Service layer architecture ✅
+- [x] Component scaffolding ✅
 - [ ] Dashboard interface implementation
 - [ ] Template system development
-- [x] IndexedDB storage layer ✅
 - [ ] Basic APD editor
 
 ### Phase 3: Advanced Features (Weeks 5-6)

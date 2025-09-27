@@ -41,9 +41,9 @@ export interface ValidationRule {
     | 'min'
     | 'max'
     | 'custom';
-  value?: any;
+  value?: unknown;
   message: string;
-  validator?: (value: any, context: any) => boolean;
+  validator?: (value: unknown, context: Record<string, unknown>) => boolean;
 }
 
 // Template Field Definition
@@ -57,7 +57,7 @@ export interface TemplateField {
   helpText?: string;
   placeholder?: string;
   options?: SelectOption[]; // For select/radio fields
-  defaultValue?: any;
+  defaultValue?: unknown;
 
   // Table-specific properties
   columns?: TemplateTableColumn[];
@@ -66,7 +66,7 @@ export interface TemplateField {
   // Conditional display
   showWhen?: {
     fieldId: string;
-    value: any;
+    value: unknown;
   };
 
   // Calculation properties
@@ -94,7 +94,7 @@ export interface TemplateTableColumn {
 export interface TemplateTableRow {
   id: string;
   label?: string;
-  cells: Record<string, any>;
+  cells: Record<string, unknown>;
   isCalculated?: boolean;
 }
 
@@ -155,7 +155,7 @@ export interface FieldValidationResult {
 // Form Generation Context
 export interface FormGenerationContext {
   template: APDTemplate;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   validationState: ValidationResult;
   readOnly?: boolean;
 }
@@ -204,5 +204,5 @@ export interface ParsedField {
   helpText?: string;
   validation?: ValidationRule[];
   options?: SelectOption[];
-  defaultValue?: any;
+  defaultValue?: unknown;
 }

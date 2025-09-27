@@ -60,8 +60,8 @@ export class ChangeTrackingService {
     apdId: string,
     fieldPath: string,
     fieldLabel: string,
-    oldValue: any,
-    newValue: any,
+    oldValue: unknown,
+    newValue: unknown,
     section: string,
     author?: string
   ): Promise<FieldChange> {
@@ -378,7 +378,7 @@ export class ChangeTrackingService {
 
   // Private helper methods
 
-  private valuesEqual(oldValue: any, newValue: any): boolean {
+  private valuesEqual(oldValue: unknown, newValue: unknown): boolean {
     // Handle null/undefined
     if (oldValue === newValue) return true;
     if (oldValue == null && newValue == null) return true;
@@ -402,7 +402,10 @@ export class ChangeTrackingService {
       return oldKeys.every(
         key =>
           newKeys.includes(key) &&
-          this.valuesEqual(oldValue[key], newValue[key])
+          this.valuesEqual(
+            (oldValue as Record<string, unknown>)[key],
+            (newValue as Record<string, unknown>)[key]
+          )
       );
     }
 
@@ -410,7 +413,10 @@ export class ChangeTrackingService {
     return oldValue === newValue;
   }
 
-  private determineChangeType(oldValue: any, newValue: any): ChangeType {
+  private determineChangeType(
+    oldValue: unknown,
+    newValue: unknown
+  ): ChangeType {
     if (oldValue == null && newValue != null) return 'added';
     if (oldValue != null && newValue == null) return 'deleted';
     return 'modified';
@@ -561,7 +567,7 @@ export class ChangeTrackingService {
     return Array.from(grouped.values());
   }
 
-  private valueToString(value: any): string {
+  private valueToString(value: unknown): string {
     if (value == null) return '';
     if (typeof value === 'string') return value;
     if (typeof value === 'object') return JSON.stringify(value, null, 2);

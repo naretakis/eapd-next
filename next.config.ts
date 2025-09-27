@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_ENVIRONMENT:
       process.env.NEXT_PUBLIC_ENVIRONMENT || 'development',
-    NEXT_PUBLIC_VERSION: process.env.npm_package_version || '0.1.0',
+    NEXT_PUBLIC_VERSION: process.env.npm_package_version || '0.2.0',
   },
 
   // Webpack configuration for better bundle analysis

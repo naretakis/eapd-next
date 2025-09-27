@@ -170,7 +170,7 @@ export const Layout: React.FC<LayoutProps> = ({
       >
         <Container maxWidth="xl">
           <Typography variant="body2" color="text.secondary" align="center">
-            eAPD-Next v{process.env.NEXT_PUBLIC_VERSION || '0.1.0'} - APD
+            eAPD-Next v{process.env.NEXT_PUBLIC_VERSION || '0.2.0'} - APD
             Creation and Management Tool
           </Typography>
         </Container>

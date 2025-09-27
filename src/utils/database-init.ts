@@ -7,7 +7,11 @@
 
 import { storageService } from '../services/database';
 import { APDTemplate } from '../types/template';
-import { StorageError, StorageErrorCode } from '../types/database';
+import {
+  StorageError,
+  StorageErrorCode,
+  StorageQuota,
+} from '../types/database';
 
 /**
  * Initialize the database with default templates and settings
@@ -274,7 +278,9 @@ async function performMaintenanceTasks(): Promise<void> {
     // Check when last cleanup was performed
     const lastCleanup = await storageService.getSetting('lastCleanup');
     const now = new Date();
-    const lastCleanupDate = lastCleanup ? new Date(lastCleanup) : new Date(0);
+    const lastCleanupDate = lastCleanup
+      ? new Date(lastCleanup as string | number | Date)
+      : new Date(0);
 
     // Perform cleanup if it's been more than 7 days
     const daysSinceCleanup = Math.floor(
@@ -326,7 +332,7 @@ export async function resetDatabase(): Promise<void> {
 export async function checkDatabaseHealth(): Promise<{
   isHealthy: boolean;
   issues: string[];
-  quota: any;
+  quota: StorageQuota | null;
 }> {
   const issues: string[] = [];
   let isHealthy = true;

@@ -6,7 +6,7 @@
  */
 
 import { VersionControlService } from '../versionControlService';
-import { APD, APDVersion, APDWorkingCopy, FieldChange } from '../../types/apd';
+import { APD, APDVersion, APDWorkingCopy } from '../../types/apd';
 import { storageService } from '../database';
 
 // Mock the storage service
@@ -166,11 +166,14 @@ describe('VersionControlService', () => {
     });
 
     it('should update working copy with changes', async () => {
-      const changes = {
+      const changes: Partial<APDWorkingCopy> = {
         sections: {
           'executive-summary': {
-            ...mockWorkingCopy.sections['executive-summary'],
+            sectionId: 'executive-summary',
+            title: 'Executive Summary',
             content: { overview: 'Updated overview again' },
+            isComplete: false,
+            lastModified: new Date(),
           },
         },
       };
@@ -487,7 +490,7 @@ describe('VersionControlService', () => {
 
   describe('generateChangeHighlights', () => {
     it('should generate change highlights', () => {
-      const changes = [mockWorkingCopy.changes[0]];
+      const changes = [mockWorkingCopy.changes[0]].filter(Boolean);
 
       const result = versionControlService.generateChangeHighlights(changes);
 
@@ -497,13 +500,14 @@ describe('VersionControlService', () => {
         changeType: 'modified',
         displayType: 'inline',
       });
-      expect(result[0].tooltip).toContain('Modified "Overview"');
+      expect(result[0]?.tooltip).toContain('Modified "Overview"');
     });
   });
 
   describe('generateInlineDiff', () => {
     it('should generate inline diff for text changes', () => {
       const change = mockWorkingCopy.changes[0];
+      if (!change) throw new Error('Mock change not found');
 
       const result = versionControlService.generateInlineDiff(change);
 

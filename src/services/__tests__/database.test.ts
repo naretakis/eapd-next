@@ -62,7 +62,65 @@ jest.mock('dexie', () => {
 
 describe('IndexedDBStorageService', () => {
   let storageService: IndexedDBStorageService;
-  let mockDb: any;
+  let mockDb: {
+    transaction: jest.Mock;
+    open?: jest.Mock;
+    tables?: unknown[];
+    apds: {
+      delete: jest.Mock;
+      get: jest.Mock;
+      put: jest.Mock;
+      toArray: jest.Mock;
+      clear?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    apdVersions: {
+      delete: jest.Mock;
+      where: jest.Mock;
+      put?: jest.Mock;
+      toArray?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    workingCopies: {
+      delete: jest.Mock;
+      where: jest.Mock;
+      put?: jest.Mock;
+      get?: jest.Mock;
+      toArray?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    fieldChanges: {
+      delete: jest.Mock;
+      where: jest.Mock;
+      put?: jest.Mock;
+      toArray?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    projects: {
+      delete: jest.Mock;
+      get: jest.Mock;
+      put: jest.Mock;
+      toArray: jest.Mock;
+      orderBy?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    templates: {
+      delete: jest.Mock;
+      get: jest.Mock;
+      put: jest.Mock;
+      where: jest.Mock;
+      equals?: jest.Mock;
+      toArray?: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+    settings: {
+      delete: jest.Mock;
+      get: jest.Mock;
+      put: jest.Mock;
+      toArray: jest.Mock;
+      bulkAdd?: jest.Mock;
+    };
+  };
 
   beforeEach(() => {
     // Create a fresh instance for each test
@@ -92,6 +150,7 @@ describe('IndexedDBStorageService', () => {
         orderBy: jest.fn().mockReturnThis(),
         reverse: jest.fn().mockReturnThis(),
         toArray: jest.fn(),
+        bulkAdd: jest.fn(),
       },
       workingCopies: {
         put: jest.fn(),
@@ -100,6 +159,7 @@ describe('IndexedDBStorageService', () => {
         where: jest.fn().mockReturnThis(),
         equals: jest.fn().mockReturnThis(),
         toArray: jest.fn(),
+        bulkAdd: jest.fn(),
       },
       fieldChanges: {
         put: jest.fn(),
@@ -109,6 +169,7 @@ describe('IndexedDBStorageService', () => {
         reverse: jest.fn().mockReturnThis(),
         toArray: jest.fn(),
         delete: jest.fn(),
+        bulkAdd: jest.fn(),
       },
       projects: {
         put: jest.fn(),
@@ -134,7 +195,7 @@ describe('IndexedDBStorageService', () => {
     };
 
     // Replace the internal db with our mock
-    (storageService as any).db = mockDb;
+    (storageService as unknown as { db: typeof mockDb }).db = mockDb;
   });
 
   afterEach(() => {
@@ -251,7 +312,7 @@ describe('IndexedDBStorageService', () => {
 
     it('should delete APD and related data', async () => {
       mockDb.transaction.mockImplementation(
-        (_mode: any, _tables: any, callback: any) => {
+        (_mode: string, _tables: string[], callback: () => void) => {
           return callback();
         }
       );
@@ -586,7 +647,7 @@ describe('IndexedDBStorageService', () => {
 
     it('should cleanup old data', async () => {
       mockDb.transaction.mockImplementation(
-        (_mode: any, _tables: any, callback: any) => {
+        (_mode: string, _tables: string[], callback: () => void) => {
           return callback();
         }
       );
@@ -614,9 +675,26 @@ describe('IndexedDBStorageService', () => {
       const mockAPD: APD = {
         id: 'test-apd',
         type: 'PAPD',
-        metadata: {} as any,
+        metadata: {
+          stateName: 'Test State',
+          stateAgency: 'Test Agency',
+          primaryContact: {
+            name: 'Test',
+            title: 'Test',
+            email: 'test@test.com',
+            phone: '123-456-7890',
+          },
+          documentType: 'PAPD' as const,
+          benefitsMultiplePrograms: false,
+          projectName: 'Test Project',
+        },
         sections: {},
-        validationState: {} as any,
+        validationState: {
+          isValid: true,
+          errors: [],
+          warnings: [],
+          lastValidated: new Date(),
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
         currentVersion: 'v1.0',

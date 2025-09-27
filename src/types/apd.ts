@@ -42,7 +42,7 @@ export interface APDMetadata {
 export interface APDSectionData {
   sectionId: string;
   title: string;
-  content: Record<string, any>;
+  content: Record<string, unknown>;
   isComplete: boolean;
   lastModified: Date;
 }
@@ -52,8 +52,8 @@ export interface FieldChange {
   id: string;
   fieldPath: string; // e.g., "sections.budget.personnel.row1.federalShare"
   fieldLabel: string; // Human-readable field name
-  oldValue: any;
-  newValue: any;
+  oldValue: unknown;
+  newValue: unknown;
   changeType: ChangeType;
   timestamp: Date;
   author?: string | undefined;
@@ -120,6 +120,10 @@ export interface APD {
   currentVersion: string; // Points to latest committed version
   workingCopy?: APDWorkingCopy; // Current uncommitted changes
   versions: APDVersion[]; // All committed versions
+
+  // Parent-child relationships for sub-documents
+  parentAPDId?: string; // For AoA and Acquisition Checklists
+  childDocumentIds?: string[]; // For APDs that have sub-documents
 }
 
 // Version Comparison and Diff
@@ -161,6 +165,9 @@ export interface APDListItem {
   isComplete: boolean;
   currentVersion: string;
   hasUncommittedChanges: boolean;
+  // Parent-child relationships for sub-documents
+  parentAPDId?: string; // For AoA and Acquisition Checklists
+  childDocumentIds?: string[]; // For APDs that have sub-documents
 }
 
 // Project Grouping

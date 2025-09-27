@@ -173,7 +173,13 @@ export function useAutoSave(
         }
       }
     },
-    [onSave, opts.enableConflictResolution, opts.maxRetries, opts.retryDelayMs]
+    [
+      apd,
+      onSave,
+      opts.enableConflictResolution,
+      opts.maxRetries,
+      opts.retryDelayMs,
+    ]
   );
 
   /**
@@ -280,8 +286,20 @@ export function useWorkingCopyAutoSave(
     ? {
         ...workingCopy,
         type: 'PAPD' as const,
-        metadata: {} as any,
-        validationState: {} as any,
+        metadata: {
+          stateName: '',
+          stateAgency: '',
+          primaryContact: { name: '', title: '', email: '', phone: '' },
+          documentType: 'PAPD' as const,
+          benefitsMultiplePrograms: false,
+          projectName: '',
+        },
+        validationState: {
+          isValid: false,
+          errors: [],
+          warnings: [],
+          lastValidated: new Date(),
+        },
         createdAt: new Date(),
         updatedAt: workingCopy.lastModified,
         currentVersion: workingCopy.baseVersionId,
@@ -289,7 +307,23 @@ export function useWorkingCopyAutoSave(
       }
     : null;
 
-  return useAutoSave(apdLike, saveWorkingCopy as any, options);
+  return useAutoSave(
+    apdLike,
+    (apd: APD) => {
+      // Convert APD back to APDWorkingCopy for saving
+      const workingCopy: APDWorkingCopy = {
+        id: apd.id,
+        apdId: apd.id,
+        baseVersionId: apd.currentVersion,
+        sections: apd.sections,
+        changes: [],
+        lastModified: new Date(),
+        hasUncommittedChanges: true,
+      };
+      return saveWorkingCopy(workingCopy);
+    },
+    options
+  );
 }
 
 /**
@@ -305,8 +339,8 @@ export function useFieldChangeTracking(
     async (
       fieldPath: string,
       fieldLabel: string,
-      oldValue: any,
-      newValue: any,
+      oldValue: unknown,
+      newValue: unknown,
       section: string
     ): Promise<void> => {
       if (!apdId || oldValue === newValue) return;

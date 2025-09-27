@@ -22,6 +22,7 @@ import {
   ChangeHighlight,
   InlineDiff,
   ChangeType,
+  APDSectionData,
 } from '../types/apd';
 import { storageService } from './database';
 import { StorageError, StorageErrorCode } from '../types/database';
@@ -218,12 +219,16 @@ export class VersionControlService {
    * Compare two versions and generate diff
    */
   async compareVersions(
-    _apdId: string,
+    apdId: string,
     fromVersionId: string,
     toVersionId: string,
-    _options: CompareOptions = {}
+    options: CompareOptions = {}
   ): Promise<VersionDiff> {
     try {
+      // TODO: Implement comparison options
+      void apdId;
+      void options;
+
       const [fromVersion, toVersion] = await Promise.all([
         this.getVersion(fromVersionId),
         this.getVersion(toVersionId),
@@ -428,8 +433,8 @@ export class VersionControlService {
   }
 
   private detectChanges(
-    oldSections: Record<string, any>,
-    newSections: Record<string, any>
+    oldSections: Record<string, APDSectionData>,
+    newSections: Record<string, APDSectionData>
   ): FieldChange[] {
     const changes: FieldChange[] = [];
     const allSectionIds = new Set([
@@ -443,13 +448,28 @@ export class VersionControlService {
 
       if (!oldSection && newSection) {
         // Section added
-        this.detectSectionChanges(null, newSection, sectionId, changes);
+        this.detectSectionChanges(
+          {} as Record<string, unknown>,
+          newSection as unknown as Record<string, unknown>,
+          sectionId,
+          changes
+        );
       } else if (oldSection && !newSection) {
         // Section deleted
-        this.detectSectionChanges(oldSection, null, sectionId, changes);
+        this.detectSectionChanges(
+          oldSection as unknown as Record<string, unknown>,
+          {} as Record<string, unknown>,
+          sectionId,
+          changes
+        );
       } else if (oldSection && newSection) {
         // Section modified
-        this.detectSectionChanges(oldSection, newSection, sectionId, changes);
+        this.detectSectionChanges(
+          oldSection as unknown as Record<string, unknown>,
+          newSection as unknown as Record<string, unknown>,
+          sectionId,
+          changes
+        );
       }
     }
 
@@ -457,8 +477,8 @@ export class VersionControlService {
   }
 
   private detectSectionChanges(
-    oldSection: any,
-    newSection: any,
+    oldSection: Record<string, unknown>,
+    newSection: Record<string, unknown>,
     sectionId: string,
     changes: FieldChange[]
   ): void {
@@ -471,8 +491,8 @@ export class VersionControlService {
     } else {
       // Compare section content
       this.compareObjects(
-        oldSection.content || {},
-        newSection.content || {},
+        (oldSection.content as Record<string, unknown>) || {},
+        (newSection.content as Record<string, unknown>) || {},
         `sections.${sectionId}.content`,
         sectionId,
         changes
@@ -481,8 +501,8 @@ export class VersionControlService {
   }
 
   private compareObjects(
-    oldObj: any,
-    newObj: any,
+    oldObj: Record<string, unknown>,
+    newObj: Record<string, unknown>,
     basePath: string,
     sectionId: string,
     changes: FieldChange[]
@@ -535,7 +555,7 @@ export class VersionControlService {
   }
 
   private addFieldChangesForSection(
-    section: any,
+    section: Record<string, unknown>,
     sectionId: string,
     changeType: ChangeType,
     changes: FieldChange[]
@@ -560,8 +580,8 @@ export class VersionControlService {
   private createFieldChange(
     fieldPath: string,
     fieldLabel: string,
-    oldValue: any,
-    newValue: any,
+    oldValue: unknown,
+    newValue: unknown,
     changeType: ChangeType,
     section: string
   ): FieldChange {

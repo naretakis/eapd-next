@@ -6,7 +6,13 @@
  */
 
 import { storageService } from '../services/database';
-import { APD, Project } from '../types/apd';
+import {
+  APD,
+  Project,
+  APDVersion,
+  APDWorkingCopy,
+  FieldChange,
+} from '../types/apd';
 import { APDTemplate } from '../types/template';
 import { BackupOptions, RestoreOptions } from '../types/database';
 
@@ -20,14 +26,15 @@ export interface BackupData {
     includesVersionHistory: boolean;
     includesWorkingCopies: boolean;
     includesSettings: boolean;
+    timestamp: Date;
   };
   apds: APD[];
-  apdVersions?: any[];
-  workingCopies?: any[];
-  fieldChanges?: any[];
+  apdVersions?: APDVersion[];
+  workingCopies?: APDWorkingCopy[];
+  fieldChanges?: FieldChange[];
   projects: Project[];
   templates: APDTemplate[];
-  settings?: Record<string, any>;
+  settings?: Record<string, unknown>;
 }
 
 export interface RestoreResult {
@@ -83,6 +90,7 @@ export async function createBackup(options: BackupOptions = {}): Promise<Blob> {
         includesVersionHistory: opts.includeVersionHistory,
         includesWorkingCopies: opts.includeWorkingCopies,
         includesSettings: opts.includeSettings,
+        timestamp: new Date(),
       },
       apds,
       projects,
@@ -172,7 +180,17 @@ export function validateBackup(
           version: 'unknown',
           errors: [`Failed to parse backup file: ${(error as Error).message}`],
           warnings: [],
-          metadata: {} as any,
+          metadata: {
+            version: 'unknown',
+            exportDate: new Date().toISOString(),
+            appVersion: 'unknown',
+            totalAPDs: 0,
+            totalProjects: 0,
+            includesVersionHistory: false,
+            includesWorkingCopies: false,
+            includesSettings: false,
+            timestamp: new Date(),
+          },
         });
       }
     };
@@ -183,7 +201,17 @@ export function validateBackup(
         version: 'unknown',
         errors: ['Failed to read backup file'],
         warnings: [],
-        metadata: {} as any,
+        metadata: {
+          version: 'unknown',
+          exportDate: new Date().toISOString(),
+          appVersion: 'unknown',
+          totalAPDs: 0,
+          totalProjects: 0,
+          includesVersionHistory: false,
+          includesWorkingCopies: false,
+          includesSettings: false,
+          timestamp: new Date(),
+        },
       });
     };
 
@@ -391,6 +419,7 @@ export async function exportAPDs(
       includesVersionHistory: options.includeVersionHistory || false,
       includesWorkingCopies: options.includeWorkingCopies || false,
       includesSettings: false,
+      timestamp: new Date(),
     },
     apds,
     projects,
@@ -425,8 +454,8 @@ async function getAllAPDsForBackup(): Promise<APD[]> {
   return apds;
 }
 
-async function getAllVersionsForBackup(): Promise<any[]> {
-  const versions: any[] = [];
+async function getAllVersionsForBackup(): Promise<APDVersion[]> {
+  const versions: APDVersion[] = [];
   const apdList = await storageService.getAllAPDs();
 
   for (const apdItem of apdList) {
@@ -437,8 +466,8 @@ async function getAllVersionsForBackup(): Promise<any[]> {
   return versions;
 }
 
-async function getAllFieldChangesForBackup(): Promise<any[]> {
-  const changes: any[] = [];
+async function getAllFieldChangesForBackup(): Promise<FieldChange[]> {
+  const changes: FieldChange[] = [];
   const apdList = await storageService.getAllAPDs();
 
   for (const apdItem of apdList) {
@@ -449,8 +478,8 @@ async function getAllFieldChangesForBackup(): Promise<any[]> {
   return changes;
 }
 
-async function getAllWorkingCopiesForBackup(): Promise<any[]> {
-  const workingCopies: any[] = [];
+async function getAllWorkingCopiesForBackup(): Promise<APDWorkingCopy[]> {
+  const workingCopies: APDWorkingCopy[] = [];
   const apdList = await storageService.getAllAPDs();
 
   for (const apdItem of apdList) {

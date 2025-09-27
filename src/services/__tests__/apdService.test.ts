@@ -371,21 +371,21 @@ describe('APDService', () => {
       const result = await apdService.getAllAPDs({ type: 'PAPD' });
 
       expect(result).toHaveLength(1);
-      expect(result[0].type).toBe('PAPD');
+      expect(result[0]?.type).toBe('PAPD');
     });
 
     it('should filter by status', async () => {
       const result = await apdService.getAllAPDs({ status: 'complete' });
 
       expect(result).toHaveLength(1);
-      expect(result[0].isComplete).toBe(true);
+      expect(result[0]?.isComplete).toBe(true);
     });
 
     it('should filter by query', async () => {
       const result = await apdService.getAllAPDs({ query: 'Project A' });
 
       expect(result).toHaveLength(1);
-      expect(result[0].projectName).toBe('Project A');
+      expect(result[0]?.projectName).toBe('Project A');
     });
 
     it('should filter by date range', async () => {
@@ -397,7 +397,7 @@ describe('APDService', () => {
       });
 
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe('apd-2');
+      expect(result[0]?.id).toBe('apd-2');
     });
   });
 
@@ -568,10 +568,10 @@ describe('APDService', () => {
       const result = await apdService.getAPDsByProject();
 
       expect(result.projects).toHaveLength(1);
-      expect(result.projects[0].apds).toHaveLength(1);
-      expect(result.projects[0].apds[0].id).toBe('apd-1');
+      expect(result.projects[0]?.apds).toHaveLength(1);
+      expect(result.projects[0]?.apds[0]?.id).toBe('apd-1');
       expect(result.ungrouped).toHaveLength(1);
-      expect(result.ungrouped[0].id).toBe('apd-2');
+      expect(result.ungrouped[0]?.id).toBe('apd-2');
     });
   });
 
@@ -628,6 +628,157 @@ describe('APDService', () => {
           'Acquisition Checklist': { total: 0, completed: 0 },
         },
       });
+    });
+  });
+
+  describe('updateProject', () => {
+    const mockProject: Project = {
+      id: 'project-1',
+      name: 'Old Project Name',
+      description: 'Test project',
+      apdIds: ['apd-1', 'apd-2'],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const mockAPD1: APD = {
+      id: 'apd-1',
+      type: 'PAPD',
+      metadata: {
+        stateName: 'Test State',
+        stateAgency: 'Test Agency',
+        primaryContact: {
+          name: 'Test Contact',
+          title: 'Test Title',
+          email: 'test@example.com',
+          phone: '123-456-7890',
+        },
+        documentType: 'PAPD',
+        benefitsMultiplePrograms: false,
+        projectName: 'Old Project Name',
+      },
+      sections: {},
+      validationState: {
+        isValid: true,
+        errors: [],
+        warnings: [],
+        lastValidated: new Date(),
+      },
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      currentVersion: 'v1.0',
+      versions: [],
+    };
+
+    const mockAPD2: APD = {
+      ...mockAPD1,
+      id: 'apd-2',
+      type: 'IAPD',
+      metadata: {
+        ...mockAPD1.metadata,
+        documentType: 'IAPD',
+      },
+    };
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      (storageService.getProject as jest.Mock).mockResolvedValue(mockProject);
+      (storageService.updateProject as jest.Mock).mockResolvedValue(undefined);
+      (storageService.updateAPD as jest.Mock).mockResolvedValue(undefined);
+    });
+
+    it('should update project name and all associated APDs', async () => {
+      // Set up APD mocks for this test
+      (storageService.getAPD as jest.Mock)
+        .mockResolvedValueOnce(mockAPD1)
+        .mockResolvedValueOnce(mockAPD2);
+
+      const newProjectName = 'New Project Name';
+
+      const result = await apdService.updateProject('project-1', {
+        name: newProjectName,
+      });
+
+      // Should update the project
+      expect(storageService.updateProject).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'project-1',
+          name: newProjectName,
+          description: 'Test project',
+          apdIds: ['apd-1', 'apd-2'],
+        })
+      );
+
+      // Should fetch all APDs in the project
+      expect(storageService.getAPD).toHaveBeenCalledWith('apd-1');
+      expect(storageService.getAPD).toHaveBeenCalledWith('apd-2');
+
+      // Should update each APD's project name
+      expect(storageService.updateAPD).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'apd-1',
+          metadata: expect.objectContaining({
+            projectName: newProjectName,
+          }),
+        })
+      );
+
+      expect(storageService.updateAPD).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'apd-2',
+          metadata: expect.objectContaining({
+            projectName: newProjectName,
+          }),
+        })
+      );
+
+      expect(result.name).toBe(newProjectName);
+    });
+
+    it('should update project description without affecting APDs', async () => {
+      const newDescription = 'Updated description';
+
+      await apdService.updateProject('project-1', {
+        description: newDescription,
+      });
+
+      // Should update the project
+      expect(storageService.updateProject).toHaveBeenCalledWith(
+        expect.objectContaining({
+          description: newDescription,
+        })
+      );
+
+      // Should NOT fetch or update APDs since name didn't change
+      expect(storageService.getAPD).not.toHaveBeenCalled();
+      expect(storageService.updateAPD).not.toHaveBeenCalled();
+    });
+
+    it('should handle APDs that no longer exist', async () => {
+      // Mock one APD as not found
+      (storageService.getAPD as jest.Mock)
+        .mockResolvedValueOnce(mockAPD1)
+        .mockResolvedValueOnce(null); // APD not found
+
+      const newProjectName = 'New Project Name';
+
+      await apdService.updateProject('project-1', {
+        name: newProjectName,
+      });
+
+      // Should still update the project
+      expect(storageService.updateProject).toHaveBeenCalled();
+
+      // Should only update the APD that exists
+      expect(storageService.updateAPD).toHaveBeenCalledTimes(1);
+      expect(storageService.updateAPD).toHaveBeenCalledWith(
+        expect.objectContaining({
+          id: 'apd-1',
+          metadata: expect.objectContaining({
+            projectName: newProjectName,
+          }),
+        })
+      );
     });
   });
 });

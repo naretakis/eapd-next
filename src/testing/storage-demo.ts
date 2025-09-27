@@ -190,9 +190,21 @@ export async function demoErrorHandling() {
       await storageService.updateAPD({
         id: 'non-existent',
         type: 'PAPD',
-        metadata: {} as any,
+        metadata: {
+          stateName: '',
+          stateAgency: '',
+          primaryContact: { name: '', title: '', email: '', phone: '' },
+          documentType: 'PAPD' as const,
+          benefitsMultiplePrograms: false,
+          projectName: '',
+        },
         sections: {},
-        validationState: {} as any,
+        validationState: {
+          isValid: false,
+          errors: [],
+          warnings: [],
+          lastValidated: new Date(),
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
         currentVersion: 'v1.0',

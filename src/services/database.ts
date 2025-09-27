@@ -41,7 +41,7 @@ export class APDDatabase extends Dexie {
   fieldChanges!: Table<FieldChange, string>;
   projects!: Table<Project, string>;
   templates!: Table<APDTemplate, string>;
-  settings!: Table<{ key: string; value: any }, string>;
+  settings!: Table<{ key: string; value: unknown }, string>;
 
   constructor() {
     super('APDDatabase');
@@ -59,13 +59,17 @@ export class APDDatabase extends Dexie {
     });
 
     // Add hooks for data validation and logging
-    this.apds.hook('creating', (_primKey, obj, _trans) => {
-      (obj as any).createdAt = (obj as any).createdAt || new Date();
-      (obj as any).updatedAt = new Date();
+    this.apds.hook('creating', (_, obj) => {
+      const apdObj = obj as APD;
+      if (!apdObj.createdAt) {
+        apdObj.createdAt = new Date();
+      }
+      apdObj.updatedAt = new Date();
     });
 
-    this.apds.hook('updating', (modifications, _primKey, _obj, _trans) => {
-      (modifications as any).updatedAt = new Date();
+    this.apds.hook('updating', modifications => {
+      const mods = modifications as Partial<APD>;
+      mods.updatedAt = new Date();
     });
   }
 }
@@ -246,6 +250,8 @@ export class IndexedDBStorageService implements StorageService {
           apd.validationState.errors.length === 0,
         currentVersion: apd.currentVersion,
         hasUncommittedChanges: apd.workingCopy?.hasUncommittedChanges || false,
+        ...(apd.parentAPDId && { parentAPDId: apd.parentAPDId }),
+        childDocumentIds: apd.childDocumentIds || [],
       }));
     } catch (error) {
       throw new StorageError(
@@ -604,7 +610,7 @@ export class IndexedDBStorageService implements StorageService {
   }
 
   // Settings Operations
-  async setSetting(key: string, value: any): Promise<void> {
+  async setSetting(key: string, value: unknown): Promise<void> {
     this.ensureInitialized();
 
     try {
@@ -618,7 +624,7 @@ export class IndexedDBStorageService implements StorageService {
     }
   }
 
-  async getSetting(key: string): Promise<any> {
+  async getSetting(key: string): Promise<unknown> {
     this.ensureInitialized();
 
     try {
@@ -647,12 +653,12 @@ export class IndexedDBStorageService implements StorageService {
     }
   }
 
-  async getAllSettings(): Promise<Record<string, any>> {
+  async getAllSettings(): Promise<Record<string, unknown>> {
     this.ensureInitialized();
 
     try {
       const settings = await this.db.settings.toArray();
-      const result: Record<string, any> = {};
+      const result: Record<string, unknown> = {};
 
       settings.forEach(setting => {
         result[setting.key] = setting.value;

@@ -91,7 +91,7 @@ export interface APDDatabase {
   // Application settings
   settings: {
     key: string; // Setting key
-    value: any;
+    value: unknown;
   };
 }
 
@@ -142,10 +142,10 @@ export interface StorageService {
   deleteTemplate(id: string): Promise<void>;
 
   // Settings operations
-  setSetting(key: string, value: any): Promise<void>;
-  getSetting(key: string): Promise<any>;
+  setSetting(key: string, value: unknown): Promise<void>;
+  getSetting(key: string): Promise<unknown>;
   deleteSetting(key: string): Promise<void>;
-  getAllSettings(): Promise<Record<string, any>>;
+  getAllSettings(): Promise<Record<string, unknown>>;
 
   // Backup and restore
   exportData(): Promise<Blob>;
@@ -168,7 +168,7 @@ export interface StorageQuota {
 export interface DatabaseMigration {
   version: number;
   description: string;
-  migrate(db: any): Promise<void>;
+  migrate(db: IDBDatabase): Promise<void>;
 }
 
 // Error Types
@@ -217,7 +217,7 @@ export interface QueryOptions {
   offset?: number;
   orderBy?: string;
   orderDirection?: 'asc' | 'desc';
-  filter?: Record<string, any>;
+  filter?: Record<string, unknown>;
 }
 
 // Backup/Restore Options

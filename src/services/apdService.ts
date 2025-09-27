@@ -24,7 +24,7 @@ import {
   ValidationError,
   ValidationWarning,
 } from '../types/apd';
-import { APDTemplate } from '../types/template';
+import { APDTemplate, TemplateSection } from '../types/template';
 import { storageService } from './database';
 import { StorageError, StorageErrorCode } from '../types/database';
 
@@ -395,6 +395,84 @@ export class APDService {
   }
 
   /**
+   * Update project information
+   */
+  async updateProject(
+    projectId: string,
+    updates: Partial<Pick<Project, 'name' | 'description'>>
+  ): Promise<Project> {
+    try {
+      const project = await storageService.getProject(projectId);
+      if (!project) {
+        throw new Error(`Project with ID ${projectId} not found`);
+      }
+
+      const updatedProject: Project = {
+        id: project.id,
+        name: updates.name ?? project.name,
+        description: updates.description ?? project.description,
+        apdIds: project.apdIds,
+        createdAt: project.createdAt,
+        updatedAt: new Date(),
+      };
+
+      // If the project name is being updated, we need to update all APDs in this project
+      if (updates.name && updates.name !== project.name) {
+        await this.updateAPDsProjectName(project.apdIds, updates.name);
+      }
+
+      await storageService.updateProject(updatedProject);
+      return updatedProject;
+    } catch (error) {
+      throw new StorageError(
+        `Failed to update project: ${projectId}`,
+        StorageErrorCode.TRANSACTION_FAILED,
+        error as Error
+      );
+    }
+  }
+
+  /**
+   * Update project name in all APDs that belong to a project
+   * @private
+   */
+  private async updateAPDsProjectName(
+    apdIds: string[],
+    newProjectName: string
+  ): Promise<void> {
+    try {
+      // Get all APDs that belong to this project
+      const apdsToUpdate = await Promise.all(
+        apdIds.map(apdId => storageService.getAPD(apdId))
+      );
+
+      // Update each APD's metadata.projectName
+      const updatePromises = apdsToUpdate
+        .filter((apd): apd is APD => apd !== null)
+        .map(async apd => {
+          const updatedAPD: APD = {
+            ...apd,
+            metadata: {
+              ...apd.metadata,
+              projectName: newProjectName,
+            },
+            updatedAt: new Date(),
+          };
+
+          return storageService.updateAPD(updatedAPD);
+        });
+
+      await Promise.all(updatePromises);
+    } catch (error) {
+      throw new StorageError(
+        `Failed to update APDs project name: ${newProjectName}`,
+        StorageErrorCode.TRANSACTION_FAILED,
+        error as Error
+      );
+    }
+  }
+
+  /**
    * Add APD to a project
    */
   async addAPDToProject(apdId: string, projectId: string): Promise<void> {
@@ -441,9 +519,119 @@ export class APDService {
   }
 
   /**
-   * Get APDs grouped by projects
+   * Link a sub-document (AoA or Acquisition Checklist) to a parent APD
    */
-  async getAPDsByProject(_options: ProjectGroupingOptions = {}): Promise<{
+  async linkSubDocument(
+    parentAPDId: string,
+    childDocumentId: string
+  ): Promise<void> {
+    try {
+      const [parentAPD, childDocument] = await Promise.all([
+        storageService.getAPD(parentAPDId),
+        storageService.getAPD(childDocumentId),
+      ]);
+
+      if (!parentAPD) {
+        throw new Error(`Parent APD not found: ${parentAPDId}`);
+      }
+
+      if (!childDocument) {
+        throw new Error(`Child document not found: ${childDocumentId}`);
+      }
+
+      // Validate that parent is an APD and child is a sub-document
+      if (!['PAPD', 'IAPD', 'OAPD'].includes(parentAPD.type)) {
+        throw new Error(
+          `Parent document must be an APD, got: ${parentAPD.type}`
+        );
+      }
+
+      if (!['AoA', 'Acquisition Checklist'].includes(childDocument.type)) {
+        throw new Error(
+          `Child document must be AoA or Acquisition Checklist, got: ${childDocument.type}`
+        );
+      }
+
+      // Update parent APD to include child
+      const updatedParent: APD = {
+        ...parentAPD,
+        childDocumentIds: [
+          ...(parentAPD.childDocumentIds || []),
+          childDocumentId,
+        ],
+        updatedAt: new Date(),
+      };
+
+      // Update child document to reference parent
+      const updatedChild: APD = {
+        ...childDocument,
+        parentAPDId: parentAPDId,
+        updatedAt: new Date(),
+      };
+
+      await Promise.all([
+        storageService.updateAPD(updatedParent),
+        storageService.updateAPD(updatedChild),
+      ]);
+    } catch (error) {
+      throw new StorageError(
+        `Failed to link sub-document: ${childDocumentId} -> ${parentAPDId}`,
+        StorageErrorCode.TRANSACTION_FAILED,
+        error as Error
+      );
+    }
+  }
+
+  /**
+   * Unlink a sub-document from its parent APD
+   */
+  async unlinkSubDocument(
+    parentAPDId: string,
+    childDocumentId: string
+  ): Promise<void> {
+    try {
+      const [parentAPD, childDocument] = (await Promise.all([
+        storageService.getAPD(parentAPDId),
+        storageService.getAPD(childDocumentId),
+      ])) as [APD | null, APD | null];
+
+      if (!parentAPD || !childDocument) {
+        return; // Already unlinked or documents don't exist
+      }
+
+      // Update parent APD to remove child
+      const updatedParent: APD = {
+        ...parentAPD,
+        childDocumentIds: (parentAPD.childDocumentIds || []).filter(
+          id => id !== childDocumentId
+        ),
+        updatedAt: new Date(),
+      };
+
+      // Update child document to remove parent reference
+      const { parentAPDId: _, ...childWithoutParent } = childDocument;
+      const updatedChild: APD = {
+        ...childWithoutParent,
+        updatedAt: new Date(),
+      };
+
+      await Promise.all([
+        storageService.updateAPD(updatedParent),
+        storageService.updateAPD(updatedChild),
+      ]);
+    } catch (error) {
+      throw new StorageError(
+        `Failed to unlink sub-document: ${childDocumentId} -> ${parentAPDId}`,
+        StorageErrorCode.TRANSACTION_FAILED,
+        error as Error
+      );
+    }
+  }
+
+  /**
+   * Get APDs grouped by projects with hierarchical sub-document organization
+   */
+  async getAPDsByProject(options: ProjectGroupingOptions = {}): Promise<{
     projects: Array<{
       project: Project;
       apds: APDListItem[];
@@ -451,6 +639,8 @@ export class APDService {
     ungrouped: APDListItem[];
   }> {
     try {
+      // TODO: Implement filtering/sorting options
+      void options;
       const [allAPDs, allProjects] = await Promise.all([
         this.getAllAPDs(),
         storageService.getAllProjects(),
@@ -464,6 +654,9 @@ export class APDService {
           project.apdIds.includes(apd.id)
         );
 
+        // Organize APDs hierarchically (parent APDs with their sub-documents)
+        const organizedAPDs = this.organizeAPDsHierarchically(projectAPDs);
+
         // Remove from ungrouped list
         projectAPDs.forEach(apd => {
           const index = ungroupedAPDs.findIndex(u => u.id === apd.id);
@@ -474,13 +667,17 @@ export class APDService {
 
         projectGroups.push({
           project,
-          apds: projectAPDs,
+          apds: organizedAPDs,
         });
       }
 
+      // Organize ungrouped APDs hierarchically as well
+      const organizedUngroupedAPDs =
+        this.organizeAPDsHierarchically(ungroupedAPDs);
+
       return {
         projects: projectGroups,
-        ungrouped: ungroupedAPDs,
+        ungrouped: organizedUngroupedAPDs,
       };
     } catch (error) {
       throw new StorageError(
@@ -489,6 +686,51 @@ export class APDService {
         error as Error
       );
     }
+  }
+
+  /**
+   * Organize APDs hierarchically with parent APDs followed by their sub-documents
+   * @private
+   */
+  private organizeAPDsHierarchically(apds: APDListItem[]): APDListItem[] {
+    const organized: APDListItem[] = [];
+    const processed = new Set<string>();
+
+    // First, add all parent APDs (PAPD, IAPD, OAPD) with their children
+    apds
+      .filter(apd => ['PAPD', 'IAPD', 'OAPD'].includes(apd.type))
+      .forEach(parentAPD => {
+        if (processed.has(parentAPD.id)) return;
+
+        organized.push(parentAPD);
+        processed.add(parentAPD.id);
+
+        // Add child documents immediately after their parent
+        if (
+          parentAPD.childDocumentIds &&
+          parentAPD.childDocumentIds.length > 0
+        ) {
+          parentAPD.childDocumentIds.forEach(childId => {
+            const childDoc = apds.find(apd => apd.id === childId);
+            if (childDoc && !processed.has(childDoc.id)) {
+              organized.push(childDoc);
+              processed.add(childDoc.id);
+            }
+          });
+        }
+      });
+
+    // Then add any remaining sub-documents that don't have parents
+    apds
+      .filter(apd => ['AoA', 'Acquisition Checklist'].includes(apd.type))
+      .forEach(subDoc => {
+        if (!processed.has(subDoc.id)) {
+          organized.push(subDoc);
+          processed.add(subDoc.id);
+        }
+      });
+
+    return organized;
   }
 
   /**
@@ -538,8 +780,10 @@ export class APDService {
 
   // Private helper methods
 
-  private initializeSectionContent(templateSection: any): Record<string, any> {
-    const content: Record<string, any> = {};
+  private initializeSectionContent(
+    templateSection: TemplateSection
+  ): Record<string, unknown> {
+    const content: Record<string, unknown> = {};
 
     if (templateSection.fields) {
       for (const field of templateSection.fields) {
@@ -551,7 +795,7 @@ export class APDService {
     return content;
   }
 
-  private getDefaultValueForFieldType(fieldType: string): any {
+  private getDefaultValueForFieldType(fieldType: string): unknown {
     switch (fieldType) {
       case 'text':
       case 'textarea':
@@ -577,8 +821,11 @@ export class APDService {
   private validateMetadata(
     metadata: APDMetadata,
     errors: ValidationError[],
-    _warnings: ValidationWarning[]
+    warnings: ValidationWarning[]
   ): void {
+    // TODO: Implement warning validations
+    void warnings;
+
     if (!metadata.stateName?.trim()) {
       errors.push({
         fieldId: 'stateName',
@@ -636,8 +883,11 @@ export class APDService {
     apd: APD,
     template: APDTemplate,
     errors: ValidationError[],
-    _warnings: ValidationWarning[]
+    warnings: ValidationWarning[]
   ): void {
+    // TODO: Implement warning validations for section completeness
+    void warnings;
+
     for (const templateSection of template.sections) {
       const apdSection = apd.sections[templateSection.id];
 
@@ -683,8 +933,9 @@ export class APDService {
     // Example: Validate that project names are consistent
     const projectNames = new Set<string>();
     Object.values(apd.sections).forEach(section => {
-      if (section.content.projectName) {
-        projectNames.add(section.content.projectName);
+      const projectName = section.content.projectName;
+      if (typeof projectName === 'string' && projectName.trim()) {
+        projectNames.add(projectName);
       }
     });
 
@@ -725,7 +976,12 @@ export class APDService {
     // Example: Budget validation for different APD types
     if (apd.type === 'PAPD' || apd.type === 'IAPD') {
       const budgetSection = apd.sections['budget-tables'];
-      if (budgetSection && budgetSection.content.totalCost > 10000000) {
+      const totalCost = budgetSection?.content.totalCost;
+      if (
+        budgetSection &&
+        typeof totalCost === 'number' &&
+        totalCost > 10000000
+      ) {
         warnings.push({
           fieldId: 'totalCost',
           sectionId: 'budget-tables',
@@ -736,7 +992,7 @@ export class APDService {
     }
   }
 
-  private isEmpty(value: any): boolean {
+  private isEmpty(value: unknown): boolean {
     if (value === null || value === undefined) return true;
     if (typeof value === 'string') return value.trim() === '';
     if (Array.isArray(value)) return value.length === 0;
