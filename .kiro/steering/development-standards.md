@@ -83,6 +83,7 @@ describe('ComponentName', () => {
 - Types: feat, fix, docs, style, refactor, test, chore
 - Keep first line under 50 characters
 - Include detailed description for complex changes
+- Use `BREAKING CHANGE:` footer for breaking changes
 
 ### Branch Strategy
 
@@ -97,6 +98,16 @@ describe('ComponentName', () => {
 - No merge conflicts
 - Updated documentation if needed
 - Accessibility review for UI changes
+
+### Release Workflow
+
+1. **Feature Development**: Use conventional commits throughout development
+2. **Pre-Release**: Run `npm run changelog:draft` to review changes
+3. **Update CHANGELOG**: Curate and add user-facing changes to CHANGELOG.md
+4. **Version Bump**: Use `npm version [major|minor|patch]` to update version
+5. **Commit Release**: Commit changelog and version changes together
+6. **Push and Tag**: Push commits and tags to trigger deployment
+7. **Verify Release**: Confirm deployment and version display
 
 ## Performance Standards
 
@@ -164,6 +175,117 @@ describe('ComponentName', () => {
 - Troubleshooting guides
 - Learning resources for new developers
 
+## Version Management and Changelog Standards
+
+### Semantic Versioning
+
+Follow [Semantic Versioning](https://semver.org/) strictly:
+
+- **MAJOR** (1.0.0): Breaking changes that require user action
+- **MINOR** (0.2.0): New features that are backward compatible
+- **PATCH** (0.1.1): Bug fixes that are backward compatible
+
+### Version Bumping Process
+
+1. **Determine Version Type**: Based on changes since last release
+2. **Update Version**: Use `npm version [major|minor|patch]` (updates package.json and creates git tag)
+3. **Update CHANGELOG**: Add new version section with user-facing changes
+4. **Commit and Push**: Include changelog updates in version commit
+5. **Verify Deployment**: Ensure version displays correctly in application
+
+### Changelog Maintenance
+
+#### Required for Every Release
+
+- **Update CHANGELOG.md** before version bump
+- **Follow Keep a Changelog format** with consistent sections
+- **Focus on user impact** rather than technical implementation details
+- **Group related commits** into meaningful feature descriptions
+
+#### Changelog Sections (in order)
+
+- **Added** for new features
+- **Changed** for changes in existing functionality
+- **Deprecated** for soon-to-be removed features
+- **Removed** for now removed features
+- **Fixed** for any bug fixes
+- **Security** for vulnerability fixes
+
+#### Semi-Automated Workflow
+
+1. **Generate Draft**: Run `npm run changelog:draft` to get commit-based draft
+2. **Review Commits**: Focus on conventional commit types since last release
+3. **Curate Content**: Transform technical commits into user-facing descriptions
+4. **Group Features**: Combine related commits into cohesive feature descriptions
+5. **Add Context**: Explain why changes matter to users
+
+#### Commit Type Mapping
+
+- `feat:` → **Added** section (new features)
+- `fix:` → **Fixed** section (bug fixes)
+- `docs:` → **Changed** (if user-facing) or omit if internal
+- `perf:` → **Changed** or **Added** (performance improvements)
+- `refactor:` → Usually omit unless user-facing impact
+- `style:`, `test:`, `chore:` → Usually omit unless significant
+- `BREAKING CHANGE:` → **Changed** with migration notes
+
+#### Quality Standards
+
+- **User-Focused Language**: Avoid technical jargon, explain user benefits
+- **Actionable Information**: Include migration steps for breaking changes
+- **Complete Coverage**: All user-visible changes must be documented
+- **Consistent Format**: Use same style and structure across versions
+- **Accurate Dates**: Use actual release dates (YYYY-MM-DD format)
+
+### Version Display Integration
+
+Ensure version is displayed consistently:
+
+- **Application Header/Footer**: Show current version to users
+- **Environment Variables**: Use `NEXT_PUBLIC_VERSION` from package.json
+- **Fallback Values**: Update component fallbacks when bumping versions
+- **Test Expectations**: Update tests that check version display
+
+### Release Process Integration
+
+#### Pre-Release Checklist
+
+- [ ] All tests passing (minimum 80% coverage)
+- [ ] Documentation updated (README, component docs)
+- [ ] CHANGELOG.md updated with new version
+- [ ] Version bump completed (`npm version`)
+- [ ] Git tags created and pushed
+- [ ] Application displays new version correctly
+
+#### Post-Release Verification
+
+- [ ] Deployment successful and accessible
+- [ ] Version displayed correctly in application
+- [ ] CHANGELOG.md links work correctly
+- [ ] Git tags pushed to remote repository
+
+### Automation Tools
+
+#### Available Scripts
+
+- `npm run changelog:draft` - Generate changelog draft from commits
+- `npm version [type]` - Bump version and create git tag
+- `git log --oneline --no-merges` - Review commits for changelog
+
+#### Helper Commands
+
+```bash
+# Get commits since last tag for changelog
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges
+
+# Get commits by type since last tag
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^feat:"
+git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^fix:"
+
+# Check current version
+npm version --json
+```
+
 ## Error Handling
 
 ### Error Boundaries
@@ -198,6 +320,10 @@ describe('ComponentName', () => {
 - [ ] Performance impact considered
 - [ ] Security implications reviewed
 - [ ] Error handling implemented
+- [ ] README.md updated (for releases)
+- [ ] CHANGELOG.md updated (for releases)
+- [ ] Version bump appropriate for changes (for releases)
+- [ ] User-facing changes clearly documented
 
 ### Deployment Process
 
