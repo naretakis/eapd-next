@@ -72,7 +72,7 @@ graph TB
 
 ### Template Integration System
 
-The core innovation of eAPD-Next is automatically converting CMS markdown templates into interactive forms:
+The core innovation of eAPD-Next is automatically converting CMS markdown templates into interactive forms with Markdown-based text input:
 
 ```mermaid
 graph LR
@@ -80,17 +80,57 @@ graph LR
     B --> C[Field Definitions]
     C --> D[Form Generator]
     D --> E[Material-UI Components]
-    E --> F[Validation Rules]
-    F --> G[Interactive Form]
+    E --> F[Milkdown WYSIWYG Components]
+    F --> G[Validation Rules]
+    G --> H[Interactive Form]
 ```
 
 **Template Processing Pipeline:**
 
 1. **Parse Markdown**: Extract sections, fields, and help text from template files
 2. **Generate Schema**: Create TypeScript interfaces and validation rules
-3. **Build Forms**: Dynamically create Material-UI form components
-4. **Apply Validation**: Real-time validation based on CMS requirements
-5. **Calculate Budgets**: Automatic calculations for budget tables and totals
+3. **Build Forms**: Dynamically create Material-UI form components with WYSIWYG support
+4. **Apply WYSIWYG**: Use Milkdown editors for text fields with visual formatting
+5. **Apply Validation**: Real-time validation for content structure and completeness
+6. **Calculate Budgets**: Automatic calculations for budget tables and totals
+
+### WYSIWYG Text Input with Markdown Storage
+
+The application uses a WYSIWYG editor that stores content as clean Markdown, providing structure without requiring users to learn Markdown syntax:
+
+```mermaid
+graph TB
+    A[User Formats Text] --> B[WYSIWYG Editor]
+    B --> C[Real-time Rendering]
+    B --> D[Markdown Conversion]
+    C --> E[Visual Feedback]
+    D --> F[Clean Markdown]
+    E --> G[Auto-Save]
+    F --> G
+    G --> H[IndexedDB Storage]
+```
+
+**Milkdown WYSIWYG Integration Features:**
+
+- **Visual Editing**: Real-time formatted text editing with familiar toolbar and keyboard shortcuts
+- **Transparent Markdown**: Users see formatted text, Milkdown stores clean Markdown
+- **Plugin Architecture**: Milkdown's plugin system for bold, italic, headers, lists, links, and tables
+- **Material-UI Integration**: Custom Milkdown theme matching application design
+- **Smart Conversion**: Automatic conversion between visual formatting and Markdown syntax
+- **Table Support**: Visual table editing plugin that generates proper Markdown tables
+- **Export Compatibility**: Direct conversion from stored Markdown to HTML (PDF) and formatted text
+
+**Technical Implementation:**
+
+```typescript
+// Milkdown Editor Configuration
+interface MilkdownConfig {
+  plugins: ['bold', 'italic', 'heading', 'list', 'link', 'table'];
+  theme: MaterialUITheme;
+  shortcuts: KeyboardShortcuts;
+  outputFormat: 'markdown';
+}
+```
 
 ### Budget Calculation Engine
 
@@ -146,6 +186,7 @@ src/
 │   │       └── BudgetTables/
 │   ├── forms/
 │   │   ├── FormField/
+│   │   ├── WYSIWYGEditor/
 │   │   ├── ValidationMessage/
 │   │   ├── BudgetTable/
 │   │   └── DatePicker/
@@ -275,12 +316,45 @@ interface APDSection {
 interface FormFieldProps {
   name: string;
   label: string;
-  type: 'text' | 'number' | 'date' | 'select' | 'textarea' | 'table';
+  type:
+    | 'text'
+    | 'wysiwyg'
+    | 'number'
+    | 'date'
+    | 'select'
+    | 'textarea'
+    | 'table';
   required?: boolean;
   helpText?: string;
   validation?: ValidationRule[];
   value: any;
   onChange: (value: any) => void;
+  wysiwygOptions?: WYSIWYGEditorOptions;
+}
+
+interface WYSIWYGEditorProps {
+  value: string; // Markdown content
+  onChange: (markdownValue: string) => void;
+  placeholder?: string;
+  helpText?: string;
+  maxLength?: number;
+  validationErrors?: ValidationError[];
+  editorOptions?: WYSIWYGEditorOptions;
+}
+
+interface WYSIWYGEditorOptions {
+  enableTables: boolean;
+  enableLinks: boolean;
+  enableHeaders: boolean;
+  enableLists: boolean;
+  maxLength?: number;
+  toolbarItems?: ToolbarItem[];
+}
+
+interface ToolbarItem {
+  type: 'bold' | 'italic' | 'header' | 'list' | 'link' | 'table';
+  label: string;
+  shortcut?: string;
 }
 
 interface BudgetTableProps {

@@ -256,7 +256,25 @@ This project also serves as a comprehensive learning platform for modern web dev
 11. WHEN I organize files THEN the system SHALL use context-aware file naming and structure for maximum Kiro effectiveness
 12. WHEN I manage project documentation THEN the system SHALL integrate documentation with Kiro's context system for enhanced AI assistance
 
-### Requirement 18: APD Version Control and Change Tracking
+### Requirement 18: WYSIWYG Text Input with Markdown Storage
+
+**User Story:** As a state user writing APD content, I want to use familiar rich text editing (bold, italics, headers, lists) that automatically creates structured content behind the scenes, so I can focus on writing without learning new syntax.
+
+#### Acceptance Criteria
+
+1. WHEN I enter text in APD fields THEN the system SHALL provide a WYSIWYG editor that renders formatted text in real-time
+2. WHEN I format text THEN the system SHALL use familiar toolbar buttons and keyboard shortcuts (Ctrl+B for bold, Ctrl+I for italic, etc.)
+3. WHEN I create structure THEN the system SHALL support headers, bulleted lists, numbered lists, bold, italic, and links through visual editing
+4. WHEN I save content THEN the system SHALL automatically convert the formatted content to clean Markdown for storage
+5. WHEN I load content THEN the system SHALL automatically render stored Markdown as formatted text in the editor
+6. WHEN I export APDs THEN the system SHALL properly convert the underlying Markdown to appropriate formats (HTML for PDF, formatted text for Markdown export)
+7. WHEN I import APD data THEN the system SHALL preserve formatting by converting imported Markdown to the visual editor format
+8. WHEN I use tables THEN the system SHALL provide visual table editing that generates clean Markdown table syntax
+9. WHEN I need to include links THEN the system SHALL provide a simple link dialog that creates proper Markdown link syntax
+10. WHEN I work with long documents THEN the system SHALL maintain formatting consistency and provide clean, readable Markdown output
+11. WHEN I copy and paste content THEN the system SHALL intelligently convert common formatting to appropriate Markdown equivalents
+
+### Requirement 19: APD Version Control and Change Tracking
 
 **User Story:** As a state user working on APDs over time, I want to track changes, create versions, and see what has been modified so that I can maintain an audit trail, collaborate safely, and revert changes when needed.
 

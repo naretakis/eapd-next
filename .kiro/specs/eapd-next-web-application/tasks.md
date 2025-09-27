@@ -94,7 +94,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create version history storage and retrieval with full snapshot approach
   - Add commit workflow with user messages and automatic version numbering
   - Implement working copy management with change preservation
-  - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.12_
+  - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.5, 19.12_
 
 - [x] 3. Dashboard Interface and APD Management
   - Build central dashboard for APD management with Material-UI components
@@ -116,7 +116,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create APDCard component with action buttons (edit, view, duplicate, delete, export, version history)
   - Display version indicators showing current version number and uncommitted changes status
   - Add quick access to version history and working copy status from dashboard
-  - _Requirements: 1.2, 1.3, 1.4, 1.5, 18.6, 18.12_
+  - _Requirements: 1.2, 1.3, 1.4, 1.5, 19.6, 19.12_
 
 - [x] 3.3 Build APD Creation Dialog and Type Selection
   - Create CreateAPDDialog component with Material-UI Dialog and form controls
@@ -128,8 +128,9 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 - [ ] 4. Template System and Form Generation Engine
   - Parse CMS markdown templates into structured form definitions
   - Build dynamic form generation system using Material-UI components
+  - Implement WYSIWYG text editor using Milkdown that stores content as Markdown
   - Implement template-based validation rules and help text integration
-  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7_
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 18.1, 18.2, 18.3, 18.4, 18.5_
 
 - [ ] 4.1 Create Markdown Template Parser
   - Build template parser to extract sections, fields, and metadata from markdown files
@@ -138,19 +139,33 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create template schema generator for TypeScript interface creation
   - _Requirements: 3.1, 3.2, 3.3, 3.5_
 
-- [ ] 4.2 Implement Dynamic Form Generation System
+- [ ] 4.2 Build WYSIWYG Text Editor with Milkdown and Markdown Storage
+  - Integrate Milkdown WYSIWYG editor library for React with Material-UI theming
+  - Create WYSIWYGEditor component that renders formatted text while storing Markdown
+  - Configure Milkdown with plugins for bold, italic, headers, lists, links, and table support
+  - Add keyboard shortcuts (Ctrl+B, Ctrl+I, etc.) for common formatting operations
+  - Implement automatic conversion between visual formatting and clean Markdown syntax
+  - Configure table plugin for visual table editing that generates proper Markdown tables
+  - Add smart paste functionality that converts common formatting to Markdown
+  - Style Milkdown editor to match Material-UI theme and application design
+  - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.8, 18.9, 18.10, 18.11_
+
+- [ ] 4.3 Implement Dynamic Form Generation System with WYSIWYG Integration
   - Create FormGenerator component that builds forms from template definitions
-  - Implement field type mapping to appropriate Material-UI components (TextField, Select, DatePicker, etc.)
+  - Implement field type mapping to appropriate Material-UI components (TextField, Select, DatePicker, WYSIWYGEditor)
+  - Integrate WYSIWYG editors for text fields with template-specific configuration
   - Add dynamic table generation for budget sections with calculation support
   - Build form section navigation with progress tracking and completion indicators
-  - _Requirements: 3.4, 3.6, 3.7, 2.1, 2.2_
+  - _Requirements: 3.4, 3.6, 3.7, 2.1, 2.2, 18.1_
 
-- [ ] 4.3 Build Template-Based Validation Engine
+- [ ] 4.4 Build Template-Based Validation Engine with Content Structure Support
   - Implement ValidationService with rules derived from template requirements
   - Create real-time validation with Material-UI error styling and clear messaging
+  - Add content structure validation to ensure proper formatting and completeness
   - Add field dependency validation (e.g., required fields based on other selections)
   - Implement completeness checking for APD sections and overall document
-  - _Requirements: 5.1, 5.2, 5.5, 5.6, 5.7_
+  - Validate that stored Markdown content maintains proper structure for export
+  - _Requirements: 5.1, 5.2, 5.5, 5.6, 5.7, 18.6, 18.7_
 
 - [ ] 5. APD Editor with TurboTax-Style Navigation
   - Build guided APD editor with step-by-step navigation and progress tracking
@@ -247,27 +262,31 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 
 - [ ] 8.1 Implement Markdown Export with Template Formatting and Version Information
   - Create MarkdownExporter that generates properly formatted markdown following template structure
+  - Implement proper conversion of user Markdown content to final document format
   - Implement section ordering and formatting based on original CMS templates
   - Add metadata inclusion with version information, commit history, and change summary
   - Include version control metadata in exported document headers
-  - Build export validation to ensure completeness before generation
-  - _Requirements: 6.1, 6.2, 6.5, 6.6, 18.11_
+  - Build export validation to ensure completeness and valid Markdown syntax before generation
+  - _Requirements: 6.1, 6.2, 6.5, 6.6, 18.6, 19.11_
 
 - [ ] 8.2 Build PDF Export with Professional Formatting and Version History
   - Implement PDFExporter using jsPDF for professional document generation
+  - Convert Markdown content to properly formatted HTML for PDF generation
   - Create PDF templates matching CMS document formatting requirements
   - Add table formatting, page breaks, and header/footer generation
   - Include version history appendix with change log and commit messages
   - Implement progress indicators for large document exports
-  - _Requirements: 6.1, 6.3, 6.5, 6.7, 18.11_
+  - _Requirements: 6.1, 6.3, 6.5, 6.7, 18.6, 19.11_
 
-- [ ] 8.3 Create JSON Export and Import System with Version Control
+- [ ] 8.3 Create JSON Export and Import System with Version Control and Markdown Preservation
   - Build JSONExporter for structured data export including full version history and change tracking
+  - Preserve Markdown formatting in JSON exports and validate Markdown content during import
   - Implement JSONImporter with data validation, conflict resolution, and version preservation
   - Add bulk export/import capabilities for multiple APDs with their complete version histories
   - Create data sharing functionality for collaboration with version control information intact
   - Handle import of APDs with existing version histories and merge conflicts
-  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 18.10, 18.11_
+  - Validate imported Markdown content and provide conversion assistance if needed
+  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 18.8, 19.10, 19.11_
 
 - [ ] 9. View-Only Mode and Collaboration Features
   - Implement read-only APD viewing with full navigation capabilities
@@ -371,11 +390,14 @@ This implementation plan converts the eAPD-Next design into a series of incremen
 - [ ] 14.1 Build Comprehensive Test Suite for All Features
   - Create unit tests for all components using React Testing Library
   - Implement integration tests for complete user workflows (create APD, edit, export)
+  - Add comprehensive WYSIWYG editor testing (formatting, toolbar functionality, Markdown conversion accuracy)
+  - Test content preservation through export/import cycles and version control operations
   - Add comprehensive version control testing (commit, revert, diff, working copy management)
   - Build change tracking tests for field-level detection and highlighting accuracy
-  - Add accessibility tests using @axe-core/react for WCAG compliance
+  - Add accessibility tests using @axe-core/react for WCAG compliance including WYSIWYG editor accessibility
   - Build performance tests for large data operations, export functionality, and version history storage
-  - _Requirements: 14.1, 14.2, 14.3, 14.4, 18.1-18.12_
+  - Test visual formatting to Markdown conversion accuracy and consistency
+  - _Requirements: 14.1, 14.2, 14.3, 14.4, 18.1-18.11, 19.1-19.12_
 
 - [ ] 14.2 Finalize Testing Quality Gates and Documentation
   - Ensure 90% code coverage target is met across all modules
