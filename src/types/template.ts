@@ -22,7 +22,8 @@ export type FieldType =
   | 'checkbox'
   | 'radio'
   | 'table'
-  | 'file';
+  | 'file'
+  | 'milkdown-editor';
 
 // Select Options
 export interface SelectOption {
