@@ -202,6 +202,7 @@ git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^f
 git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges | grep -E "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build):"
 ```
 
+[0.3.0]: https://github.com/naretakis/eapd-next/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/naretakis/eapd-next/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/naretakis/eapd-next/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/naretakis/eapd-next/releases/tag/v0.0.1
