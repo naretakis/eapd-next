@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-09-28
+
+### Added
+
+#### Advanced Template Parser with Milkdown Integration (Task 4.1 Complete)
+
+- **Intelligent Template Parsing**: Advanced markdown template parser that extracts structured field definitions from APD templates
+- **Content Type Detection**: Automatically detects 10 different content types (budget tables, personnel tables, regulatory references, etc.) with confidence scoring
+- **Milkdown Editor Integration**: Generates appropriate Milkdown editor configurations with specialized plugins for each content type
+- **APD-Specific Features**: Creates APD-specific slash commands for quick content insertion (budget tables, personnel tables, regulatory citations, FFP calculations)
+- **Schema Generation**: Automatically generates TypeScript interfaces and validation schemas from parsed templates
+- **Interactive Demo**: Web-based demo at `/demo` showcasing template analysis and content detection capabilities
+
+#### Template Parser Components
+
+- **MarkdownTemplateParser**: Core parser for YAML front matter and markdown content extraction
+- **ContentTypeDetector**: Intelligent content analysis with pattern matching and confidence scoring
+- **TemplateSchemaGenerator**: TypeScript interface and validation schema generation
+- **TemplateService**: High-level orchestration API for template processing
+
+#### Content Intelligence Features
+
+- **Smart Editor Selection**: Automatically recommends appropriate editing tools based on content analysis
+- **Contextual Help Integration**: Extracts and processes help text from template guidance sections
+- **Validation Framework**: Content-specific validation rules for budget calculations, regulatory citations, and personnel data
+- **Plugin Configuration**: Dynamic Milkdown plugin selection based on content complexity and type
+
+### Enhanced
+
+- **Dashboard Interface**: Added template parser demo button for easy access to new functionality
+- **Type System**: Extended template types to support Milkdown-specific field configurations
+
 ## [0.2.0] - 2025-09-27
 
 ### Added
