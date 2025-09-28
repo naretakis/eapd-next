@@ -42,53 +42,48 @@ npm test -- --testPathPatterns=versionControlService.test.ts --maxWorkers=1
 
 ## 🌐 Manual Browser Testing
 
-### ✅ 4. Use the Test Page
+### ✅ 4. Browser Developer Tools Testing
 
 1. Start the development server: `npm run dev`
-2. Visit: `http://localhost:3000/storage-test.html`
-3. Run through the test sequence:
+2. Open the application in your browser
+3. Open Developer Tools (F12)
+4. Test storage functionality through the console:
 
 **Database Initialization:**
 
-- [ ] Click "1. Initialize Database"
-- [ ] Should see "Database connection established successfully"
-- [ ] Status should turn green
-- [ ] Next button should become enabled
+- [ ] Check IndexedDB section in Application/Storage tab
+- [ ] Should see "APDDatabase" with proper object stores
+- [ ] No errors in console during initialization
 
 **APD Operations:**
 
-- [ ] Click "2. Test APD Operations"
-- [ ] Should see "APD created successfully" with an ID
-- [ ] Status should turn green
-- [ ] Next button should become enabled
+- [ ] Create test APDs through the UI (when available)
+- [ ] Verify data appears in IndexedDB
+- [ ] Check that operations complete without errors
 
 **Version Control:**
 
-- [ ] Click "3. Test Version Control"
-- [ ] Should see "Version created: v1.0"
-- [ ] Should see commit message
-- [ ] Status should turn green
+- [ ] Test working copy creation and commits
+- [ ] Verify version history is maintained
+- [ ] Check change tracking functionality
 
 **Project Management:**
 
-- [ ] Click "4. Test Project Management"
-- [ ] Should see "Project created: Test Project Group"
-- [ ] Should see "APD associated with project"
-- [ ] Status should turn green
+- [ ] Create projects and associate APDs
+- [ ] Verify project data persistence
+- [ ] Test project organization features
 
 **Storage Quota:**
 
-- [ ] Click "5. Test Storage Quota"
-- [ ] Should see storage quota information (MB available/used)
-- [ ] Should see percentage used
-- [ ] No warnings unless storage is actually low
+- [ ] Check storage usage in browser settings
+- [ ] Monitor for storage quota warnings
+- [ ] Verify cleanup functions work properly
 
 **Backup/Restore:**
 
-- [ ] Click "6. Test Backup/Restore"
-- [ ] Should see "Backup created successfully" with file size
-- [ ] Should see a download link appear
-- [ ] Click the download link to get a JSON backup file
+- [ ] Test export functionality when implemented
+- [ ] Verify backup file format and content
+- [ ] Test restore/import capabilities
 
 ### ✅ 5. Browser Developer Tools Check
 
