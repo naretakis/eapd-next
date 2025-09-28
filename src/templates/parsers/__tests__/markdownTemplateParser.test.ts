@@ -110,7 +110,7 @@ Version:
 | | | |
 `;
 
-      const result = await parser.parseTemplate(markdownContent, 'PAPD');
+      await parser.parseTemplate(markdownContent, 'PAPD');
 
       const milkdownConfigs = parser.getAllMilkdownConfigs();
       expect(milkdownConfigs.size).toBeGreaterThan(0);

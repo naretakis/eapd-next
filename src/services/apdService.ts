@@ -609,7 +609,8 @@ export class APDService {
       };
 
       // Update child document to remove parent reference
-      const { parentAPDId: _, ...childWithoutParent } = childDocument;
+      const { parentAPDId: _removedParentId, ...childWithoutParent } =
+        childDocument;
       const updatedChild: APD = {
         ...childWithoutParent,
         updatedAt: new Date(),

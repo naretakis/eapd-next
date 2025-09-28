@@ -266,7 +266,7 @@ export class TemplateService {
    * Generate custom slash commands for specific APD context
    */
   public generateCustomSlashCommands(
-    apdType: APDType,
+    _apdType: APDType,
     projectContext?: {
       projectName?: string;
       stateName?: string;
@@ -359,7 +359,7 @@ export class TemplateService {
       type: parsedTemplate.metadata.type,
       version: parsedTemplate.metadata.version,
       name: parsedTemplate.metadata.title,
-      description: parsedTemplate.metadata.description,
+      description: parsedTemplate.metadata.description || '',
       sections,
       validationRules: this.enhanceValidationRules(
         parsedTemplate.validationRules,
@@ -385,11 +385,11 @@ export class TemplateService {
     return {
       id: this.generateSectionId(parsedSection.title),
       title: parsedSection.title,
-      description: parsedSection.description,
+      description: parsedSection.description || '',
       fields,
       subsections,
       isRequired: true,
-      helpText: parsedSection.helpText,
+      helpText: parsedSection.helpText || '',
       order: 0, // Will be set by parent
     };
   }
@@ -404,8 +404,8 @@ export class TemplateService {
       type: parsedField.type,
       required: parsedField.required,
       validation: parsedField.validation || [],
-      helpText: parsedField.helpText,
-      options: parsedField.options,
+      helpText: parsedField.helpText || '',
+      options: parsedField.options || [],
       defaultValue: parsedField.defaultValue,
     };
   }
@@ -421,7 +421,7 @@ export class TemplateService {
       rules.push({
         type: 'custom',
         message: 'Content must meet APD formatting standards',
-        validator: (value: unknown) => {
+        validator: () => {
           // Implement APD-specific validation
           return true;
         },
@@ -433,7 +433,7 @@ export class TemplateService {
       rules.push({
         type: 'custom',
         message: 'Content must be complete and consistent across sections',
-        validator: (value: unknown, context: Record<string, unknown>) => {
+        validator: () => {
           // Implement cross-section validation
           return true;
         },
@@ -502,7 +502,7 @@ export class TemplateService {
     };
   }
 
-  private getRequiredSections(apdType: APDType): string[] {
+  private getRequiredSections(_apdType: APDType): string[] {
     // For now, only require sections that are commonly present
     // This can be made more strict in the future
     return ['executive_summary'];

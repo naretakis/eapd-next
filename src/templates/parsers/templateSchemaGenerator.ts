@@ -9,9 +9,6 @@ import {
   ParsedTemplate,
   ParsedSection,
   ParsedField,
-  APDTemplate,
-  TemplateSection,
-  TemplateField,
   ValidationRule,
   FieldType,
 } from '../../types/template';
@@ -287,7 +284,7 @@ import { MilkdownEditorValue } from '../components/forms/MilkdownEditor';
         type: field.type,
         required: field.required,
         rules: this.generateFieldValidationRules(field, milkdownConfig),
-        milkdownConfig,
+        ...(milkdownConfig && { milkdownConfig }),
       };
 
       fields.push(fieldValidation);
@@ -388,7 +385,7 @@ import { MilkdownEditorValue } from '../components/forms/MilkdownEditor';
         rules.push({
           type: 'custom',
           message: 'Budget table must have valid calculations',
-          validator: (value: unknown) => {
+          validator: () => {
             // Validate budget table structure and calculations
             return true; // Placeholder
           },
@@ -399,7 +396,7 @@ import { MilkdownEditorValue } from '../components/forms/MilkdownEditor';
         rules.push({
           type: 'custom',
           message: 'Personnel table must have valid resource allocations',
-          validator: (value: unknown) => {
+          validator: () => {
             // Validate personnel table structure
             return true; // Placeholder
           },
@@ -442,9 +439,11 @@ import { MilkdownEditorValue } from '../components/forms/MilkdownEditor';
           fieldId: field.name,
           label: field.label,
           type: field.type,
-          milkdownContentType: milkdownConfig?.contentType,
           component: this.getComponentName(field, milkdownConfig),
           props: this.generateComponentProps(field, milkdownConfig),
+          ...(milkdownConfig?.contentType && {
+            milkdownContentType: milkdownConfig.contentType,
+          }),
         };
 
         mappings.push(mapping);
@@ -519,7 +518,6 @@ import { MilkdownEditorValue } from '../components/forms/MilkdownEditor';
       label: field.label,
       required: field.required,
       helpText: field.helpText,
-      placeholder: field.placeholder,
     };
 
     if (milkdownConfig) {

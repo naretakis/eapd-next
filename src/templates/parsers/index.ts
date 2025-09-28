@@ -161,7 +161,9 @@ export const getPluginsForContentType = (
   contentType: MilkdownContentType
 ): string[] => {
   const basePlugins = [...DEFAULT_MILKDOWN_PLUGINS];
-  const contentPlugins = (CONTENT_TYPE_PLUGINS as any)[contentType] || [];
+  const contentPlugins =
+    (CONTENT_TYPE_PLUGINS as Record<string, readonly string[]>)[contentType] ||
+    [];
 
   return [...basePlugins, ...contentPlugins];
 };

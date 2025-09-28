@@ -145,11 +145,11 @@ export class MarkdownTemplateParser {
     }
 
     const yamlContent = match[1];
-    const markdownContent = match[2];
+    const markdownContent = match[2] || '';
 
     // Simple YAML parser for front matter
     const frontMatter: TemplateFrontMatter = {};
-    const lines = yamlContent.split('\n');
+    const lines = yamlContent?.split('\n') || [];
     let currentKey = '';
 
     for (const line of lines) {
@@ -193,6 +193,7 @@ export class MarkdownTemplateParser {
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
+      if (!line) continue;
       const trimmed = line.trim();
 
       // Skip empty lines
@@ -275,24 +276,27 @@ export class MarkdownTemplateParser {
       // Parse content insertion points
       if (trimmed === '[Insert written content here]') {
         const fieldName = this.generateFieldName(
-          currentSection,
-          currentSubsection
+          currentSection || undefined,
+          currentSubsection || undefined
         );
         const field: ParsedField = {
           name: fieldName,
-          label: this.generateFieldLabel(currentSection, currentSubsection),
+          label: this.generateFieldLabel(
+            currentSection || undefined,
+            currentSubsection || undefined
+          ),
           type: 'textarea',
           required: true,
-          helpText: instructionContent
-            ? this.cleanInstructionText(instructionContent)
-            : undefined,
+          ...(instructionContent && {
+            helpText: this.cleanInstructionText(instructionContent),
+          }),
         };
 
         // Determine if this should use Milkdown
         const contentType = this.detectMilkdownContentType(
           field,
-          currentSection,
-          currentSubsection
+          currentSection || undefined,
+          currentSubsection || undefined
         );
         if (contentType !== 'rich-text') {
           field.type = 'text'; // Will be converted to Milkdown in config
@@ -329,7 +333,7 @@ export class MarkdownTemplateParser {
     const headerLine = lines[startIndex];
     const separatorLine = lines[startIndex + 1];
 
-    if (!separatorLine || !separatorLine.includes('---')) {
+    if (!headerLine || !separatorLine || !separatorLine.includes('---')) {
       return null;
     }
 
@@ -479,7 +483,7 @@ export class MarkdownTemplateParser {
     field: ParsedField,
     contentType: MilkdownContentType,
     templateType: APDType,
-    fieldPath: string
+    _fieldPath: string
   ): MilkdownFieldConfig {
     const plugins = this.getPluginsForContentType(contentType);
     const slashCommands = this.getSlashCommandsForContentType(
@@ -748,7 +752,7 @@ export class MarkdownTemplateParser {
    */
   private getSlashCommandsForContentType(
     contentType: MilkdownContentType,
-    templateType: APDType
+    _templateType: APDType
   ): SlashCommand[] {
     return this.slashCommands.filter(cmd => {
       switch (contentType) {
@@ -846,10 +850,10 @@ export class MarkdownTemplateParser {
     const descMatch = content.match(
       />\s*This template can be used for (.+?)$/m
     );
-    return descMatch ? descMatch[1] : '';
+    return descMatch ? descMatch[1] || '' : '';
   }
 
-  private extractValidationRules(sections: ParsedSection[]): ValidationRule[] {
+  private extractValidationRules(_sections: ParsedSection[]): ValidationRule[] {
     const rules: ValidationRule[] = [];
 
     // Add common validation rules
@@ -890,7 +894,7 @@ export class MarkdownTemplateParser {
     return subsection?.title || section?.title || 'Content';
   }
 
-  private detectTableType(headers: string[], templateType: APDType): string {
+  private detectTableType(headers: string[], _templateType: APDType): string {
     const headerText = headers.join(' ').toLowerCase();
 
     if (headerText.includes('federal') && headerText.includes('state')) {
@@ -913,7 +917,7 @@ export class MarkdownTemplateParser {
     return `${tableType}_table_${headers[0]?.toLowerCase().replace(/[^a-z0-9]/g, '_') || 'data'}`;
   }
 
-  private generateTableLabel(headers: string[], tableType: string): string {
+  private generateTableLabel(_headers: string[], tableType: string): string {
     return `${tableType.charAt(0).toUpperCase() + tableType.slice(1)} Table`;
   }
 
