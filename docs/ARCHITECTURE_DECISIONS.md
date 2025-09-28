@@ -501,6 +501,95 @@ We will implement **multi-layered documentation** with learning focus.
 
 ---
 
+## ADR-012: WYSIWYG Editor Selection - Milkdown with Crepe
+
+**Date**: 2025-09-27  
+**Status**: Accepted  
+**Deciders**: Development Team
+
+### Context
+
+We need a sophisticated WYSIWYG editor for APD content creation that stores clean Markdown, provides professional editing features, and integrates well with our Material-UI and React architecture. APD documents require complex formatting including tables, structured content, and the ability to reorganize sections dynamically.
+
+### Decision
+
+We will use **Milkdown with Crepe (React integration)** as our WYSIWYG editor solution.
+
+### Rationale
+
+- **Professional Features**: Provides enterprise-grade editing capabilities including drag-and-drop blocks, slash commands, and visual table editing
+- **Markdown Storage**: Natively stores content as clean Markdown while providing WYSIWYG editing experience
+- **Plugin Architecture**: Extensible plugin system allows APD-specific customizations (budget tables, personnel sections, regulatory references)
+- **React Integration**: Crepe provides seamless React integration with hooks and component patterns
+- **Material-UI Compatibility**: Can be themed to match our existing Material-UI design system
+- **Performance**: Built on ProseMirror with efficient document model for large documents
+- **Advanced Features**: Includes features we need out-of-the-box (tables, math expressions, diagrams, smart paste)
+
+### Specific Milkdown Features Leveraged
+
+1. **Core Plugins**: commonmark, GFM, history for standard editing
+2. **UI Enhancement**: block plugin (drag-and-drop), slash plugin (quick insertion), tooltip plugin (floating toolbar)
+3. **Content Plugins**: table plugin (visual table editing), math plugin (calculations), diagram plugin (architecture)
+4. **APD-Specific Customizations**: Custom plugins for budget tables, personnel sections, regulatory references
+
+### Integration Strategy
+
+- **Leverage Existing Infrastructure**: Extend MUI Table patterns, use existing validation services, integrate with auto-save system
+- **Performance Optimization**: Lazy load plugins, use React.memo patterns, follow 100ms render targets
+- **Accessibility**: Full WCAG compliance using established patterns and @axe-core/react testing
+- **Testing**: Comprehensive testing using React Testing Library and Jest patterns
+
+### Alternatives Considered
+
+1. **Custom Editor with Draft.js**
+   - Pros: Full control, React-native
+   - Cons: Significant development time, need to build all features from scratch
+2. **TinyMCE or CKEditor**
+   - Pros: Mature, feature-rich
+   - Cons: Not React-native, complex integration, licensing considerations, doesn't store Markdown natively
+3. **Simple Textarea with Markdown**
+   - Pros: Simple implementation, lightweight
+   - Cons: Poor user experience, requires users to learn Markdown syntax
+4. **Quill.js**
+   - Pros: Lightweight, good API
+   - Cons: Limited table support, would need significant customization for APD needs
+5. **Slate.js**
+   - Pros: React-native, highly customizable
+   - Cons: Requires building most features from scratch, steeper learning curve
+
+### Consequences
+
+- **Positive**:
+  - Professional editing experience that users expect
+  - Saves months of development time compared to building custom editor
+  - Clean Markdown storage ensures export compatibility
+  - Extensible for APD-specific needs (budget tables, drag-and-drop sections)
+  - Strong React integration with existing patterns
+- **Negative**:
+  - Additional dependency and bundle size
+  - Learning curve for Milkdown plugin development
+  - Potential complexity in deep customizations
+- **Neutral**:
+  - Need to maintain Milkdown version compatibility
+  - May need custom plugins for very specific APD requirements
+
+### Implementation Plan
+
+1. **Phase 1**: Basic Milkdown integration with core plugins
+2. **Phase 2**: APD-specific plugin development (budget tables, personnel sections)
+3. **Phase 3**: Advanced features (drag-and-drop reorganization, custom slash commands)
+4. **Phase 4**: Performance optimization and accessibility compliance
+
+### Success Metrics
+
+- User can create formatted APD content without learning Markdown
+- Visual table editing for budget and personnel tables works seamlessly
+- Drag-and-drop content reorganization improves user workflow
+- Clean Markdown export maintains structure for CMS submission
+- Editor performance meets 100ms render target for typical APD sections
+
+---
+
 ## Decision Summary
 
 | ADR | Decision                    | Status   | Impact |
@@ -516,6 +605,7 @@ We will implement **multi-layered documentation** with learning focus.
 | 009 | Comprehensive Accessibility | Accepted | High   |
 | 010 | Desktop-First Performance   | Accepted | Medium |
 | 011 | Multi-Layered Documentation | Accepted | Medium |
+| 012 | Milkdown + Crepe WYSIWYG    | Accepted | High   |
 
 ## Future Considerations
 

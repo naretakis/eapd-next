@@ -94,43 +94,154 @@ graph LR
 5. **Apply Validation**: Real-time validation for content structure and completeness
 6. **Calculate Budgets**: Automatic calculations for budget tables and totals
 
-### WYSIWYG Text Input with Markdown Storage
+### Advanced WYSIWYG Text Editing with Milkdown and Crepe
 
-The application uses a WYSIWYG editor that stores content as clean Markdown, providing structure without requiring users to learn Markdown syntax:
+The application uses Milkdown with Crepe (React integration) to provide a professional-grade WYSIWYG editing experience that stores content as clean Markdown:
 
 ```mermaid
 graph TB
-    A[User Formats Text] --> B[WYSIWYG Editor]
-    B --> C[Real-time Rendering]
-    B --> D[Markdown Conversion]
-    C --> E[Visual Feedback]
-    D --> F[Clean Markdown]
-    E --> G[Auto-Save]
-    F --> G
-    G --> H[IndexedDB Storage]
+    A[User Interaction] --> B[Crepe React Component]
+    B --> C[Milkdown Core Engine]
+    C --> D[ProseMirror Document Model]
+    D --> E[Plugin System]
+    E --> F[Real-time Rendering]
+    E --> G[Markdown Output]
+    F --> H[Visual Feedback]
+    G --> I[Clean Markdown Storage]
+    H --> J[Auto-Save with Change Detection]
+    I --> J
+    J --> K[IndexedDB Persistence]
 ```
 
-**Milkdown WYSIWYG Integration Features:**
+**Milkdown Plugin Architecture Integration:**
 
-- **Visual Editing**: Real-time formatted text editing with familiar toolbar and keyboard shortcuts
-- **Transparent Markdown**: Users see formatted text, Milkdown stores clean Markdown
-- **Plugin Architecture**: Milkdown's plugin system for bold, italic, headers, lists, links, and tables
-- **Material-UI Integration**: Custom Milkdown theme matching application design
-- **Smart Conversion**: Automatic conversion between visual formatting and Markdown syntax
-- **Table Support**: Visual table editing plugin that generates proper Markdown tables
-- **Export Compatibility**: Direct conversion from stored Markdown to HTML (PDF) and formatted text
+- **Core Plugins**: `@milkdown/plugin-commonmark` for standard Markdown, `@milkdown/plugin-gfm` for GitHub Flavored Markdown
+- **UI Enhancement Plugins**: `@milkdown/plugin-block` for drag-and-drop, `@milkdown/plugin-slash` for quick content insertion
+- **Content Plugins**: `@milkdown/plugin-table` for visual table editing, `@milkdown/plugin-math` for budget calculations
+- **Interaction Plugins**: `@milkdown/plugin-tooltip` for formatting toolbar, `@milkdown/plugin-clipboard` for smart paste
+- **Advanced Plugins**: `@milkdown/plugin-diagram` for system architecture diagrams, `@milkdown/plugin-prism` for code highlighting
 
-**Technical Implementation:**
+**Crepe React Integration Features:**
+
+- **React Hooks**: `useEditor` for editor instance management, `useNodeViewFactory` for custom components
+- **Component Integration**: Seamless integration with Material-UI form components and validation
+- **State Management**: Proper React state synchronization with Milkdown document state
+- **Event Handling**: React-friendly event handling for editor interactions and changes
+
+**APD-Specific Customizations Leveraging Existing Infrastructure:**
 
 ```typescript
-// Milkdown Editor Configuration
-interface MilkdownConfig {
-  plugins: ['bold', 'italic', 'heading', 'list', 'link', 'table'];
-  theme: MaterialUITheme;
-  shortcuts: KeyboardShortcuts;
-  outputFormat: 'markdown';
+// APD-Specific Milkdown Configuration with Existing Tool Integration
+interface APDMilkdownConfig {
+  // Core plugins for standard editing (lazy loaded)
+  corePlugins: [
+    '@milkdown/plugin-commonmark',
+    '@milkdown/plugin-gfm',
+    '@milkdown/plugin-history',
+  ];
+
+  // UI enhancement plugins (conditionally loaded based on APD section)
+  uiPlugins: [
+    '@milkdown/plugin-block', // Drag-and-drop content blocks
+    '@milkdown/plugin-slash', // Quick insertion menu with MUI Menu integration
+    '@milkdown/plugin-tooltip', // Floating toolbar with MUI theme
+    '@milkdown/plugin-cursor', // Enhanced cursor behavior
+  ];
+
+  // Content-specific plugins (lazy loaded per section needs)
+  contentPlugins: [
+    '@milkdown/plugin-table', // Visual table editing extending MUI Table patterns
+    '@milkdown/plugin-math', // Math expressions integrated with existing calculation engine
+    '@milkdown/plugin-diagram', // Mermaid diagrams for architecture sections
+    '@milkdown/plugin-emoji', // Emoji support for user-friendly content
+  ];
+
+  // APD-specific custom plugins leveraging existing services
+  customPlugins: [
+    'apd-budget-table-plugin', // Extends existing BudgetCalculationEngine
+    'apd-personnel-table-plugin', // Uses existing MUI Table and validation patterns
+    'apd-section-navigation-plugin', // Integrates with existing ProgressTracker
+    'apd-validation-plugin', // Extends existing ValidationService
+  ];
+
+  // Material-UI theme integration using established theme system
+  theme: {
+    primary: materialUITheme.palette.primary.main;
+    secondary: materialUITheme.palette.secondary.main;
+    background: materialUITheme.palette.background.paper;
+    surface: materialUITheme.palette.background.default;
+    // Leverage existing MUI spacing and typography
+    spacing: materialUITheme.spacing;
+    typography: materialUITheme.typography;
+  };
+
+  // Performance optimization using established patterns
+  performance: {
+    lazyLoadPlugins: true; // Use React.lazy patterns
+    memoizeComponents: true; // Use React.memo patterns
+    debounceAutoSave: 5000; // Use existing auto-save infrastructure
+    maxRenderTime: 100; // Follow established 100ms render target
+  };
+
+  // Accessibility integration using existing standards
+  accessibility: {
+    ariaLabels: true; // Use established ARIA patterns
+    keyboardNavigation: true; // Follow existing keyboard navigation
+    screenReaderSupport: true; // Integrate with existing accessibility testing
+    colorContrast: 'WCAG_AA'; // Use established color contrast standards
+  };
+
+  // Testing integration using established patterns
+  testing: {
+    reactTestingLibrary: true; // Use existing RTL patterns
+    jestConfiguration: true; // Follow existing Jest setup
+    accessibilityTesting: true; // Use @axe-core/react integration
+    performanceTesting: true; // Add to existing performance benchmarks
+  };
+}
+
+// Custom APD Content Types
+interface APDContentTypes {
+  budgetTable: {
+    type: 'budget-table';
+    attrs: {
+      tableType: 'personnel' | 'contractor' | 'hardware' | 'software';
+      ffpRate: 90 | 75 | 50;
+      autoCalculate: boolean;
+    };
+  };
+
+  personnelSection: {
+    type: 'personnel-section';
+    attrs: {
+      roleType: 'state' | 'contractor';
+      costCenter: string;
+    };
+  };
+
+  regulatoryReference: {
+    type: 'regulatory-reference';
+    attrs: {
+      regulation: string;
+      section: string;
+      url?: string;
+    };
+  };
 }
 ```
+
+**Advanced Features Implementation Leveraging Existing Infrastructure:**
+
+- **Slash Commands**: Custom APD-specific slash commands using existing MUI Menu patterns for inserting budget tables, personnel sections, regulatory references
+- **Block Manipulation**: Drag-and-drop using existing MUI interaction patterns for reorganizing APD sections, budget line items, and content blocks
+- **Smart Tables**: Specialized table components extending existing MUI Table infrastructure with automatic calculations, validation, and APD-specific formatting
+- **Content Templates**: Pre-built content blocks leveraging existing template parsing system for common APD sections (executive summary templates, budget table templates)
+- **Collaborative Editing**: Foundation for future real-time collaboration using `@milkdown/plugin-collab` with existing version control infrastructure
+- **Performance Integration**: Milkdown optimization using established React.memo, lazy loading, and 100ms render target patterns
+- **Accessibility Integration**: Full WCAG compliance using existing @axe-core/react testing and established ARIA patterns
+- **Error Handling**: Milkdown error boundaries using existing error handling patterns and MUI error display components
+- **Testing Integration**: Comprehensive testing using established React Testing Library, Jest, and accessibility testing patterns
+- **Bundle Optimization**: Tree-shaking and code splitting using established performance optimization and build processes
 
 ### Budget Calculation Engine
 
@@ -310,7 +421,7 @@ interface APDSection {
 }
 ```
 
-#### Form Components
+#### Form Components with Milkdown Integration
 
 ```typescript
 interface FormFieldProps {
@@ -318,50 +429,130 @@ interface FormFieldProps {
   label: string;
   type:
     | 'text'
-    | 'wysiwyg'
+    | 'milkdown-editor'
     | 'number'
     | 'date'
     | 'select'
     | 'textarea'
-    | 'table';
+    | 'budget-table'
+    | 'personnel-table';
   required?: boolean;
   helpText?: string;
   validation?: ValidationRule[];
   value: any;
   onChange: (value: any) => void;
-  wysiwygOptions?: WYSIWYGEditorOptions;
+  milkdownOptions?: MilkdownEditorOptions;
 }
 
-interface WYSIWYGEditorProps {
+interface MilkdownEditorProps {
   value: string; // Markdown content
   onChange: (markdownValue: string) => void;
   placeholder?: string;
   helpText?: string;
   maxLength?: number;
   validationErrors?: ValidationError[];
-  editorOptions?: WYSIWYGEditorOptions;
+  editorOptions: MilkdownEditorOptions;
+  apdContext?: APDContext; // Context for APD-specific features
 }
 
-interface WYSIWYGEditorOptions {
-  enableTables: boolean;
-  enableLinks: boolean;
-  enableHeaders: boolean;
-  enableLists: boolean;
+interface MilkdownEditorOptions {
+  // Core plugin configuration
+  enableCommonmark: boolean;
+  enableGFM: boolean;
+  enableMath: boolean;
+  enableDiagram: boolean;
+
+  // UI enhancement plugins
+  enableBlockPlugin: boolean; // Drag-and-drop blocks
+  enableSlashPlugin: boolean; // Quick insertion menu
+  enableTooltipPlugin: boolean; // Floating toolbar
+  enableClipboardPlugin: boolean; // Smart paste
+
+  // Content-specific plugins
+  enableTablePlugin: boolean; // Visual table editing
+  enableEmojiPlugin: boolean; // Emoji support
+  enablePrismPlugin: boolean; // Code highlighting
+
+  // APD-specific configurations
+  apdContentTypes?: APDContentType[];
+  customSlashCommands?: SlashCommand[];
+  budgetTableConfig?: BudgetTableConfig;
+
+  // Editor behavior
   maxLength?: number;
-  toolbarItems?: ToolbarItem[];
+  autoSave?: boolean;
+  autoSaveDelay?: number;
+
+  // Material-UI theme integration
+  theme?: MilkdownThemeConfig;
 }
 
-interface ToolbarItem {
-  type: 'bold' | 'italic' | 'header' | 'list' | 'link' | 'table';
+interface APDContext {
+  apdType: 'PAPD' | 'IAPD' | 'OAPD';
+  sectionId: string;
+  fieldPath: string;
+  projectName: string;
+  availableFFPRates: number[];
+}
+
+interface SlashCommand {
+  id: string;
   label: string;
-  shortcut?: string;
+  description: string;
+  icon?: string;
+  keywords: string[];
+  handler: (editor: Editor) => void;
+}
+
+interface APDContentType {
+  type: string;
+  label: string;
+  description: string;
+  icon?: string;
+  defaultAttrs?: Record<string, any>;
+  nodeSpec: NodeSpec;
+  component?: React.ComponentType<any>;
+}
+
+interface BudgetTableConfig {
+  tableType: 'personnel' | 'contractor' | 'hardware' | 'software' | 'training';
+  ffpRate: 90 | 75 | 50;
+  autoCalculate: boolean;
+  columns: BudgetColumn[];
+  validationRules: BudgetValidationRule[];
+}
+
+interface MilkdownThemeConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  surfaceColor: string;
+  textColor: string;
+  borderColor: string;
+  focusColor: string;
+  errorColor: string;
+  warningColor: string;
+  successColor: string;
 }
 
 interface BudgetTableProps {
+  tableType: 'personnel' | 'contractor' | 'hardware' | 'software' | 'training';
   columns: BudgetColumn[];
   rows: BudgetRow[];
   calculations: CalculationRule[];
+  ffpRate: 90 | 75 | 50;
   onCellChange: (rowId: string, columnId: string, value: number) => void;
+  onRowAdd: () => void;
+  onRowDelete: (rowId: string) => void;
+  validationErrors?: BudgetValidationError[];
+  milkdownIntegration?: boolean; // Whether this table is embedded in Milkdown
+}
+
+interface PersonnelTableProps extends BudgetTableProps {
+  roleTypes: ('state' | 'contractor')[];
+  costCenters: string[];
+  onRoleChange: (rowId: string, role: 'state' | 'contractor') => void;
+  onCostCenterChange: (rowId: string, costCenter: string) => void;
 }
 ```
 

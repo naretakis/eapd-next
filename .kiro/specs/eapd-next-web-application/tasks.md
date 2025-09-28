@@ -125,47 +125,95 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Integrate with APDService to create new APDs and navigate to editor
   - _Requirements: 1.6, 2.6, 3.1, 3.2, 3.3_
 
-- [ ] 4. Template System and Form Generation Engine
-  - Parse CMS markdown templates into structured form definitions
-  - Build dynamic form generation system using Material-UI components
-  - Implement WYSIWYG text editor using Milkdown that stores content as Markdown
-  - Implement template-based validation rules and help text integration
-  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 18.1, 18.2, 18.3, 18.4, 18.5_
+- [ ] 4. Advanced Template System and Milkdown-Powered Form Generation
+  - Parse CMS markdown templates into structured form definitions with Milkdown integration
+  - Build dynamic form generation system using Material-UI components and Milkdown editors
+  - Implement professional WYSIWYG text editing using Milkdown with Crepe React integration
+  - Create APD-specific Milkdown plugins for budget tables, personnel sections, and content blocks
+  - Implement template-based validation rules and contextual help text integration
+  - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 18.1, 18.2, 18.3, 18.4, 18.5, 18.6, 18.7, 18.8, 18.9, 18.10, 18.11, 18.12, 18.13_
 
-- [ ] 4.1 Create Markdown Template Parser
-  - Build template parser to extract sections, fields, and metadata from markdown files
-  - Convert template instructions into structured field definitions with types and validation
-  - Parse help text and examples from template guidance sections
-  - Create template schema generator for TypeScript interface creation
-  - _Requirements: 3.1, 3.2, 3.3, 3.5_
+- [ ] 4.1 Create Advanced Markdown Template Parser with Milkdown Integration
+  - Build template parser to extract sections, fields, and metadata from markdown files with Milkdown content type detection
+  - Convert template instructions into structured field definitions with Milkdown editor configurations
+  - Parse help text and examples from template guidance sections for contextual Milkdown assistance
+  - Create template schema generator for TypeScript interfaces including Milkdown-specific field types
+  - Identify content areas that benefit from specialized Milkdown plugins (tables, math, diagrams)
+  - Generate APD-specific slash command configurations for quick content insertion
+  - _Requirements: 3.1, 3.2, 3.3, 3.5, 18.1, 18.13_
 
-- [ ] 4.2 Build WYSIWYG Text Editor with Milkdown and Markdown Storage
-  - Integrate Milkdown WYSIWYG editor library for React with Material-UI theming
-  - Create WYSIWYGEditor component that renders formatted text while storing Markdown
-  - Configure Milkdown with plugins for bold, italic, headers, lists, links, and table support
-  - Add keyboard shortcuts (Ctrl+B, Ctrl+I, etc.) for common formatting operations
-  - Implement automatic conversion between visual formatting and clean Markdown syntax
-  - Configure table plugin for visual table editing that generates proper Markdown tables
-  - Add smart paste functionality that converts common formatting to Markdown
-  - Style Milkdown editor to match Material-UI theme and application design
-  - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.8, 18.9, 18.10, 18.11_
+- [ ] 4.2 Build Professional Milkdown Editor with Crepe and Material-UI Integration
+  - Install and configure Milkdown core with Crepe React integration following established React component patterns from steering docs
+  - Set up essential Milkdown plugins with lazy loading and tree-shaking optimization: commonmark, GFM, history, block, slash, tooltip, clipboard, and table plugins
+  - Create MilkdownEditor component using Crepe's useEditor hook with full Material-UI theme integration following established MUI guidelines
+  - Leverage existing MUI Table components as foundation for Milkdown table plugin customization and styling
+  - Configure Milkdown's block plugin for drag-and-drop content reorganization within APD sections using MUI interaction patterns
+  - Implement slash command plugin with APD-specific quick insertion menu using MUI Menu and MenuItem components for consistency
+  - Set up table plugin for visual editing extending existing MUI TableContainer, Table, TableHead, and TableBody patterns
+  - Configure math plugin for inline budget calculations with MUI TextField integration for formula editing
+  - Add diagram plugin support with lazy loading for system architecture diagrams and process flows
+  - Implement clipboard plugin for intelligent paste handling with MUI Snackbar notifications for paste status
+  - Style Milkdown editor with Material-UI theme system using established color palette, typography, and spacing patterns
+  - Create APD-specific content types using MUI component composition patterns and established prop interface standards
+  - Add auto-save integration with debounced change detection using existing auto-save patterns and MUI progress indicators
+  - Implement performance optimization following 100ms render target with React.memo and proper cleanup patterns
+  - Add comprehensive accessibility support using established ARIA patterns and screen reader compatibility
+  - _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.6, 18.7, 18.8, 18.9, 18.10, 18.11, 18.12, 18.13_
 
-- [ ] 4.3 Implement Dynamic Form Generation System with WYSIWYG Integration
-  - Create FormGenerator component that builds forms from template definitions
-  - Implement field type mapping to appropriate Material-UI components (TextField, Select, DatePicker, WYSIWYGEditor)
-  - Integrate WYSIWYG editors for text fields with template-specific configuration
-  - Add dynamic table generation for budget sections with calculation support
-  - Build form section navigation with progress tracking and completion indicators
-  - _Requirements: 3.4, 3.6, 3.7, 2.1, 2.2, 18.1_
+- [ ] 4.3 Implement Advanced Dynamic Form Generation with Milkdown Integration
+  - Create FormGenerator component that builds forms from template definitions with Milkdown editor integration
+  - Implement intelligent field type mapping to Material-UI components and Milkdown editors based on content requirements
+  - Integrate Milkdown editors for rich text fields with APD-specific plugin configurations (slash commands, block manipulation, table editing)
+  - Create specialized APD content components: BudgetTableEditor, PersonnelTableEditor, RegulatoryReferenceEditor using Milkdown's extensibility
+  - Build dynamic budget table generation with Milkdown table plugin integration for visual editing and automatic calculations
+  - Implement form section navigation with Milkdown content preservation and progress tracking
+  - Add contextual Milkdown editor configurations based on APD section type (executive summary vs. technical specifications vs. budget sections)
+  - Create APD-specific slash commands for quick insertion of common content blocks (budget line items, personnel roles, regulatory citations)
+  - Integrate Milkdown's block plugin for drag-and-drop reorganization of form sections and content blocks
+  - _Requirements: 3.4, 3.6, 3.7, 2.1, 2.2, 18.1, 18.3, 18.4, 18.5, 18.13_
 
-- [ ] 4.4 Build Template-Based Validation Engine with Content Structure Support
-  - Implement ValidationService with rules derived from template requirements
-  - Create real-time validation with Material-UI error styling and clear messaging
-  - Add content structure validation to ensure proper formatting and completeness
-  - Add field dependency validation (e.g., required fields based on other selections)
-  - Implement completeness checking for APD sections and overall document
-  - Validate that stored Markdown content maintains proper structure for export
-  - _Requirements: 5.1, 5.2, 5.5, 5.6, 5.7, 18.6, 18.7_
+- [ ] 4.4 Build Advanced Validation Engine with Milkdown Content Structure Support
+  - Implement ValidationService with rules derived from template requirements and Milkdown content validation
+  - Create real-time validation for Milkdown editors with Material-UI error styling and contextual messaging
+  - Add Milkdown content structure validation to ensure proper Markdown formatting, table structure, and content completeness
+  - Implement APD-specific content validation for budget tables, personnel sections, and regulatory references within Milkdown
+  - Add field dependency validation that works across Material-UI components and Milkdown editors
+  - Create Milkdown plugin for real-time APD validation with inline error highlighting and suggestions
+  - Implement completeness checking for APD sections including Milkdown content analysis and structure verification
+  - Validate that Milkdown-generated Markdown maintains proper structure for export and CMS compliance
+  - Add validation for APD-specific content types (budget calculations, personnel cost allocations, regulatory citations)
+  - Create validation integration between Milkdown table data and APD business rules (FFP rates, cost allocation requirements)
+  - _Requirements: 5.1, 5.2, 5.5, 5.6, 5.7, 18.6, 18.7, 18.12, 18.13_
+
+- [ ] 4.5 Develop APD-Specific Milkdown Plugins Leveraging Existing Infrastructure
+  - Create custom Milkdown budget table plugin extending existing MUI Table patterns with automatic calculation capabilities and FFP rate validation
+  - Develop personnel table plugin using established MUI form validation patterns for role-based cost allocation and state/contractor differentiation
+  - Implement regulatory reference plugin leveraging existing MUI Autocomplete and validation patterns for CFR citations and compliance requirements
+  - Build APD section navigation plugin using established breadcrumb and stepper patterns for seamless movement between sections
+  - Create custom slash commands using MUI Menu patterns for APD-specific content: /budget-table, /personnel-section, /regulatory-ref, /timeline
+  - Develop APD timeline plugin using MUI Stepper and Timeline components with milestone tracking and dependency visualization
+  - Implement cost allocation plugin leveraging existing budget calculation engine for multi-program benefit calculations and PACAP compliance
+  - Create APD validation plugin using established ValidationService patterns with real-time compliance checking and MUI error styling
+  - Build custom node types following established TypeScript interface patterns for APD metadata, project information, and submission tracking
+  - Develop APD export preparation plugin integrating with existing export service for content structure validation before export operations
+  - Add comprehensive testing using established React Testing Library patterns and Jest configuration for all custom plugins
+  - Implement lazy loading and code splitting for plugins following established performance optimization patterns
+  - _Requirements: 18.3, 18.4, 18.5, 18.13, 3.6, 3.7, 5.3_
+
+- [ ] 4.6 Optimize Milkdown Integration with Existing Development Infrastructure
+  - Implement Milkdown bundle optimization using established tree-shaking patterns to include only necessary plugins per APD section
+  - Add Milkdown component lazy loading using React.lazy and Suspense patterns with MUI CircularProgress fallbacks
+  - Create Milkdown performance monitoring integration with existing performance standards (100ms render target)
+  - Implement Milkdown accessibility testing using established @axe-core/react patterns and WCAG compliance validation
+  - Add Milkdown error boundary integration using existing error handling patterns and MUI error display components
+  - Create Milkdown TypeScript integration following established strict mode configuration and interface patterns
+  - Implement Milkdown testing utilities extending existing React Testing Library patterns for editor interaction testing
+  - Add Milkdown ESLint and Prettier integration following established code quality standards and formatting rules
+  - Create Milkdown documentation following established component README patterns and JSDoc comment standards
+  - Implement Milkdown version control integration with existing auto-save and change tracking infrastructure
+  - Add Milkdown deployment optimization using established GitHub Actions CI/CD pipeline and build processes
+  - Create Milkdown debugging tools integration with existing development workflow and local testing patterns
+  - _Requirements: 14.1, 14.2, 16.2, 16.3, 16.4, 16.7, 18.12_
 
 - [ ] 5. APD Editor with TurboTax-Style Navigation
   - Build guided APD editor with step-by-step navigation and progress tracking
@@ -173,27 +221,38 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create contextual help system integrated with template guidance
   - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7_
 
-- [ ] 5.1 Create APD Editor Layout and Navigation System
-  - Build APDEditor component with sidebar navigation and main content area
-  - Implement ProgressTracker component showing completion status and section navigation
-  - Add breadcrumb navigation for easy return to dashboard and section jumping
-  - Create section completion indicators with visual progress representation
-  - Add version control panel showing current working copy status and uncommitted changes
-  - _Requirements: 2.1, 2.2, 2.3, 2.4, 18.1, 18.12_
+- [ ] 5.1 Create Advanced APD Editor Layout with Milkdown Integration
+  - Build APDEditor component with sidebar navigation, main Milkdown editing area, and contextual help panel
+  - Implement ProgressTracker component showing completion status with Milkdown content analysis and section navigation
+  - Add breadcrumb navigation with Milkdown editor state preservation for seamless section jumping
+  - Create section completion indicators that analyze Milkdown content completeness and structure
+  - Add version control panel showing current working copy status, uncommitted Milkdown changes, and content diff visualization
+  - Implement Milkdown editor switching between sections with content preservation and auto-save
+  - Create floating action buttons for Milkdown-specific features (block manipulation, slash commands, table editing)
+  - Add contextual toolbar that adapts based on current Milkdown editor focus and APD section type
+  - _Requirements: 2.1, 2.2, 2.3, 2.4, 18.1, 18.3, 18.4, 18.12_
 
-- [ ] 5.2 Implement Section Components for PAPD Template (Phase 1)
-  - Create ExecutiveSummary section component with template-based form fields
-  - Build ProjectManagement section with personnel tables and resource planning
-  - Implement StatementOfNeeds section with objectives and requirements forms
-  - Create BudgetTables section with automatic calculations and validation
-  - _Requirements: 2.5, 3.1, 3.6, 3.7_
+- [ ] 5.2 Implement Advanced Section Components for PAPD Template with Milkdown Integration
+  - Create ExecutiveSummary section component with Milkdown editors for rich text content and APD-specific slash commands
+  - Build ProjectManagement section with Milkdown table plugin for personnel tables and drag-and-drop resource planning
+  - Implement StatementOfNeeds section with Milkdown editors supporting structured objectives, requirements lists, and regulatory references
+  - Create BudgetTables section using Milkdown table plugin with automatic calculations, real-time validation, and visual editing
+  - Add APD-specific Milkdown content blocks for common PAPD elements (project timelines, stakeholder lists, risk assessments)
+  - Implement contextual slash commands for each section type (budget line items in budget sections, personnel roles in management sections)
+  - Create section-specific Milkdown themes and toolbar configurations optimized for different content types
+  - Add drag-and-drop functionality using Milkdown block plugin for reorganizing section content and priorities
+  - _Requirements: 2.5, 3.1, 3.6, 3.7, 18.3, 18.4, 18.5, 18.13_
 
-- [ ] 5.3 Implement IAPD and OAPD Template Support (Phase 2)
-  - Create IAPD-specific sections (Summary of Activities, Requirements Analysis results)
-  - Build OAPD-specific sections (Activity summaries, Annual budget updates)
-  - Implement AoA (Analysis of Alternatives) template with evaluation matrices
-  - Create Acquisition Checklist template with regulatory compliance checks
-  - _Requirements: 3.2, 3.3_
+- [ ] 5.3 Implement Advanced IAPD and OAPD Template Support with Specialized Milkdown Features
+  - Create IAPD-specific sections with Milkdown editors optimized for technical content (Summary of Activities, Requirements Analysis results)
+  - Build OAPD-specific sections using Milkdown table plugin for activity summaries and annual budget updates with automatic calculations
+  - Implement AoA (Analysis of Alternatives) template with Milkdown table plugin for evaluation matrices and scoring systems
+  - Create Acquisition Checklist template with Milkdown checkbox lists and regulatory compliance tracking
+  - Add specialized Milkdown content types for technical specifications, system diagrams, and implementation timelines
+  - Implement IAPD-specific slash commands for technical content (system architecture, data flow diagrams, security requirements)
+  - Create OAPD-specific Milkdown configurations for operational content (performance metrics, maintenance schedules, cost tracking)
+  - Add AoA-specific Milkdown table templates with built-in scoring calculations and comparison matrices
+  - _Requirements: 3.2, 3.3, 18.3, 18.4, 18.7, 18.8, 18.13_
 
 - [ ] 5.4 Build Version Control User Interface
   - Create ChangeTrackingPanel showing inline change highlights with Word-style track changes appearance
@@ -260,33 +319,46 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create professional document formatting suitable for CMS submission
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7_
 
-- [ ] 8.1 Implement Markdown Export with Template Formatting and Version Information
-  - Create MarkdownExporter that generates properly formatted markdown following template structure
-  - Implement proper conversion of user Markdown content to final document format
-  - Implement section ordering and formatting based on original CMS templates
-  - Add metadata inclusion with version information, commit history, and change summary
-  - Include version control metadata in exported document headers
-  - Build export validation to ensure completeness and valid Markdown syntax before generation
-  - _Requirements: 6.1, 6.2, 6.5, 6.6, 18.6, 19.11_
+- [ ] 8.1 Implement Advanced Markdown Export with Milkdown Content Processing
+  - Create MarkdownExporter that processes Milkdown-generated content and formats according to CMS template structure
+  - Implement intelligent conversion of Milkdown content including tables, math expressions, diagrams, and custom APD content types
+  - Process Milkdown table plugin output to generate properly formatted budget tables and personnel tables in final Markdown
+  - Implement section ordering and formatting based on original CMS templates while preserving Milkdown content structure
+  - Add metadata inclusion with version information, commit history, change summary, and Milkdown content analysis
+  - Include version control metadata and Milkdown editor statistics in exported document headers
+  - Build export validation for Milkdown content including table structure, math expression validity, and custom content type completeness
+  - Process Milkdown diagram plugin output to include system architecture and process flow diagrams in exports
+  - Handle Milkdown math plugin content for budget calculations and formula documentation in exported format
+  - Validate APD-specific Milkdown content types (budget tables, personnel sections, regulatory references) before export
+  - _Requirements: 6.1, 6.2, 6.5, 6.6, 18.6, 18.7, 18.8, 18.12, 19.11_
 
-- [ ] 8.2 Build PDF Export with Professional Formatting and Version History
-  - Implement PDFExporter using jsPDF for professional document generation
-  - Convert Markdown content to properly formatted HTML for PDF generation
-  - Create PDF templates matching CMS document formatting requirements
-  - Add table formatting, page breaks, and header/footer generation
-  - Include version history appendix with change log and commit messages
-  - Implement progress indicators for large document exports
-  - _Requirements: 6.1, 6.3, 6.5, 6.7, 18.6, 19.11_
+- [ ] 8.2 Build Advanced PDF Export with Milkdown Content Rendering
+  - Implement PDFExporter using jsPDF with Milkdown content processing for professional document generation
+  - Convert Milkdown-generated Markdown to properly formatted HTML including tables, math expressions, and diagrams for PDF rendering
+  - Create PDF templates matching CMS document formatting requirements with support for Milkdown table layouts and visual elements
+  - Add advanced table formatting for Milkdown table plugin output including budget tables, personnel tables, and evaluation matrices
+  - Implement proper rendering of Milkdown math plugin content for budget calculations and formulas in PDF format
+  - Process Milkdown diagram plugin output to include system architecture diagrams and process flows in PDF exports
+  - Add page breaks, headers, footers, and table of contents generation with Milkdown content structure analysis
+  - Include version history appendix with change log, commit messages, and Milkdown content evolution tracking
+  - Implement progress indicators for large document exports including Milkdown content processing stages
+  - Handle APD-specific Milkdown content types with proper PDF formatting and CMS compliance requirements
+  - Add PDF accessibility features for Milkdown content including proper heading structure, alt text for diagrams, and table headers
+  - _Requirements: 6.1, 6.3, 6.5, 6.7, 18.6, 18.7, 18.8, 18.12, 19.11_
 
-- [ ] 8.3 Create JSON Export and Import System with Version Control and Markdown Preservation
-  - Build JSONExporter for structured data export including full version history and change tracking
-  - Preserve Markdown formatting in JSON exports and validate Markdown content during import
-  - Implement JSONImporter with data validation, conflict resolution, and version preservation
-  - Add bulk export/import capabilities for multiple APDs with their complete version histories
-  - Create data sharing functionality for collaboration with version control information intact
-  - Handle import of APDs with existing version histories and merge conflicts
-  - Validate imported Markdown content and provide conversion assistance if needed
-  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 18.8, 19.10, 19.11_
+- [ ] 8.3 Create Advanced JSON Export and Import System with Milkdown Content Preservation
+  - Build JSONExporter for structured data export including full version history, change tracking, and Milkdown editor state preservation
+  - Preserve Milkdown-generated Markdown formatting, plugin configurations, and custom content types in JSON exports
+  - Implement JSONImporter with Milkdown content validation, plugin compatibility checking, and version preservation
+  - Add bulk export/import capabilities for multiple APDs with complete version histories and Milkdown editor configurations
+  - Create data sharing functionality for collaboration with version control information and Milkdown content structure intact
+  - Handle import of APDs with existing version histories, Milkdown content, and merge conflict resolution for rich text content
+  - Validate imported Milkdown content including table structures, math expressions, diagrams, and custom APD content types
+  - Provide Milkdown content conversion assistance for legacy formats and compatibility with different Milkdown plugin versions
+  - Preserve APD-specific Milkdown configurations including slash commands, custom content types, and validation rules
+  - Add Milkdown editor state reconstruction for imported content including cursor position, selection state, and plugin data
+  - Handle Milkdown plugin data migration and version compatibility for imported APDs with different plugin configurations
+  - _Requirements: 6.1, 6.4, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 18.8, 18.12, 18.13, 19.10, 19.11_
 
 - [ ] 9. View-Only Mode and Collaboration Features
   - Implement read-only APD viewing with full navigation capabilities
@@ -387,17 +459,22 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - Create testing documentation and examples for future development
   - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.6, 14.7, 14.8_
 
-- [ ] 14.1 Build Comprehensive Test Suite for All Features
-  - Create unit tests for all components using React Testing Library
-  - Implement integration tests for complete user workflows (create APD, edit, export)
-  - Add comprehensive WYSIWYG editor testing (formatting, toolbar functionality, Markdown conversion accuracy)
-  - Test content preservation through export/import cycles and version control operations
-  - Add comprehensive version control testing (commit, revert, diff, working copy management)
-  - Build change tracking tests for field-level detection and highlighting accuracy
-  - Add accessibility tests using @axe-core/react for WCAG compliance including WYSIWYG editor accessibility
-  - Build performance tests for large data operations, export functionality, and version history storage
-  - Test visual formatting to Markdown conversion accuracy and consistency
-  - _Requirements: 14.1, 14.2, 14.3, 14.4, 18.1-18.11, 19.1-19.12_
+- [ ] 14.1 Build Comprehensive Test Suite Including Advanced Milkdown Testing
+  - Create unit tests for all components using React Testing Library with Milkdown editor mocking and testing utilities
+  - Implement integration tests for complete user workflows including Milkdown editor interactions (create APD, edit with rich text, export)
+  - Add comprehensive Milkdown editor testing: plugin functionality, slash commands, block manipulation, table editing, and toolbar interactions
+  - Test Milkdown content preservation through export/import cycles, version control operations, and format conversions
+  - Add comprehensive version control testing including Milkdown content diffing, commit operations, and working copy management
+  - Build change tracking tests for Milkdown content including field-level detection, inline highlighting, and content structure changes
+  - Add accessibility tests using @axe-core/react for WCAG compliance including Milkdown editor accessibility, keyboard navigation, and screen reader support
+  - Build performance tests for Milkdown editor with large documents, complex tables, and real-time collaboration scenarios
+  - Test Milkdown plugin integration: block plugin drag-and-drop, slash command functionality, table plugin calculations, and math plugin rendering
+  - Create Milkdown-specific test utilities for editor state manipulation, content insertion, and plugin behavior verification
+  - Test APD-specific Milkdown content types: budget tables, personnel sections, regulatory references, and custom slash commands
+  - Add visual regression testing for Milkdown editor rendering, Material-UI theme integration, and responsive design
+  - Test Milkdown clipboard plugin with various paste sources (Word, Google Docs, plain text, HTML)
+  - Verify Markdown output quality and consistency from Milkdown editors across different content types and complexity levels
+  - _Requirements: 14.1, 14.2, 14.3, 14.4, 18.1-18.13, 19.1-19.12_
 
 - [ ] 14.2 Finalize Testing Quality Gates and Documentation
   - Ensure 90% code coverage target is met across all modules
