@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Container,
   Typography,
@@ -10,7 +10,10 @@ import {
   Button,
   Alert,
 } from '@mui/material';
-import { MilkdownEditor } from '@/components/forms/MilkdownEditor';
+import {
+  MilkdownEditor,
+  MilkdownEditorRef,
+} from '@/components/forms/MilkdownEditor';
 
 /**
  * Demo page for testing Milkdown Crepe editor integration
@@ -75,18 +78,47 @@ For more information, visit [CMS.gov](https://cms.gov).
   const [readOnlyContent, setReadOnlyContent] = useState(sampleContent);
   const [showContent, setShowContent] = useState(false);
 
-  const handleContentChange = (markdown: string) => {
-    setContent(markdown);
-  };
+  // Refs for accessing editor instances
+  const basicEditorRef = useRef<MilkdownEditorRef>(null);
+  const validationEditorRef = useRef<MilkdownEditorRef>(null);
+  const readOnlyEditorRef = useRef<MilkdownEditorRef>(null);
 
-  const handleValidationContentChange = (markdown: string) => {
+  // State for raw markdown content from editors
+  const [basicRawContent, setBasicRawContent] = useState('');
+  const [validationRawContent, setValidationRawContent] = useState('');
+  const [readOnlyRawContent, setReadOnlyRawContent] = useState('');
+
+  const handleContentChange = useCallback((markdown: string) => {
+    setContent(markdown);
+  }, []);
+
+  // Note: We don't use onChange for validation editor to avoid breaking validation logic
+  const handleValidationContentChange = useCallback((markdown: string) => {
     console.log('Validation content changed:', markdown);
     setValidationContent(markdown);
-  };
+  }, []);
 
-  const handleReadOnlyContentChange = (markdown: string) => {
+  const handleReadOnlyContentChange = useCallback((markdown: string) => {
     setReadOnlyContent(markdown);
-  };
+  }, []);
+
+  // Function to update raw markdown content from all editors
+  const updateRawContent = useCallback(() => {
+    if (basicEditorRef.current) {
+      const basicContent = basicEditorRef.current.getMarkdown();
+      setBasicRawContent(basicContent);
+    }
+
+    if (validationEditorRef.current) {
+      const validationContent = validationEditorRef.current.getMarkdown();
+      setValidationRawContent(validationContent);
+    }
+
+    if (readOnlyEditorRef.current) {
+      const readOnlyContent = readOnlyEditorRef.current.getMarkdown();
+      setReadOnlyRawContent(readOnlyContent);
+    }
+  }, []);
 
   // Validation functions
   const validateContent = (text: string) => {
@@ -105,24 +137,48 @@ For more information, visit [CMS.gov](https://cms.gov).
   // Get current validation results
   const { validations, isValid } = validateContent(validationContent);
 
-  // External validation logic - checks content every 500ms
+  // External validation logic - checks content every 1000ms using editor ref (less aggressive)
   useEffect(() => {
     const interval = setInterval(() => {
-      // Get content directly from the validation editor DOM
-      const validationEditor = document.querySelector(
-        '[aria-label="Executive Summary"] .ProseMirror'
-      );
-      if (validationEditor) {
-        const currentText = validationEditor.textContent || '';
-        if (currentText !== validationContent) {
-          console.log('External validation detected change:', currentText);
-          setValidationContent(currentText);
+      if (validationEditorRef.current) {
+        try {
+          const currentMarkdown = validationEditorRef.current.getMarkdown();
+          const currentText = currentMarkdown
+            .replace(/[#*_`~\[\]()]/g, '')
+            .trim(); // Strip markdown formatting for validation
+
+          if (currentText !== validationContent) {
+            console.log('External validation detected change:', currentText);
+            setValidationContent(currentText);
+          }
+        } catch (error) {
+          console.warn('Failed to get validation content:', error);
         }
       }
-    }, 500);
+    }, 1000); // Increased from 500ms to 1000ms
 
     return () => clearInterval(interval);
   }, [validationContent]);
+
+  // Initialize raw content when editors are ready and update periodically
+  useEffect(() => {
+    if (showContent) {
+      // Initial update after a delay to let editors initialize
+      const initialTimer = setTimeout(() => {
+        updateRawContent();
+      }, 1000);
+
+      // Periodic updates every 3 seconds when showing content (less aggressive)
+      const interval = setInterval(() => {
+        updateRawContent();
+      }, 3000);
+
+      return () => {
+        clearTimeout(initialTimer);
+        clearInterval(interval);
+      };
+    }
+  }, [showContent, updateRawContent]);
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
@@ -142,15 +198,81 @@ For more information, visit [CMS.gov](https://cms.gov).
         Statement of Needs.
       </Alert>
 
-      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <Button variant="outlined" onClick={() => setContent(sampleContent)}>
           Load Sample Content
         </Button>
         <Button variant="outlined" onClick={() => setContent('')}>
           Clear Content
         </Button>
-        <Button variant="outlined" onClick={() => setShowContent(!showContent)}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            if (!showContent) {
+              // Update raw content when showing
+              updateRawContent();
+            }
+            setShowContent(!showContent);
+          }}
+        >
           {showContent ? 'Hide' : 'Show'} Raw Markdown
+        </Button>
+
+        {/* New utility buttons */}
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => {
+            if (basicEditorRef.current) {
+              const outline = basicEditorRef.current.getOutline();
+              console.log('Document Outline:', outline);
+              alert(
+                `Document has ${outline.length} sections. Check console for details.`
+              );
+            }
+          }}
+        >
+          Show Outline
+        </Button>
+
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => {
+            if (basicEditorRef.current) {
+              basicEditorRef.current.insertContent(
+                '\n\n## New Section\n\n[Content to be added]\n\n'
+              );
+            }
+          }}
+        >
+          Insert Section
+        </Button>
+
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => {
+            if (basicEditorRef.current) {
+              const html = basicEditorRef.current.getHTML();
+              console.log('HTML Export:', html);
+              // Create a new window to show the HTML preview
+              const previewWindow = window.open('', '_blank');
+              if (previewWindow) {
+                previewWindow.document.write(`
+                  <html>
+                    <head><title>APD Preview</title></head>
+                    <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+                      ${html}
+                    </body>
+                  </html>
+                `);
+                previewWindow.document.close();
+              }
+            }
+          }}
+        >
+          HTML Preview
         </Button>
       </Box>
 
@@ -163,6 +285,7 @@ For more information, visit [CMS.gov](https://cms.gov).
             </Typography>
             <Box sx={{ position: 'relative', overflow: 'visible' }}>
               <MilkdownEditor
+                ref={basicEditorRef}
                 label="APD Content"
                 defaultValue={content}
                 onChange={handleContentChange}
@@ -193,8 +316,16 @@ For more information, visit [CMS.gov](https://cms.gov).
                   margin: 0,
                 }}
               >
-                {content || 'No content yet...'}
+                {basicRawContent || 'No content yet...'}
               </Box>
+              <Button
+                variant="text"
+                size="small"
+                onClick={updateRawContent}
+                sx={{ mt: 1 }}
+              >
+                Refresh Content
+              </Button>
             </CardContent>
           </Card>
         )}
@@ -276,10 +407,11 @@ For more information, visit [CMS.gov](https://cms.gov).
 
             <Box sx={{ position: 'relative', overflow: 'visible' }}>
               <MilkdownEditor
+                ref={validationEditorRef}
                 label="Executive Summary"
                 required
                 error={!isValid}
-                onChange={handleValidationContentChange}
+                // Note: Not using onChange to avoid breaking validation logic
                 helperText={
                   !isValid
                     ? 'Please ensure all validation requirements are met (see above)'
@@ -311,8 +443,16 @@ For more information, visit [CMS.gov](https://cms.gov).
                   margin: 0,
                 }}
               >
-                {validationContent || 'No content yet...'}
+                {validationRawContent || 'No content yet...'}
               </Box>
+              <Button
+                variant="text"
+                size="small"
+                onClick={updateRawContent}
+                sx={{ mt: 1 }}
+              >
+                Refresh Content
+              </Button>
             </CardContent>
           </Card>
         )}
@@ -327,6 +467,7 @@ For more information, visit [CMS.gov](https://cms.gov).
             </Typography>
             <Box sx={{ position: 'relative', overflow: 'visible' }}>
               <MilkdownEditor
+                ref={readOnlyEditorRef}
                 label="Template Preview"
                 defaultValue={sampleContent}
                 onChange={handleReadOnlyContentChange}
@@ -357,8 +498,16 @@ For more information, visit [CMS.gov](https://cms.gov).
                   margin: 0,
                 }}
               >
-                {readOnlyContent || sampleContent || 'No content yet...'}
+                {readOnlyRawContent || sampleContent || 'No content yet...'}
               </Box>
+              <Button
+                variant="text"
+                size="small"
+                onClick={updateRawContent}
+                sx={{ mt: 1 }}
+              >
+                Refresh Content
+              </Button>
             </CardContent>
           </Card>
         )}
