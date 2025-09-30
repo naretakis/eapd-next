@@ -75,7 +75,6 @@ For more information, visit [CMS.gov](https://cms.gov).
 
   const [content, setContent] = useState('');
   const [validationContent, setValidationContent] = useState('');
-  const [readOnlyContent, setReadOnlyContent] = useState(sampleContent);
   const [showContent, setShowContent] = useState(false);
 
   // Refs for accessing editor instances
@@ -90,16 +89,6 @@ For more information, visit [CMS.gov](https://cms.gov).
 
   const handleContentChange = useCallback((markdown: string) => {
     setContent(markdown);
-  }, []);
-
-  // Note: We don't use onChange for validation editor to avoid breaking validation logic
-  const handleValidationContentChange = useCallback((markdown: string) => {
-    console.log('Validation content changed:', markdown);
-    setValidationContent(markdown);
-  }, []);
-
-  const handleReadOnlyContentChange = useCallback((markdown: string) => {
-    setReadOnlyContent(markdown);
   }, []);
 
   // Function to update raw markdown content from all editors
@@ -178,6 +167,9 @@ For more information, visit [CMS.gov](https://cms.gov).
         clearInterval(interval);
       };
     }
+
+    // Return empty cleanup function when showContent is false
+    return () => {};
   }, [showContent, updateRawContent]);
 
   return (
@@ -376,7 +368,7 @@ For more information, visit [CMS.gov](https://cms.gov).
                       : 'error.main',
                   }}
                 >
-                  ✓ Contains "Hello World":{' '}
+                  ✓ Contains &quot;Hello World&quot;:{' '}
                   {validations.hasHelloWorld ? ' ✅' : ' ❌'}
                 </Typography>
                 <Typography
@@ -388,7 +380,7 @@ For more information, visit [CMS.gov](https://cms.gov).
                       : 'error.main',
                   }}
                 >
-                  ✓ Contains "time and materials":{' '}
+                  ✓ Contains &quot;time and materials&quot;:{' '}
                   {validations.hasTimeAndMaterials ? ' ✅' : ' ❌'}
                 </Typography>
                 <Typography
@@ -470,7 +462,6 @@ For more information, visit [CMS.gov](https://cms.gov).
                 ref={readOnlyEditorRef}
                 label="Template Preview"
                 defaultValue={sampleContent}
-                onChange={handleReadOnlyContentChange}
                 readOnly
                 helperText="This content is read-only and cannot be edited"
               />

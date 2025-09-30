@@ -4,13 +4,20 @@ import { ThemeProvider } from '@mui/material/styles';
 import { MilkdownEditor } from './MilkdownEditor';
 import theme from '@/theme/theme';
 
-// Mock Milkdown Crepe since it requires DOM manipulation
+// Mock Milkdown modules since they require DOM manipulation and complex setup
 jest.mock('@milkdown/crepe', () => ({
   Crepe: jest.fn().mockImplementation(() => ({
     create: jest.fn().mockResolvedValue(undefined),
     destroy: jest.fn(),
+    editor: {
+      action: jest.fn().mockReturnValue(''),
+    },
   })),
 }));
+
+// Mock CSS imports
+jest.mock('@milkdown/crepe/theme/common/style.css', () => ({}));
+jest.mock('@milkdown/crepe/theme/frame.css', () => ({}));
 
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);

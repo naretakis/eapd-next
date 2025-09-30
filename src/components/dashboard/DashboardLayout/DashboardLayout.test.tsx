@@ -167,7 +167,7 @@ describe('DashboardLayout Component', () => {
         </DashboardLayout>
       );
 
-      expect(screen.getByText('v0.2.0')).toBeInTheDocument();
+      expect(screen.getByText('v0.4.0')).toBeInTheDocument();
     });
 
     it('should hide version information when showVersionInfo is false', () => {

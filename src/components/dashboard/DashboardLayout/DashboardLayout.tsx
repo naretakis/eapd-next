@@ -186,7 +186,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               {showVersionInfo && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Chip
-                    label={`v${process.env.NEXT_PUBLIC_VERSION || '0.2.0'}`}
+                    label={`v${process.env.NEXT_PUBLIC_VERSION || '0.4.0'}`}
                     size="small"
                     variant="outlined"
                     color="primary"

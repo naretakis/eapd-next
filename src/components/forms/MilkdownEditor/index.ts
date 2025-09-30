@@ -1,2 +1,2 @@
 export { MilkdownEditor } from './MilkdownEditor';
-export type { MilkdownEditorProps } from './MilkdownEditor';
+export type { MilkdownEditorProps, MilkdownEditorRef } from './MilkdownEditor';

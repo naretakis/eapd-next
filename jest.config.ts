@@ -11,8 +11,8 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-  // Handle ES modules like uuid
-  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
+  // Handle ES modules like uuid and milkdown
+  transformIgnorePatterns: ['node_modules/(?!(uuid|@milkdown)/)'],
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
     '^@/(.*)$': '<rootDir>/src/$1',

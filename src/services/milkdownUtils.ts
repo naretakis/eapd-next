@@ -5,7 +5,7 @@
  * in the context of APD document creation and management.
  */
 
-import { MilkdownEditorRef } from '@/components/forms/MilkdownEditor';
+import type { MilkdownEditorRef } from '@/components/forms/MilkdownEditor';
 
 export interface APDSection {
   id: string;
@@ -158,20 +158,22 @@ This project will comply with all applicable security standards including:
       'Security Requirements',
     ];
 
-    const sections: APDSection[] = outline.map(item => {
-      const isRequired = requiredSections.some(req =>
-        item.text.toLowerCase().includes(req.toLowerCase())
-      );
+    const sections: APDSection[] = outline.map(
+      (item: { text: string; level: number; id: string }) => {
+        const isRequired = requiredSections.some(req =>
+          item.text.toLowerCase().includes(req.toLowerCase())
+        );
 
-      return {
-        id: item.id,
-        title: item.text,
-        level: item.level,
-        isRequired,
-        isComplete: this.validateSectionCompleteness(item.text, editor),
-        validationErrors: this.validateSection(item.text, editor),
-      };
-    });
+        return {
+          id: item.id,
+          title: item.text,
+          level: item.level,
+          isRequired,
+          isComplete: this.validateSectionCompleteness(item.text, editor),
+          validationErrors: this.validateSection(item.text, editor),
+        };
+      }
+    );
 
     const completedSections = sections.filter(s => s.isComplete).length;
     const totalSections = sections.length;
@@ -253,13 +255,13 @@ This project will comply with all applicable security standards including:
 
     if (sectionStart === -1) return '';
 
-    const sectionLevel = (lines[sectionStart].match(/^#+/) || [''])[0].length;
+    const sectionLevel = (lines[sectionStart]?.match(/^#+/) || [''])[0].length;
     let sectionEnd = lines.length;
 
     // Find the next section at the same or higher level
     for (let i = sectionStart + 1; i < lines.length; i++) {
       const line = lines[i];
-      if (line.startsWith('#')) {
+      if (line?.startsWith('#')) {
         const currentLevel = (line.match(/^#+/) || [''])[0].length;
         if (currentLevel <= sectionLevel) {
           sectionEnd = i;

@@ -390,6 +390,13 @@ export const MilkdownEditor = forwardRef<
           proseMirror.removeEventListener('paste', handleChange);
         };
       }
+
+      // Return cleanup function even if proseMirror is not found
+      return () => {
+        if (debounceTimeout) {
+          clearTimeout(debounceTimeout);
+        }
+      };
     }, [readOnly]); // Only depend on readOnly, not on onChange
 
     return (
