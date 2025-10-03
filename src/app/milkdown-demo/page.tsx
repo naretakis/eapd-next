@@ -87,8 +87,15 @@ For more information, visit [CMS.gov](https://cms.gov).
   const [validationRawContent, setValidationRawContent] = useState('');
   const [readOnlyRawContent, setReadOnlyRawContent] = useState('');
 
+  // Standardized content change handlers using ref-based approach
   const handleContentChange = useCallback((markdown: string) => {
     setContent(markdown);
+  }, []);
+
+  const handleValidationChange = useCallback((markdown: string) => {
+    // Strip markdown formatting for validation
+    const plainText = markdown.replace(/[#*_`~\[\]()]/g, '').trim();
+    setValidationContent(plainText);
   }, []);
 
   // Function to update raw markdown content from all editors
@@ -126,28 +133,51 @@ For more information, visit [CMS.gov](https://cms.gov).
   // Get current validation results
   const { validations, isValid } = validateContent(validationContent);
 
-  // External validation logic - checks content every 1000ms using editor ref (less aggressive)
+  // Set up standardized content change listeners for all editors
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (validationEditorRef.current) {
-        try {
-          const currentMarkdown = validationEditorRef.current.getMarkdown();
-          const currentText = currentMarkdown
-            .replace(/[#*_`~\[\]()]/g, '')
-            .trim(); // Strip markdown formatting for validation
+    let basicCleanup: (() => void) | undefined;
+    let validationCleanup: (() => void) | undefined;
 
-          if (currentText !== validationContent) {
-            console.log('External validation detected change:', currentText);
-            setValidationContent(currentText);
-          }
-        } catch (error) {
-          console.warn('Failed to get validation content:', error);
-        }
+    // Function to set up listeners when editors are ready
+    const setupListeners = () => {
+      // Basic editor content change listener
+      if (basicEditorRef.current && !basicCleanup) {
+        basicCleanup =
+          basicEditorRef.current.onContentChange(handleContentChange);
       }
-    }, 1000); // Increased from 500ms to 1000ms
 
-    return () => clearInterval(interval);
-  }, [validationContent]);
+      // Validation editor content change listener
+      if (validationEditorRef.current && !validationCleanup) {
+        validationCleanup = validationEditorRef.current.onContentChange(
+          handleValidationChange
+        );
+      }
+    };
+
+    // Try to set up listeners immediately
+    setupListeners();
+
+    // If editors aren't ready yet, try again after a delay
+    const timer = setTimeout(() => {
+      setupListeners();
+    }, 500);
+
+    // Also try periodically until both are set up
+    const interval = setInterval(() => {
+      if (!basicCleanup || !validationCleanup) {
+        setupListeners();
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+      basicCleanup?.();
+      validationCleanup?.();
+    };
+  }, [handleContentChange, handleValidationChange]);
 
   // Initialize raw content when editors are ready and update periodically
   useEffect(() => {
@@ -191,10 +221,22 @@ For more information, visit [CMS.gov](https://cms.gov).
       </Alert>
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-        <Button variant="outlined" onClick={() => setContent(sampleContent)}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            basicEditorRef.current?.replaceAllContent(sampleContent);
+            setContent(sampleContent); // Update display state for raw content view
+          }}
+        >
           Load Sample Content
         </Button>
-        <Button variant="outlined" onClick={() => setContent('')}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            basicEditorRef.current?.replaceAllContent('');
+            setContent(''); // Update display state for raw content view
+          }}
+        >
           Clear Content
         </Button>
         <Button
@@ -279,10 +321,11 @@ For more information, visit [CMS.gov](https://cms.gov).
               <MilkdownEditor
                 ref={basicEditorRef}
                 label="APD Content"
-                defaultValue={content}
-                onChange={handleContentChange}
+                defaultValue="" // Don't use content state to avoid circular dependency
                 placeholder="Start writing your APD content here..."
                 helperText="Use markdown syntax for formatting. The editor provides a WYSIWYG experience."
+                pollingInterval={500} // Responsive polling for demo
+                enablePolling={true}
               />
             </Box>
           </CardContent>
@@ -403,13 +446,14 @@ For more information, visit [CMS.gov](https://cms.gov).
                 label="Executive Summary"
                 required
                 error={!isValid}
-                // Note: Not using onChange to avoid breaking validation logic
                 helperText={
                   !isValid
                     ? 'Please ensure all validation requirements are met (see above)'
                     : 'All validation checks passed! ✅'
                 }
                 placeholder="Try typing: Hello World! This project uses time and materials approach with a budget of $500,000."
+                pollingInterval={1000} // Slower polling for validation-heavy context
+                enablePolling={true}
               />
             </Box>
           </CardContent>
@@ -464,6 +508,7 @@ For more information, visit [CMS.gov](https://cms.gov).
                 defaultValue={sampleContent}
                 readOnly
                 helperText="This content is read-only and cannot be edited"
+                enablePolling={false} // No polling needed for read-only
               />
             </Box>
           </CardContent>

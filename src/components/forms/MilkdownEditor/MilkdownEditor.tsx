@@ -4,6 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
   forwardRef,
+  useCallback,
 } from 'react';
 import { Box, Typography, Alert } from '@mui/material';
 import { Crepe } from '@milkdown/crepe';
@@ -25,10 +26,6 @@ export interface MilkdownEditorProps {
    * Initial markdown content for the editor
    */
   defaultValue?: string;
-  /**
-   * Callback fired when the editor content changes
-   */
-  onChange?: (markdown: string) => void;
   /**
    * Label for the editor (for accessibility)
    */
@@ -53,6 +50,16 @@ export interface MilkdownEditorProps {
    * Whether the field is required
    */
   required?: boolean;
+  /**
+   * Polling interval for content synchronization (in milliseconds)
+   * Default: 1000ms for validation-heavy contexts, 500ms for responsive contexts
+   */
+  pollingInterval?: number;
+  /**
+   * Whether to enable automatic content synchronization via polling
+   * Default: true
+   */
+  enablePolling?: boolean;
 }
 
 export interface MilkdownEditorRef {
@@ -96,6 +103,16 @@ export interface MilkdownEditorRef {
    * Force editor update
    */
   forceUpdate: () => void;
+  /**
+   * Set up content change listener with callback
+   * This is the standardized way to listen for content changes
+   */
+  onContentChange: (callback: (markdown: string) => void) => () => void;
+  /**
+   * Get the current content and trigger change callback if different
+   * Used for immediate synchronization (e.g., on blur)
+   */
+  syncContent: () => string;
 }
 
 /**
@@ -109,60 +126,53 @@ export const MilkdownEditor = forwardRef<
   (
     {
       defaultValue = '',
-      onChange,
       label,
       readOnly = false,
       placeholder = 'Start writing...',
       error = false,
       helperText,
       required = false,
+      pollingInterval = 1000,
+      enablePolling = true,
     },
     ref
   ) => {
     const editorRef = useRef<HTMLDivElement>(null);
     const crepeRef = useRef<Crepe | null>(null);
-    const onChangeRef = useRef(onChange);
+    const contentChangeCallbackRef = useRef<
+      ((markdown: string) => void) | null
+    >(null);
+    const lastContentRef = useRef<string>(defaultValue);
     const [, setIsInitialized] = useState(false);
     const [initError, setInitError] = useState<string | null>(null);
 
-    // Update the onChange ref when it changes
-    useEffect(() => {
-      onChangeRef.current = onChange;
-    }, [onChange]);
+    // Helper function to get cleaned markdown content
+    const getCleanedMarkdown = useCallback(() => {
+      if (!crepeRef.current?.editor) {
+        return '';
+      }
+      try {
+        const rawMarkdown = crepeRef.current.editor.action(getMarkdown());
+
+        // Post-process the markdown to fix bullet list spacing issues
+        const cleanedMarkdown = rawMarkdown
+          // Remove extra blank lines between bullet list items (- * +)
+          .replace(/^(\s*[-*+]\s+.+)\n\n+(?=\s*[-*+]\s+)/gm, '$1\n')
+          // Also handle the case where there might be whitespace on the blank line
+          .replace(/^(\s*[-*+]\s+.+)\n\s+\n+(?=\s*[-*+]\s+)/gm, '$1\n');
+
+        return cleanedMarkdown;
+      } catch (error) {
+        console.warn('Failed to get markdown content:', error);
+        return '';
+      }
+    }, []);
 
     // Expose methods to parent component
     useImperativeHandle(
       ref,
       () => ({
-        getMarkdown: () => {
-          if (!crepeRef.current?.editor) {
-            return '';
-          }
-          try {
-            const rawMarkdown = crepeRef.current.editor.action(getMarkdown());
-
-            // Post-process the markdown to fix bullet list spacing issues
-            // The main issue is that Milkdown adds extra blank lines between bullet points
-            const cleanedMarkdown = rawMarkdown
-              // Remove extra blank lines between bullet list items (- * +)
-              .replace(/^(\s*[-*+]\s+.+)\n\n+(?=\s*[-*+]\s+)/gm, '$1\n')
-              // Also handle the case where there might be whitespace on the blank line
-              .replace(/^(\s*[-*+]\s+.+)\n\s+\n+(?=\s*[-*+]\s+)/gm, '$1\n');
-
-            // Debug logging to help troubleshoot (can be removed later)
-            if (rawMarkdown !== cleanedMarkdown) {
-              console.log('Bullet list spacing fixed:', {
-                before: rawMarkdown.split('\n'),
-                after: cleanedMarkdown.split('\n'),
-              });
-            }
-
-            return cleanedMarkdown;
-          } catch (error) {
-            console.warn('Failed to get markdown content:', error);
-            return '';
-          }
-        },
+        getMarkdown: getCleanedMarkdown,
 
         getHTML: () => {
           if (!crepeRef.current?.editor) {
@@ -225,6 +235,8 @@ export const MilkdownEditor = forwardRef<
           }
           try {
             crepeRef.current.editor.action(replaceAll(content, flush));
+            // Update our last content reference
+            lastContentRef.current = content;
           } catch (error) {
             console.warn('Failed to replace all content:', error);
           }
@@ -258,8 +270,30 @@ export const MilkdownEditor = forwardRef<
         },
 
         getEditor: () => crepeRef.current,
+
+        // Standardized content change handling
+        onContentChange: (callback: (markdown: string) => void) => {
+          contentChangeCallbackRef.current = callback;
+
+          // Return cleanup function
+          return () => {
+            contentChangeCallbackRef.current = null;
+          };
+        },
+
+        // Immediate content synchronization
+        syncContent: () => {
+          const currentContent = getCleanedMarkdown();
+          if (currentContent !== lastContentRef.current) {
+            lastContentRef.current = currentContent;
+            if (contentChangeCallbackRef.current) {
+              contentChangeCallbackRef.current(currentContent);
+            }
+          }
+          return currentContent;
+        },
       }),
-      []
+      [getCleanedMarkdown]
     );
     useEffect(() => {
       let mounted = true;
@@ -290,6 +324,9 @@ export const MilkdownEditor = forwardRef<
           crepeRef.current = crepe;
           setIsInitialized(true);
           setInitError(null);
+
+          // Initialize content reference
+          lastContentRef.current = defaultValue || '';
 
           console.log('Crepe editor initialized successfully', { readOnly });
 
@@ -347,57 +384,79 @@ export const MilkdownEditor = forwardRef<
       };
     }, [defaultValue, readOnly, placeholder]); // Keep minimal dependencies
 
-    // Separate effect for onChange handling to prevent editor re-initialization
+    // Standardized polling system for content synchronization
     useEffect(() => {
-      if (!onChangeRef.current || readOnly || !crepeRef.current) {
+      if (!enablePolling || readOnly) {
         return;
       }
 
-      let debounceTimeout: NodeJS.Timeout;
-
-      const handleChange = () => {
-        // Clear previous timeout
-        if (debounceTimeout) {
-          clearTimeout(debounceTimeout);
-        }
-
-        // Debounce the onChange call to prevent excessive updates
-        debounceTimeout = setTimeout(() => {
-          if (crepeRef.current?.editor && onChangeRef.current) {
+      // Wait a bit for editor to be fully initialized
+      const startPolling = () => {
+        const interval = setInterval(() => {
+          if (crepeRef.current?.editor && contentChangeCallbackRef.current) {
             try {
-              const markdown = crepeRef.current.editor.action(getMarkdown());
-              onChangeRef.current(markdown);
+              const currentContent = getCleanedMarkdown();
+              if (currentContent !== lastContentRef.current) {
+                lastContentRef.current = currentContent;
+                contentChangeCallbackRef.current(currentContent);
+              }
             } catch (error) {
-              console.warn('Failed to get markdown for onChange:', error);
+              console.warn('Failed to sync content during polling:', error);
             }
           }
-        }, 500); // 500ms debounce to be less aggressive
+        }, pollingInterval);
+
+        return interval;
       };
 
-      // Add event listeners to the ProseMirror editor
+      // Start polling after a delay to ensure editor is ready
+      const timer = setTimeout(() => {
+        const interval = startPolling();
+
+        // Store interval for cleanup
+        return () => {
+          clearInterval(interval);
+        };
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }, [enablePolling, readOnly, pollingInterval]);
+
+    // Blur event handler for immediate synchronization
+    useEffect(() => {
+      if (readOnly || !crepeRef.current) {
+        return;
+      }
+
+      const handleBlur = () => {
+        if (contentChangeCallbackRef.current) {
+          try {
+            const currentContent = getCleanedMarkdown();
+            if (currentContent !== lastContentRef.current) {
+              lastContentRef.current = currentContent;
+              contentChangeCallbackRef.current(currentContent);
+            }
+          } catch (error) {
+            console.warn('Failed to sync content on blur:', error);
+          }
+        }
+      };
+
+      // Add blur listener to the editor container
       const proseMirror = editorRef.current?.querySelector('.ProseMirror');
       if (proseMirror) {
-        // Use more specific events to avoid excessive firing
-        proseMirror.addEventListener('input', handleChange);
-        proseMirror.addEventListener('paste', handleChange);
+        proseMirror.addEventListener('blur', handleBlur, true);
 
-        // Cleanup function
         return () => {
-          if (debounceTimeout) {
-            clearTimeout(debounceTimeout);
-          }
-          proseMirror.removeEventListener('input', handleChange);
-          proseMirror.removeEventListener('paste', handleChange);
+          proseMirror.removeEventListener('blur', handleBlur, true);
         };
       }
 
-      // Return cleanup function even if proseMirror is not found
-      return () => {
-        if (debounceTimeout) {
-          clearTimeout(debounceTimeout);
-        }
-      };
-    }, [readOnly]); // Only depend on readOnly, not on onChange
+      // Return empty cleanup function if proseMirror is not found
+      return () => {};
+    }, [readOnly, getCleanedMarkdown]);
 
     return (
       <Box sx={{ width: '100%' }}>
