@@ -163,17 +163,29 @@ describe('ComponentName', () => {
 
 - Keep main README file up to date with code changes
 - Keep CHANGELOG file up to date with changes
-- Keep all other documentation up to date with code changes
+- Keep all documentation in `docs/` directory up to date with code changes
 - JSDoc comments for all public APIs
 - README files for complex components
-- Architecture decision records for major changes
+- Architecture decision records in `docs/ARCHITECTURE_DECISIONS.md`
+
+### Documentation Organization
+
+Follow the established documentation structure in `docs/`:
+
+- **`docs/domain/`**: APD knowledge, project overview, and terminology
+- **`docs/design/`**: UX principles, content guidelines, and design evolution
+- **`docs/testing/`**: Testing strategies, frameworks, and procedures
+- **`docs/development/`**: Development process and internal documentation
+- **`docs/milkdown/`**: Editor-specific documentation and patterns
+- **`docs/tasks/`**: Task-specific integration guides
 
 ### User Documentation
 
-- Clear setup instructions in README
-- Component usage examples
-- Troubleshooting guides
-- Learning resources for new developers
+- Clear setup instructions in main README
+- Component usage examples in component directories
+- Troubleshooting guides in `docs/TROUBLESHOOTING.md`
+- Learning resources in `docs/LEARNING_PATH.md`
+- Domain knowledge in `docs/domain/` for APD context
 
 ## Version Management and Changelog Standards
 
@@ -315,7 +327,7 @@ npm version --json
 
 - [ ] Code follows style guidelines
 - [ ] Tests are comprehensive and passing
-- [ ] Documentation is updated
+- [ ] Documentation is updated in appropriate `docs/` subdirectory
 - [ ] Accessibility requirements met
 - [ ] Performance impact considered
 - [ ] Security implications reviewed
@@ -324,6 +336,9 @@ npm version --json
 - [ ] CHANGELOG.md updated (for releases)
 - [ ] Version bump appropriate for changes (for releases)
 - [ ] User-facing changes clearly documented
+- [ ] Domain documentation updated if APD requirements change
+- [ ] Design documentation updated if UX patterns change
+- [ ] Testing documentation updated if procedures change
 
 ### Deployment Process
 

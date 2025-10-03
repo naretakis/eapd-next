@@ -266,7 +266,7 @@ For manual testing of the storage layer:
 3. **Run through test sequence**: Click buttons in order to test functionality
 4. **Check browser console**: Look for errors in Developer Tools (F12)
 
-See `TESTING-CHECKLIST.md` for detailed testing instructions.
+See `docs/testing/TESTING-CHECKLIST.md` for detailed testing instructions.
 
 ### Test Structure
 
@@ -289,9 +289,9 @@ describe('ComponentName', () => {
 
 ### Learning Resources
 
+- **[Documentation Hub](docs/README.md)**: Complete documentation index and navigation
 - **[Learning Path](docs/LEARNING_PATH.md)**: Week-by-week development progression
 - **[Architecture Decisions](docs/ARCHITECTURE_DECISIONS.md)**: Design choices and rationale
-- **[Component Guide](docs/COMPONENT_GUIDE.md)**: Component patterns and examples
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)**: Common issues and solutions
 
 ### Domain Knowledge
@@ -305,6 +305,12 @@ describe('ComponentName', () => {
 - **[Development Standards](.kiro/steering/development-standards.md)**: Code quality and standards
 - **[Material-UI Guidelines](.kiro/steering/material-ui-guidelines.md)**: UI component patterns
 - **[Git Workflow](.kiro/steering/git-workflow.md)**: Branching and deployment process
+
+### Domain Knowledge & Design
+
+- **[APD Domain Knowledge](docs/domain/)**: Complete APD knowledge center
+- **[Design & UX Guidelines](docs/design/)**: Design principles and content standards
+- **[Testing Documentation](docs/testing/)**: Comprehensive testing strategies
 
 ## 🎯 User Pain Points Addressed
 

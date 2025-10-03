@@ -16,7 +16,7 @@
 - **Automated tests**: 71 comprehensive unit tests
 - **Manual testing page**: `public/storage-test.html` for browser testing
 - **Demo utilities**: `src/testing/storage-demo.ts` for development
-- **Testing checklist**: `TESTING-CHECKLIST.md` for verification
+- **Testing checklist**: `docs/testing/TESTING-CHECKLIST.md` for verification
 
 ### Files Added/Modified
 
@@ -34,7 +34,7 @@
 
 - `src/testing/storage-demo.ts` - Development demo utilities
 - `public/storage-test.html` - Manual testing page
-- `TESTING-CHECKLIST.md` - Comprehensive testing guide
+- `docs/testing/TESTING-CHECKLIST.md` - Comprehensive testing guide
 - `src/**/__tests__/` - 71 unit tests across all services
 
 #### Documentation

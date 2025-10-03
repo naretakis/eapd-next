@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - 2025-10-03
+
+### Enhanced
+
+#### Documentation Organization and Structure Improvements
+
+- **Comprehensive Documentation Reorganization**: Restructured entire `docs/` directory with purpose-based organization for improved navigation and maintainability
+- **Domain Knowledge Hub**: Created `docs/domain/` with APD knowledge, project overview, and comprehensive terminology reference
+- **Design Documentation Center**: Organized `docs/design/` with UX principles, content guidelines, and design evolution history
+- **Testing Documentation Hub**: Consolidated all testing documentation in `docs/testing/` including frameworks, strategies, and procedures
+- **Navigation Improvements**: Added comprehensive README files in each documentation subdirectory with clear navigation paths
+- **Cross-Reference Integration**: Enhanced documentation linking and discoverability across all categories
+- **Steering Document Updates**: Updated development standards and git workflow to reflect new documentation structure
+
+#### Documentation Structure Benefits
+
+- **Logical Grouping**: Content organized by purpose and audience rather than artificial boundaries
+- **Improved Discoverability**: Clear entry points and navigation paths for different user types
+- **Scalable Organization**: Structure that grows well with project complexity
+- **Consistent Patterns**: Standardized README files and cross-referencing throughout
+
+### Changed
+
+- **Documentation Paths**: Moved wiki content from `docs/apd-next-wiki-content/` to purpose-based directories
+- **Testing Documentation**: Moved `TESTING-CHECKLIST.md` from `docs/development/` to `docs/testing/`
+- **Reference Updates**: Updated all internal documentation references to reflect new structure
+- **Steering Guidelines**: Enhanced development standards to include documentation organization requirements
+
 ## [0.4.1] - 2025-10-03
 
 ### Enhanced
@@ -13,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Standardized State Management**: Completed comprehensive standardization of Milkdown editor state management patterns across the application
 - **Simplified Demo Implementation**: Streamlined editor setup logic in demo page, removing complex retry mechanisms in favor of reliable timeout-based initialization
-- **Accurate Documentation**: Updated `MILKDOWN_STANDARDIZATION_SUMMARY.md` to reflect actual implementation, removing references to non-existent components
+- **Accurate Documentation**: Updated `docs/milkdown/MILKDOWN_STANDARDIZATION_SUMMARY.md` to reflect actual implementation, removing references to non-existent components
 - **Codebase Cleanup**: Removed empty directories and misleading folder structure for cleaner project organization
 - **Developer Experience**: Provided clear guidance and working patterns for future Milkdown development (Task 4.3 preparation)
 - **Ref-based Architecture**: Eliminated `onChange` prop usage in favor of standardized ref-based content synchronization
@@ -260,6 +288,7 @@ git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^f
 git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges | grep -E "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build):"
 ```
 
+[0.4.2]: https://github.com/naretakis/eapd-next/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/naretakis/eapd-next/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/naretakis/eapd-next/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/naretakis/eapd-next/compare/v0.2.0...v0.3.0

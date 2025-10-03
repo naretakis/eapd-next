@@ -223,7 +223,7 @@ interface MilkdownEditorRef {
 - ✅ `src/components/forms/MilkdownEditor/index.ts` - Export definitions
 - ✅ `src/components/forms/index.ts` - Component exports
 - ✅ `docs/milkdown-state-management.md` - Comprehensive documentation
-- ✅ `MILKDOWN_STANDARDIZATION_SUMMARY.md` - This summary (updated)
+- ✅ `docs/milkdown/MILKDOWN_STANDARDIZATION_SUMMARY.md` - This summary (updated)
 
 ### Files Referenced But Not Implemented
 

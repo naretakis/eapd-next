@@ -184,7 +184,7 @@ This implementation plan converts the eAPD-Next design into a series of incremen
   - `src/components/forms/MilkdownEditor/MilkdownEditor.tsx` - Core component (production-ready)
   - `src/app/milkdown-demo/page.tsx` - Reference implementation with advanced patterns
   - `src/services/milkdownUtils.ts` - APD-specific services ready for integration
-  - `milkdown-utils-recommendations.md` - Implementation strategy for future tasks
+  - `docs/milkdown/milkdown-utils-recommendations.md` - Implementation strategy for future tasks
 
   _Requirements: 18.1, 18.2, 18.3, 18.4, 18.5, 18.6, 18.7, 18.8, 18.9, 18.10, 18.11, 18.12, 18.13_
 

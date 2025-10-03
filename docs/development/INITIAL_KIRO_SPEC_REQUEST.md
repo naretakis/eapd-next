@@ -151,7 +151,7 @@ Since this project is being built by someone with limited developer experience, 
 
 Please integrate the following existing content and templates:
 
-1. **Wiki Content** (`apd-next-wiki-content/`):
+1. **Domain Knowledge** (`docs/domain/`):
    - About-eAPD-Next.md - Project overview and benefits
    - APDs-101.md - Comprehensive APD background
    - Content-guide.md - Writing principles and style guidelines
@@ -280,7 +280,7 @@ To use this specification with Kiro:
 
 1. Create a new Kiro spec and reference this file: `#KIRO_SPEC_REQUEST.md`
 2. Include relevant context files from the project directories:
-   - `#apd-next-wiki-content/`
+   - `#docs/domain/`
    - `#apd templates/markdown apd templates/`
    - `#apd-regulatory-context/`
 3. Request Kiro to create a comprehensive technical specification based on this document and the referenced materials.

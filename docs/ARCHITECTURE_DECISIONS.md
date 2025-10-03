@@ -598,6 +598,7 @@ We will use **Milkdown with Crepe (React integration)** as our WYSIWYG editor so
 | 002 | Material-UI v5              | Accepted | High   |
 | 003 | IndexedDB Storage           | Accepted | High   |
 | 004 | React Context + Hooks       | Accepted | Medium |
+| 012 | Milkdown WYSIWYG Editor     | Accepted | High   |
 | 005 | Jest + RTL + axe-core       | Accepted | Medium |
 | 006 | GitHub Pages Deployment     | Accepted | Medium |
 | 007 | Strict TypeScript           | Accepted | High   |

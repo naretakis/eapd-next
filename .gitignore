@@ -187,4 +187,4 @@ secrets.json
 # Development and testing files (keep in repo for now, but could be excluded in production)
 # public/storage-test.html
 # src/testing/
-# TESTING-CHECKLIST.md
+# docs/testing/TESTING-CHECKLIST.md

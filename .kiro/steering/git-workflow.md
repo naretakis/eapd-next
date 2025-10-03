@@ -279,9 +279,11 @@ Before merging any PR:
 - [ ] All CI/CD checks pass
 - [ ] Code review approved
 - [ ] Tests added/updated for new functionality
-- [ ] Documentation updated if needed
+- [ ] Documentation updated in appropriate `docs/` subdirectory if needed
 - [ ] No merge conflicts
 - [ ] Accessibility review for UI changes
+- [ ] Domain documentation updated if APD requirements change
+- [ ] Testing documentation updated if procedures change
 
 ### Deployment Requirements
 
@@ -293,6 +295,8 @@ Before merging to main (production):
 - [ ] Local testing completed (`npm run dev`)
 - [ ] Performance impact assessed
 - [ ] Security review completed
+- [ ] Documentation structure maintained in `docs/` directory
+- [ ] All README files updated to reflect changes
 
 ## Branch Protection Rules
 

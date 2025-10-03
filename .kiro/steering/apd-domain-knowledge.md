@@ -463,11 +463,11 @@ interface APD {
 
 The application integrates content from:
 
-- **#[[file:apd-next-wiki-content/About-eAPD-Next.md]]**: Project overview and goals
-- **#[[file:apd-next-wiki-content/APDs-101.md]]**: Basic APD education
-- **#[[file:apd-next-wiki-content/Content-guide.md]]**: Writing and style guidelines
-- **#[[file:apd-next-wiki-content/UX-Principles.md]]**: User experience guidelines
-- **#[[file:apd-next-wiki-content/Glossary-of-Acronyms.md]]**: Term definitions
+- **#[[file:docs/domain/About-eAPD-Next.md]]**: Project overview and goals
+- **#[[file:docs/domain/APDs-101.md]]**: Basic APD education
+- **#[[file:docs/design/Content-guide.md]]**: Writing and style guidelines
+- **#[[file:docs/design/UX-Principles.md]]**: User experience guidelines
+- **#[[file:docs/domain/Glossary-of-Acronyms.md]]**: Term definitions
 
 ### Regulatory References
 

@@ -329,7 +329,7 @@ src/services/milkdownUtils.ts
 src/app/milkdown-demo/page.tsx
 
 # Integration recommendations
-milkdown-utils-recommendations.md
+docs/milkdown/milkdown-utils-recommendations.md
 ```
 
 ### 3. Integration Pattern
