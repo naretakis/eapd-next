@@ -589,10 +589,14 @@ export class APDService {
     parentAPDId: string,
     childDocumentId: string
   ): Promise<void> {
+    if (!parentAPDId || !childDocumentId) {
+      throw new Error('Parent APD ID and child document ID are required');
+    }
+
     try {
       const [parentAPD, childDocument] = (await Promise.all([
-        storageService.getAPD(parentAPDId),
-        storageService.getAPD(childDocumentId),
+        storageService.getAPD(parentAPDId as string),
+        storageService.getAPD(childDocumentId as string),
       ])) as [APD | null, APD | null];
 
       if (!parentAPD || !childDocument) {

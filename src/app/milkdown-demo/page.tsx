@@ -324,7 +324,7 @@ For more information, visit [CMS.gov](https://cms.gov).
                   margin: 0,
                 }}
               >
-                {basicRawContent || 'No content yet...'}
+                {content || basicRawContent || 'No content yet...'}
               </Box>
               <Button
                 variant="text"

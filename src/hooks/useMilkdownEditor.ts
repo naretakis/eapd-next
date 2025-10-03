@@ -37,7 +37,7 @@ export interface UseMilkdownEditorReturn {
   /**
    * Ref to attach to the MilkdownEditor component
    */
-  editorRef: React.RefObject<MilkdownEditorRef>;
+  editorRef: React.RefObject<MilkdownEditorRef | null>;
   /**
    * Get current content from the editor
    */
@@ -70,13 +70,7 @@ export interface UseMilkdownEditorReturn {
 export const useMilkdownEditor = (
   options: UseMilkdownEditorOptions = {}
 ): UseMilkdownEditorReturn => {
-  const {
-    initialContent = '',
-    onContentChange,
-    readOnly = false,
-    pollingInterval = 1000,
-    enablePolling = !readOnly,
-  } = options;
+  const { onContentChange } = options;
 
   const editorRef = useRef<MilkdownEditorRef>(null);
 
