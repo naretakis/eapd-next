@@ -138,42 +138,22 @@ For more information, visit [CMS.gov](https://cms.gov).
     let basicCleanup: (() => void) | undefined;
     let validationCleanup: (() => void) | undefined;
 
-    // Function to set up listeners when editors are ready
-    const setupListeners = () => {
-      // Basic editor content change listener
-      if (basicEditorRef.current && !basicCleanup) {
+    // Set up listeners with a simple delay to ensure editors are ready
+    const timer = setTimeout(() => {
+      if (basicEditorRef.current) {
         basicCleanup =
           basicEditorRef.current.onContentChange(handleContentChange);
       }
 
-      // Validation editor content change listener
-      if (validationEditorRef.current && !validationCleanup) {
+      if (validationEditorRef.current) {
         validationCleanup = validationEditorRef.current.onContentChange(
           handleValidationChange
         );
-      }
-    };
-
-    // Try to set up listeners immediately
-    setupListeners();
-
-    // If editors aren't ready yet, try again after a delay
-    const timer = setTimeout(() => {
-      setupListeners();
-    }, 500);
-
-    // Also try periodically until both are set up
-    const interval = setInterval(() => {
-      if (!basicCleanup || !validationCleanup) {
-        setupListeners();
-      } else {
-        clearInterval(interval);
       }
     }, 1000);
 
     return () => {
       clearTimeout(timer);
-      clearInterval(interval);
       basicCleanup?.();
       validationCleanup?.();
     };
@@ -181,25 +161,18 @@ For more information, visit [CMS.gov](https://cms.gov).
 
   // Initialize raw content when editors are ready and update periodically
   useEffect(() => {
-    if (showContent) {
-      // Initial update after a delay to let editors initialize
-      const initialTimer = setTimeout(() => {
-        updateRawContent();
-      }, 1000);
+    if (!showContent) return;
 
-      // Periodic updates every 3 seconds when showing content (less aggressive)
-      const interval = setInterval(() => {
-        updateRawContent();
-      }, 3000);
+    // Initial update after a delay to let editors initialize
+    const initialTimer = setTimeout(updateRawContent, 1000);
 
-      return () => {
-        clearTimeout(initialTimer);
-        clearInterval(interval);
-      };
-    }
+    // Periodic updates every 3 seconds when showing content
+    const interval = setInterval(updateRawContent, 3000);
 
-    // Return empty cleanup function when showContent is false
-    return () => {};
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, [showContent, updateRawContent]);
 
   return (
