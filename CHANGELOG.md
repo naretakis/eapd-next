@@ -5,6 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-10-31
+
+### Added
+
+#### Complete PAPD Form Demo with Mixed Field Types (Task 4.3 Complete)
+
+- **8-Section PAPD Form**: Complete Planning APD form with stepper navigation covering all major APD sections
+- **Mixed Field Integration**: Seamless combination of Material-UI form components with Milkdown rich text editors
+- **Real-time Form Validation**: Comprehensive validation system with visual feedback for administrative fields and assurances
+- **Auto-save with Persistence**: localStorage integration ensuring no data loss on page refresh with visual save status indicators
+- **Sample APD Content**: Realistic California MMIS modernization project data demonstrating real-world APD structure
+- **Three-State Assurance System**: Intuitive unset → yes → no → unset workflow for regulatory compliance attestations
+- **Navigation Drawer**: Organized demo page navigation with expandable sections and version display
+
+#### Advanced User Experience Features
+
+- **Stepper Navigation**: Visual progress tracking with clickable steps and completion status indicators
+- **Cross-Section Data Preservation**: Seamless navigation between sections while maintaining all form state
+- **Content Management**: Auto-save functionality with 3-second intervals and conflict-free state management
+- **Professional APD Content**: Template-based content structure matching CMS requirements and expectations
+- **Clear Data Management**: Easy form reset functionality for testing and development workflows
+
+#### Accessibility Improvements
+
+- **Full Keyboard Navigation**: Complete keyboard accessibility for stepper navigation with Enter/Space activation
+- **Milkdown Editor Accessibility**: Escape key functionality to exit rich text editors and move to next field
+- **Screen Reader Support**: Proper ARIA labels, roles, and focus management throughout the form
+- **Focus Indicators**: Clear visual focus indicators for all interactive elements
+- **Accessible Form Structure**: Semantic HTML and proper form labeling for assistive technologies
+
+#### Technical Implementation
+
+- **Dynamic Form Generation**: Template-driven form creation demonstrating scalable APD form architecture
+- **State Management**: Robust form state management across multiple sections and editor types
+- **Milkdown Integration**: Advanced rich text editing with content change tracking and validation
+- **Material-UI Patterns**: Consistent component usage following established design guidelines
+- **Performance Optimization**: Efficient rendering and state updates for smooth user experience
+
+### Enhanced
+
+- **Navigation System**: Added comprehensive navigation drawer with demo page organization
+- **Layout Components**: Enhanced layout system with proper navigation integration
+- **Milkdown Editor**: Improved keyboard navigation and accessibility features
+- **Development Infrastructure**: Better demo page organization and testing capabilities
+
+### Fixed
+
+- **Stepper Visual Highlighting**: Active step now properly highlighted with bold text and background color
+- **Data Persistence**: Form data now persists across browser refreshes using localStorage
+- **Keyboard Navigation**: Resolved tab trap in Milkdown editors with Escape key functionality
+- **Content Formatting**: Improved resource allocation table formatting from code blocks to proper tables
+
+### User Pain Points Addressed
+
+- ✅ **Navigation Complexity** (Pain Point #6): Intuitive stepper navigation with clear progress indicators
+- ✅ **Administrative Completeness** (Pain Point #5): Automated completeness checking with visual feedback
+- ✅ **Validation and Rework** (Pain Point #3): Real-time validation preventing submission errors
+- ✅ **Guidance and Expectations** (Pain Point #4): Contextual help and professional form structure
+
 ## [0.4.2] - 2025-10-03
 
 ### Enhanced
@@ -288,6 +347,7 @@ git log $(git describe --tags --abbrev=0)..HEAD --oneline --no-merges --grep="^f
 git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%s" --no-merges | grep -E "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build):"
 ```
 
+[0.5.0]: https://github.com/naretakis/eapd-next/compare/v0.4.2...v0.5.0
 [0.4.2]: https://github.com/naretakis/eapd-next/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/naretakis/eapd-next/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/naretakis/eapd-next/compare/v0.3.0...v0.4.0

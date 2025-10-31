@@ -165,7 +165,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
 
       <Box sx={{ mt: 'auto', p: 2, borderTop: 1, borderColor: 'divider' }}>
         <Typography variant="caption" color="text.secondary">
-          eAPD-Next v{process.env.NEXT_PUBLIC_VERSION || '0.4.0'}
+          eAPD-Next v{process.env.NEXT_PUBLIC_VERSION || '0.5.0'}
         </Typography>
         {process.env.NEXT_PUBLIC_ENVIRONMENT !== 'production' && (
           <Typography variant="caption" color="warning.main" display="block">
