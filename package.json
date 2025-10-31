@@ -1,6 +1,6 @@
 {
   "name": "eapd-next",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "engines": {
     "node": ">=20.0.0",
