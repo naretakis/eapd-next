@@ -29,8 +29,10 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ### Demo Pages
 
 - **Main Application**: [http://localhost:3000](http://localhost:3000) - Dashboard and APD management
-- **Milkdown Editor Demo**: [http://localhost:3000/milkdown-demo](http://localhost:3000/milkdown-demo) - WYSIWYG editor showcase
-- **Template Parser Demo**: [http://localhost:3000/demo](http://localhost:3000/demo) - Template analysis and content detection
+- **Milkdown Editor Demo**: [http://localhost:3000/demo/milkdown-demo](http://localhost:3000/demo/milkdown-demo) - WYSIWYG editor showcase
+- **PAPD Form Demo**: [http://localhost:3000/demo/papd-form-demo](http://localhost:3000/demo/papd-form-demo) - Complete form demonstration
+- **Template Parser Demo**: [http://localhost:3000/demo/template-parser-demo](http://localhost:3000/demo/template-parser-demo) - Template analysis and content detection
+- **Storage Layer Demo**: [http://localhost:3000/demo/storage-demo](http://localhost:3000/demo/storage-demo) - Storage operations demonstration
 
 ## 📋 Features
 
@@ -75,19 +77,31 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ```
 src/
 ├── app/                    # Next.js App Router pages
+│   ├── demo/              # Demo pages for development
+│   │   ├── milkdown-demo/        # Milkdown editor demonstration
+│   │   ├── papd-form-demo/       # PAPD form demonstration
+│   │   ├── storage-demo/         # Storage layer demonstration
+│   │   └── template-parser-demo/ # Template parser demonstration
+│   ├── layout.tsx         # Root layout component
+│   ├── page.tsx           # Homepage (Dashboard)
+│   └── globals.css        # Global styles
 ├── components/             # React components
-│   ├── common/            # Shared components (Layout, Navigation)
-│   ├── dashboard/         # Dashboard-specific components
 │   ├── apd-editor/        # APD editor components
+│   ├── common/            # Shared components (Layout, Navigation, ErrorBoundary)
+│   ├── dashboard/         # Dashboard-specific components
+│   ├── export/            # Export-related components
 │   ├── forms/             # Form components (including MilkdownEditor)
-│   └── export/            # Export-related components
+│   ├── layout/            # Layout components
+│   └── providers/         # React context providers
 ├── services/              # Business logic and API services
 ├── types/                 # TypeScript type definitions
 ├── hooks/                 # Custom React hooks
 ├── utils/                 # Utility functions
 ├── theme/                 # Material-UI theme configuration
 ├── testing/               # Development testing utilities
-└── templates/             # APD template definitions
+├── templates/             # APD template definitions and parsers
+│   └── parsers/           # Template parsing engine
+└── __mocks__/             # Jest mocks for testing
 
 .github/
 ├── workflows/             # GitHub Actions CI/CD
@@ -99,6 +113,16 @@ src/
 └── specs/                 # Project specifications
 
 docs/                      # Additional documentation
+├── domain/                # APD domain knowledge
+├── design/                # Design and UX guidelines
+├── testing/               # Testing documentation
+├── development/           # Development notes
+├── milkdown/              # Milkdown-specific documentation
+└── tasks/                 # Task-specific guides
+
+public/                    # Static assets
+scripts/                   # Build and deployment scripts
+coverage/                  # Test coverage reports
 ```
 
 ## 🚧 Current Development Status

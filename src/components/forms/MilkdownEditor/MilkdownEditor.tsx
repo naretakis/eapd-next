@@ -330,6 +330,119 @@ export const MilkdownEditor = forwardRef<
 
           console.log('Crepe editor initialized successfully', { readOnly });
 
+          // Add keyboard handler to ProseMirror element for tab navigation
+          setTimeout(() => {
+            const proseMirrorEl = editorRef.current?.querySelector(
+              '.ProseMirror'
+            ) as HTMLElement;
+            if (proseMirrorEl && !readOnly) {
+              const handleKeyDown = (e: KeyboardEvent) => {
+                console.log(
+                  'Key pressed in Milkdown:',
+                  e.key,
+                  e.metaKey,
+                  e.ctrlKey
+                );
+
+                // Allow Escape to tab out of the editor
+                if (e.key === 'Escape') {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  console.log('Escape pressed, trying to focus next element');
+
+                  // Find the next focusable element and focus it
+                  const focusableElements = document.querySelectorAll(
+                    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+                  );
+                  const focusableArray = Array.from(
+                    focusableElements
+                  ) as HTMLElement[];
+
+                  // Find current editor in the tab order - look for the editor container
+                  const editorContainer = editorRef.current;
+                  let currentIndex = -1;
+
+                  // First, try to find the editor container or any parent that contains it
+                  for (let i = 0; i < focusableArray.length; i++) {
+                    const element = focusableArray[i];
+                    if (
+                      element.contains(proseMirrorEl) ||
+                      element === proseMirrorEl ||
+                      (editorContainer && element.contains(editorContainer)) ||
+                      element === editorContainer
+                    ) {
+                      currentIndex = i;
+                      break;
+                    }
+                  }
+
+                  let nextIndex = -1;
+                  if (currentIndex >= 0) {
+                    nextIndex = currentIndex + 1;
+                  } else {
+                    // Fallback: find the next focusable element by DOM position
+                    // Get the editor's bounding rect to find elements after it
+                    const editorRect = proseMirrorEl.getBoundingClientRect();
+
+                    // Find focusable elements that come after this editor in DOM order
+                    for (let i = 0; i < focusableArray.length; i++) {
+                      const element = focusableArray[i];
+                      const elementRect = element.getBoundingClientRect();
+
+                      // Check if element is below the editor or to the right and below
+                      if (
+                        elementRect.top > editorRect.bottom ||
+                        (elementRect.top >= editorRect.top &&
+                          elementRect.left > editorRect.right)
+                      ) {
+                        nextIndex = i;
+
+                        break;
+                      }
+                    }
+
+                    // If still not found, just use the first button or input we can find
+                    if (nextIndex === -1) {
+                      for (let i = 0; i < focusableArray.length; i++) {
+                        const element = focusableArray[i];
+                        if (
+                          element.tagName === 'BUTTON' ||
+                          element.tagName === 'INPUT'
+                        ) {
+                          nextIndex = i;
+
+                          break;
+                        }
+                      }
+                    }
+                  }
+
+                  if (nextIndex >= 0 && nextIndex < focusableArray.length) {
+                    focusableArray[nextIndex].focus();
+                  } else if (nextIndex >= focusableArray.length) {
+                    // Wrap to first element
+                    focusableArray[0]?.focus();
+                  }
+                }
+              };
+
+              proseMirrorEl.addEventListener('keydown', handleKeyDown, true);
+
+              // Store cleanup function
+              const cleanup = () => {
+                proseMirrorEl.removeEventListener(
+                  'keydown',
+                  handleKeyDown,
+                  true
+                );
+              };
+
+              // Store cleanup in a way we can access it later
+              (proseMirrorEl as any)._tabNavigationCleanup = cleanup;
+            }
+          }, 500);
+
           // Set up onChange listener if provided - using a separate effect to avoid re-initialization
           // This will be handled in a separate useEffect to prevent editor re-creation
 
@@ -376,6 +489,15 @@ export const MilkdownEditor = forwardRef<
       // Cleanup function
       return () => {
         mounted = false;
+
+        // Clean up keyboard event listener
+        const proseMirrorEl = editorRef.current?.querySelector(
+          '.ProseMirror'
+        ) as HTMLElement;
+        if (proseMirrorEl && (proseMirrorEl as any)._tabNavigationCleanup) {
+          (proseMirrorEl as any)._tabNavigationCleanup();
+        }
+
         if (crepeRef.current) {
           crepeRef.current.destroy();
           crepeRef.current = null;
@@ -491,6 +613,53 @@ export const MilkdownEditor = forwardRef<
 
         <Box
           ref={editorRef}
+          onKeyDown={e => {
+            // Allow Escape to tab out of the editor (most intuitive)
+            // Also allow Cmd+Tab (Mac) / Ctrl+Tab (Windows) as alternative
+            if (
+              e.key === 'Escape' ||
+              (e.key === 'Tab' && (e.metaKey || e.ctrlKey))
+            ) {
+              e.preventDefault();
+              e.stopPropagation();
+
+              // Find the next focusable element and focus it
+              const focusableElements = document.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
+              );
+              const focusableArray = Array.from(
+                focusableElements
+              ) as HTMLElement[];
+
+              // Find current editor in the tab order
+              const editorElement = editorRef.current?.querySelector(
+                '.ProseMirror'
+              ) as HTMLElement;
+              if (editorElement) {
+                // Find the next element after this editor
+                let nextIndex = -1;
+                for (let i = 0; i < focusableArray.length; i++) {
+                  if (
+                    focusableArray[i].contains(editorElement) ||
+                    focusableArray[i] === editorElement
+                  ) {
+                    nextIndex = e.shiftKey ? i - 1 : i + 1;
+                    break;
+                  }
+                }
+
+                if (nextIndex >= 0 && nextIndex < focusableArray.length) {
+                  focusableArray[nextIndex].focus();
+                } else if (!e.shiftKey && nextIndex >= focusableArray.length) {
+                  // Wrap to first element
+                  focusableArray[0]?.focus();
+                } else if (e.shiftKey && nextIndex < 0) {
+                  // Wrap to last element
+                  focusableArray[focusableArray.length - 1]?.focus();
+                }
+              }
+            }
+          }}
           sx={{
             minHeight: 300,
             border: 1,
@@ -691,6 +860,20 @@ export const MilkdownEditor = forwardRef<
             }}
           >
             {helperText}
+          </Typography>
+        )}
+
+        {!readOnly && (
+          <Typography
+            variant="caption"
+            sx={{
+              display: 'block',
+              mt: 0.5,
+              color: 'text.secondary',
+              fontStyle: 'italic',
+            }}
+          >
+            Tip: Press Escape to move to the next field
           </Typography>
         )}
       </Box>

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -15,6 +15,7 @@ import {
   Home as HomeIcon,
   Help as HelpIcon,
 } from '@mui/icons-material';
+import { NavigationDrawer } from '../Navigation';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -40,9 +41,10 @@ export const Layout: React.FC<LayoutProps> = ({
   title = 'eAPD-Next',
   showNavigation = true,
 }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   const handleMenuClick = () => {
-    // TODO: Implement navigation menu
-    console.log('Menu clicked');
+    setDrawerOpen(true);
   };
 
   const handleHomeClick = () => {
@@ -57,6 +59,12 @@ export const Layout: React.FC<LayoutProps> = ({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {/* Navigation Drawer */}
+      <NavigationDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
+
       {/* Application Header */}
       <AppBar
         position="sticky"
