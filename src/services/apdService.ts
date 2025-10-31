@@ -595,7 +595,7 @@ export class APDService {
 
     try {
       const [parentAPD, childDocument] = (await Promise.all([
-        storageService.getAPD(parentAPDId as string),
+        storageService.getAPD(removedParentId as string),
         storageService.getAPD(childDocumentId as string),
       ])) as [APD | null, APD | null];
 
@@ -613,7 +613,8 @@ export class APDService {
       };
 
       // Update child document to remove parent reference
-      const { parentAPDId, ...childWithoutParent } = childDocument;
+      const { parentAPDId: removedParentId, ...childWithoutParent } =
+        childDocument;
       const updatedChild: APD = {
         ...childWithoutParent,
         updatedAt: new Date(),

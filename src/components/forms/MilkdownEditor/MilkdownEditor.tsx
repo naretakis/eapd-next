@@ -372,10 +372,12 @@ export const MilkdownEditor = forwardRef<
                   for (let i = 0; i < focusableArray.length; i++) {
                     const element = focusableArray[i];
                     if (
-                      element.contains(proseMirrorEl) ||
-                      element === proseMirrorEl ||
-                      (editorContainer && element.contains(editorContainer)) ||
-                      element === editorContainer
+                      element &&
+                      (element.contains(proseMirrorEl) ||
+                        element === proseMirrorEl ||
+                        (editorContainer &&
+                          element.contains(editorContainer)) ||
+                        element === editorContainer)
                     ) {
                       currentIndex = i;
                       break;
@@ -393,7 +395,7 @@ export const MilkdownEditor = forwardRef<
                     // Find focusable elements that come after this editor in DOM order
                     for (let i = 0; i < focusableArray.length; i++) {
                       const element = focusableArray[i];
-                      const elementRect = element.getBoundingClientRect();
+                      const elementRect = element?.getBoundingClientRect();
 
                       // Check if element is below the editor or to the right and below
                       if (
@@ -412,8 +414,9 @@ export const MilkdownEditor = forwardRef<
                       for (let i = 0; i < focusableArray.length; i++) {
                         const element = focusableArray[i];
                         if (
-                          element.tagName === 'BUTTON' ||
-                          element.tagName === 'INPUT'
+                          element &&
+                          (element.tagName === 'BUTTON' ||
+                            element.tagName === 'INPUT')
                         ) {
                           nextIndex = i;
 
@@ -424,7 +427,7 @@ export const MilkdownEditor = forwardRef<
                   }
 
                   if (nextIndex >= 0 && nextIndex < focusableArray.length) {
-                    focusableArray[nextIndex].focus();
+                    focusableArray[nextIndex]?.focus();
                   } else if (nextIndex >= focusableArray.length) {
                     // Wrap to first element
                     focusableArray[0]?.focus();
@@ -649,7 +652,7 @@ export const MilkdownEditor = forwardRef<
                 let nextIndex = -1;
                 for (let i = 0; i < focusableArray.length; i++) {
                   if (
-                    focusableArray[i].contains(editorElement) ||
+                    focusableArray[i]?.contains(editorElement) ||
                     focusableArray[i] === editorElement
                   ) {
                     nextIndex = e.shiftKey ? i - 1 : i + 1;
@@ -658,7 +661,7 @@ export const MilkdownEditor = forwardRef<
                 }
 
                 if (nextIndex >= 0 && nextIndex < focusableArray.length) {
-                  focusableArray[nextIndex].focus();
+                  focusableArray[nextIndex]?.focus();
                 } else if (!e.shiftKey && nextIndex >= focusableArray.length) {
                   // Wrap to first element
                   focusableArray[0]?.focus();
