@@ -266,7 +266,7 @@ export class TemplateService {
    * Generate custom slash commands for specific APD context
    */
   public generateCustomSlashCommands(
-    _apdType: APDType,
+    apdType: APDType,
     projectContext?: {
       projectName?: string;
       stateName?: string;
@@ -502,7 +502,7 @@ export class TemplateService {
     };
   }
 
-  private getRequiredSections(_apdType: APDType): string[] {
+  private getRequiredSections(apdType: APDType): string[] {
     // For now, only require sections that are commonly present
     // This can be made more strict in the future
     return ['executive_summary'];

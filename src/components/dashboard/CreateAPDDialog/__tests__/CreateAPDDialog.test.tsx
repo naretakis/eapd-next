@@ -224,7 +224,7 @@ describe('CreateAPDDialog Component', () => {
   });
 
   describe('Form Validation', () => {
-    const _fillValidForm = async (user: ReturnType<typeof userEvent.setup>) => {
+    const fillValidForm = async (user: ReturnType<typeof userEvent.setup>) => {
       await user.type(screen.getByLabelText('Project Name'), 'Test Project');
       await user.type(screen.getByLabelText('State Name'), 'Test State');
       await user.type(screen.getByLabelText('State Agency'), 'Test Agency');

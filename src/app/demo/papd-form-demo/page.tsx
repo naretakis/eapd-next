@@ -43,6 +43,16 @@ import {
 
 type AssuranceState = 'unset' | 'yes' | 'no';
 
+type AssuranceField =
+  | 'cfr433'
+  | 'cfr75'
+  | 'cfr95'
+  | 'cfr495_350'
+  | 'cfr495_346'
+  | 'cfr495_360'
+  | 'cfr431_300'
+  | 'cfr164';
+
 interface PAPDFormData {
   // Front matter fields
   state: string;
@@ -259,41 +269,38 @@ export default function PAPDFormDemo() {
   );
 
   // Handle assurance state changes (unset -> yes -> no -> unset)
-  const handleAssuranceChange = useCallback(
-    (field: keyof typeof formData.assurances) => {
-      setFormData(prev => {
-        const currentState = prev.assurances[field];
-        let newState: AssuranceState;
+  const handleAssuranceChange = useCallback((field: AssuranceField) => {
+    setFormData(prev => {
+      const currentState = prev.assurances[field];
+      let newState: AssuranceState;
 
-        switch (currentState) {
-          case 'unset':
-            newState = 'yes';
-            break;
-          case 'yes':
-            newState = 'no';
-            break;
-          case 'no':
-            newState = 'unset';
-            break;
-          default:
-            newState = 'unset';
-        }
+      switch (currentState) {
+        case 'unset':
+          newState = 'yes';
+          break;
+        case 'yes':
+          newState = 'no';
+          break;
+        case 'no':
+          newState = 'unset';
+          break;
+        default:
+          newState = 'unset';
+      }
 
-        return {
-          ...prev,
-          assurances: {
-            ...prev.assurances,
-            [field]: newState,
-          },
-        };
-      });
-    },
-    []
-  );
+      return {
+        ...prev,
+        assurances: {
+          ...prev.assurances,
+          [field]: newState,
+        },
+      };
+    });
+  }, []);
 
   // Handle explanation changes
   const handleExplanationChange = useCallback(
-    (field: keyof typeof formData.assuranceExplanations, value: string) => {
+    (field: AssuranceField, value: string) => {
       setFormData(prev => ({
         ...prev,
         assuranceExplanations: {
@@ -1974,7 +1981,7 @@ ${formData.proposedBudget}
 
       {dataLoadedFromStorage && (
         <Alert severity="info" sx={{ mb: 2 }}>
-          Previous form data has been restored from your browser's local
+          Previous form data has been restored from your browser&apos;s local
           storage.
         </Alert>
       )}

@@ -483,7 +483,7 @@ export class MarkdownTemplateParser {
     field: ParsedField,
     contentType: MilkdownContentType,
     templateType: APDType,
-    _fieldPath: string
+    fieldPath: string
   ): MilkdownFieldConfig {
     const plugins = this.getPluginsForContentType(contentType);
     const slashCommands = this.getSlashCommandsForContentType(
@@ -752,7 +752,7 @@ export class MarkdownTemplateParser {
    */
   private getSlashCommandsForContentType(
     contentType: MilkdownContentType,
-    _templateType: APDType
+    templateType: APDType
   ): SlashCommand[] {
     return this.slashCommands.filter(cmd => {
       switch (contentType) {
@@ -853,7 +853,7 @@ export class MarkdownTemplateParser {
     return descMatch ? descMatch[1] || '' : '';
   }
 
-  private extractValidationRules(_sections: ParsedSection[]): ValidationRule[] {
+  private extractValidationRules(sections: ParsedSection[]): ValidationRule[] {
     const rules: ValidationRule[] = [];
 
     // Add common validation rules
@@ -894,7 +894,7 @@ export class MarkdownTemplateParser {
     return subsection?.title || section?.title || 'Content';
   }
 
-  private detectTableType(headers: string[], _templateType: APDType): string {
+  private detectTableType(headers: string[], templateType: APDType): string {
     const headerText = headers.join(' ').toLowerCase();
 
     if (headerText.includes('federal') && headerText.includes('state')) {

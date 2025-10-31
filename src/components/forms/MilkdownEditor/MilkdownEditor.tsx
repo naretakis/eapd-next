@@ -21,6 +21,11 @@ import {
 import '@milkdown/crepe/theme/common/style.css';
 import '@milkdown/crepe/theme/frame.css';
 
+// Extended HTMLElement interface for tab navigation cleanup
+interface ExtendedHTMLElement extends HTMLElement {
+  _tabNavigationCleanup?: () => void;
+}
+
 export interface MilkdownEditorProps {
   /**
    * Initial markdown content for the editor
@@ -439,7 +444,8 @@ export const MilkdownEditor = forwardRef<
               };
 
               // Store cleanup in a way we can access it later
-              (proseMirrorEl as any)._tabNavigationCleanup = cleanup;
+              (proseMirrorEl as ExtendedHTMLElement)._tabNavigationCleanup =
+                cleanup;
             }
           }, 500);
 
@@ -491,11 +497,14 @@ export const MilkdownEditor = forwardRef<
         mounted = false;
 
         // Clean up keyboard event listener
-        const proseMirrorEl = editorRef.current?.querySelector(
-          '.ProseMirror'
-        ) as HTMLElement;
-        if (proseMirrorEl && (proseMirrorEl as any)._tabNavigationCleanup) {
-          (proseMirrorEl as any)._tabNavigationCleanup();
+        const currentEditor = editorRef.current;
+        if (currentEditor) {
+          const proseMirrorEl = currentEditor.querySelector(
+            '.ProseMirror'
+          ) as ExtendedHTMLElement;
+          if (proseMirrorEl && proseMirrorEl._tabNavigationCleanup) {
+            proseMirrorEl._tabNavigationCleanup();
+          }
         }
 
         if (crepeRef.current) {
