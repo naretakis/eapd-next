@@ -594,13 +594,18 @@ export class APDService {
     }
 
     try {
-      const [parentAPD, childDocument] = (await Promise.all([
-        storageService.getAPD(removedParentId as string),
-        storageService.getAPD(childDocumentId as string),
-      ])) as [APD | null, APD | null];
+      const childDocument = await storageService.getAPD(
+        childDocumentId as string
+      );
 
-      if (!parentAPD || !childDocument) {
-        return; // Already unlinked or documents don't exist
+      if (!childDocument || !childDocument.parentAPDId) {
+        return; // Already unlinked or document doesn't exist
+      }
+
+      const parentAPD = await storageService.getAPD(childDocument.parentAPDId);
+
+      if (!parentAPD) {
+        return; // Parent doesn't exist
       }
 
       // Update parent APD to remove child

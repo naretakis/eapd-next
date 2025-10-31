@@ -649,19 +649,19 @@ export default function PAPDFormDemo() {
     // Clear Milkdown editors
     setTimeout(() => {
       if (executiveSummaryRef.current) {
-        executiveSummaryRef.current.setMarkdown('');
+        executiveSummaryRef.current.replaceAllContent('');
       }
       if (projectPlanRef.current) {
-        projectPlanRef.current.setMarkdown('');
+        projectPlanRef.current.replaceAllContent('');
       }
       if (statementNeedsRef.current) {
-        statementNeedsRef.current.setMarkdown('');
+        statementNeedsRef.current.replaceAllContent('');
       }
       if (activityScheduleRef.current) {
-        activityScheduleRef.current.setMarkdown('');
+        activityScheduleRef.current.replaceAllContent('');
       }
       if (budgetRef.current) {
-        budgetRef.current.setMarkdown('');
+        budgetRef.current.replaceAllContent('');
       }
     }, 100);
   };

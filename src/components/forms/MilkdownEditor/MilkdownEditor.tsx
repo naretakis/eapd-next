@@ -399,9 +399,10 @@ export const MilkdownEditor = forwardRef<
 
                       // Check if element is below the editor or to the right and below
                       if (
-                        elementRect.top > editorRect.bottom ||
-                        (elementRect.top >= editorRect.top &&
-                          elementRect.left > editorRect.right)
+                        elementRect &&
+                        (elementRect.top > editorRect.bottom ||
+                          (elementRect.top >= editorRect.top &&
+                            elementRect.left > editorRect.right))
                       ) {
                         nextIndex = i;
 
